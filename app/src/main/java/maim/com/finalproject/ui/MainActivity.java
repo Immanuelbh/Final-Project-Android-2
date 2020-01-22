@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import maim.com.finalproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -54,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recycler);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setHasFixedSize(true);
+        //adding genres fragment
+        GenreFragment genreFragment = GenreFragment.newInstance();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+        transaction.commit();
+
 
 
     }
