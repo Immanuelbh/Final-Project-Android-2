@@ -2,14 +2,11 @@ package maim.com.finalproject.model;
 
 import android.net.Uri;
 
-import java.util.List;
+public class SubGenre {
+    String name;
+    Uri imageUri;
 
-public class Genre {
-    private String name;
-    private Uri imageUri;
-    private List<SubGenre> subGenres;
-
-    public Genre(String name) {
+    public SubGenre(String name) {
         this.name = name;
     }
 
@@ -20,5 +17,4 @@ public class Genre {
     public void setName(String name) {
         this.name = name;
     }
-
 }

@@ -52,14 +52,14 @@ public class GenreFragment extends Fragment {
         genres.add(new Genre("Writing"));
         genres.add(new Genre("Knitting"));
         genres.add(new Genre("Cooking"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
-        genres.add(new Genre("Guitar"));
+        genres.add(new Genre("Cycling"));
+        genres.add(new Genre("Computers"));
+        genres.add(new Genre("Music"));
+        genres.add(new Genre("Music"));
+        genres.add(new Genre("Music"));
+        genres.add(new Genre("Music"));
+        genres.add(new Genre("Music"));
+        genres.add(new Genre("Music"));
 
         GenreAdapter adapter = new GenreAdapter(rootView.getContext(), genres);
         recyclerView.setAdapter(adapter);
