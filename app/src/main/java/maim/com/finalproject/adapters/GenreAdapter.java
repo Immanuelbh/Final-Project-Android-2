@@ -28,7 +28,6 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     private Context gCtx;
     private List<Genre> genres;
     private GenreListener listener;
-    //TODO genre listener
 
     public interface GenreListener{
         void onGenreClicked(int position, View view);
@@ -62,7 +61,6 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         View view = LayoutInflater.from(gCtx).inflate(R.layout.genre_cell, parent, false);
 
         final GenreViewHolder gvh = new GenreViewHolder(view);
-        //TODO set on click listener
         gvh.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

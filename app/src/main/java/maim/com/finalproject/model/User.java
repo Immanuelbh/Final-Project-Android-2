@@ -3,6 +3,7 @@ package maim.com.finalproject.model;
 public class User {
 
     //private long id;
+    private String email;
     private String firstName;
     private String lastName;
     private int age;

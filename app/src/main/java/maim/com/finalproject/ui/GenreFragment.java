@@ -1,6 +1,8 @@
 package maim.com.finalproject.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +30,10 @@ import maim.com.finalproject.adapters.GenreAdapter;
 import maim.com.finalproject.model.Genre;
 
 public class GenreFragment extends Fragment {
+
+    List<Genre> genresList = new ArrayList<>();
+    FirebaseAuth firebaseAuth;
+    DatabaseReference dbGenres;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -36,16 +50,67 @@ public class GenreFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.genre_fragment, container, false);
 
-        final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
-        recyclerView.setHasFixedSize(true);
+        /*
+        firebaseAuth = FirebaseAuth.getInstance();
+        dbGenres = FirebaseDatabase.getInstance().getReference("genres");
+
 
         //TODO: add model
 
 
+        final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
+        recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
+        recyclerView.setHasFixedSize(true);
+        final GenreAdapter adapter = new GenreAdapter(rootView.getContext(), genresList);
+        recyclerView.setAdapter(adapter);
+
+        //read genres from database
+        final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Loading genres, please wait..");
+        progressDialog.show();
+
+        final FirebaseUser user = firebaseAuth.getCurrentUser();
+        dbGenres.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                genresList.clear();
+
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        Genre genre = snapshot.getValue(Genre.class);
+                        genresList.add(genre);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }) ;
+        */
         //example genres
+
         List<Genre> genres = new ArrayList<>();
         genres.add(new Genre("Music"));
         genres.add(new Genre("Computers"));
@@ -61,7 +126,12 @@ public class GenreFragment extends Fragment {
         genres.add(new Genre("Music"));
         genres.add(new Genre("Music"));
 
-        GenreAdapter adapter = new GenreAdapter(rootView.getContext(), genres);
+
+        final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
+        recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
+        recyclerView.setHasFixedSize(true);
+
+        final GenreAdapter adapter = new GenreAdapter(rootView.getContext(), genres);
         recyclerView.setAdapter(adapter);
 
         return rootView;

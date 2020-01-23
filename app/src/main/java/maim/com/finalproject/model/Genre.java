@@ -9,6 +9,11 @@ public class Genre {
     private Uri imageUri;
     private List<SubGenre> subGenres;
 
+    public Genre(String name, List<SubGenre> subGenres) {
+        this.name = name;
+        this.subGenres = subGenres;
+    }
+
     public Genre(String name) {
         this.name = name;
     }

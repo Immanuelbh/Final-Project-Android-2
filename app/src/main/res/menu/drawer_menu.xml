@@ -4,12 +4,19 @@
     <group>
 
         <item
-            android:id="@+id/item_attachment"
+            android:id="@+id/item_login"
             android:title="Login"/>
 
-        <item android:id="@+id/item_images"
+        <item android:id="@+id/item_sign_up"
             android:title="Sign up"/>
 
+    </group>
+
+    <group>
+
+        <item android:id="@+id/item_logout"
+            android:title="Log out"
+            android:visible="false"/>
     </group>
 
 </menu>
