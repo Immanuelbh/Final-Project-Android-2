@@ -1,12 +1,10 @@
 package maim.com.finalproject.model;
 
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 public class Genre implements Serializable {
     private String name;

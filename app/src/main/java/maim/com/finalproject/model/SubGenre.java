@@ -1,6 +1,5 @@
 package maim.com.finalproject.model;
 
-import android.net.Uri;
 
 public class SubGenre {
     private String name;

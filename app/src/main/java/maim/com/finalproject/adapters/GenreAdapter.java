@@ -23,7 +23,6 @@ import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Genre;
-import maim.com.finalproject.ui.GenreFragment;
 import maim.com.finalproject.ui.SubGenreFragment;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
