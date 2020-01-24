@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseUser user;
 
     String fullName;
 
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 final EditText passwordEt = dialogView.findViewById(R.id.password_input);
 
                 switch (item.getItemId()){
-
                     case R.id.item_sign_up:
                         builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
                             @Override
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 View headerView = navigationView.getHeaderView(0);
                 TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
 
-                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
 
                 //login or sign up
                 if(user != null){
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 fullName = null;
                                 if(task.isSuccessful())
-                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + "Welcome!", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, "Welcome " + user.getDisplayName() + "!", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }

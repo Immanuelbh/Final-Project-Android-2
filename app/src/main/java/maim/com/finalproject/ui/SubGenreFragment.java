@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,7 @@ import maim.com.finalproject.model.SubGenre;
 
 public class SubGenreFragment extends Fragment {
 
+    private DatabaseReference dbGenres;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,6 +45,7 @@ public class SubGenreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.genre_fragment, container, false);
 
+
         final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
         recyclerView.setHasFixedSize(true);
@@ -52,12 +57,27 @@ public class SubGenreFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            int i = bundle.getInt("current_genre", -1);
+            //int i = bundle.getInt("current_genre", -1);
+            String genreName = (String) bundle.getCharSequence("genre_name");
+
+            Genre genre = (Genre) bundle.getSerializable("genre");
+            if(genre != null){
+                List<SubGenre> list = new ArrayList<SubGenre>(genre.getSubGenres().values());
+
+                SubGenreAdapter adapter = new SubGenreAdapter(rootView.getContext(), list);
+                recyclerView.setAdapter(adapter);
+            }
+            /*
+            if(genreName != null){
+                dbGenres = FirebaseDatabase.getInstance().getReference("genres/" + genreName);
+            }
+
 
             List<SubGenre> subGenres = new ArrayList<>();
-
+            Genre genre =
             if(i >= 0){
                 if(i == 0) {// 'Music'
+
                     subGenres.add(new SubGenre("Guitar"));
                     subGenres.add(new SubGenre("Piano"));
                     subGenres.add(new SubGenre("Drums"));
@@ -69,7 +89,9 @@ public class SubGenreFragment extends Fragment {
 
                 SubGenreAdapter adapter = new SubGenreAdapter(rootView.getContext(), subGenres);
                 recyclerView.setAdapter(adapter);
-            }
+             }
+             */
+
             else{
                 Toast.makeText(this.getContext(), "couldn't open genre", Toast.LENGTH_SHORT).show();
             }
