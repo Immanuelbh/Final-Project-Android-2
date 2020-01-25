@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:id="@+id/signup_age_tv"
-            android:text="43"
+            android:text="18"
             />
     </LinearLayout>
     <SeekBar
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/signup_age_seekbar"
         android:max="102"
-        android:progress="25"
+        android:progress="0"
         />
 
     <LinearLayout
@@ -93,23 +93,35 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:padding="5dp"
-        android:visibility="gone"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="First name"
-            android:inputType="text"
-            android:id="@+id/first_name_input"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
 
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Preferred meeting location"
+            android:layout_weight="5"
             />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_add_location"
+            android:id="@+id/signup_choose_location"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signup_location_tv"
+        android:visibility="gone"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

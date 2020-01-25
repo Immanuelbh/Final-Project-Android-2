@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         ctl.setTitle("Please Log In");
 
 
+
         //initializing authlistener
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
