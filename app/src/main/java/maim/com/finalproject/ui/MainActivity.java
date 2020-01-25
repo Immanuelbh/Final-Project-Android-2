@@ -15,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,7 @@ import maim.com.finalproject.model.SubGenre;
 public class MainActivity extends AppCompatActivity {
 
     private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
+    private static final String SIGNUP_FRAGMENT_TAG = "signup_details_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -55,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
     String fullName;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbGenres = database.getReference("genres");
+    DatabaseReference dbGenres = database.getReference("users");
 
+    TextView signupRangeTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dialogView  = getLayoutInflater().inflate(R.layout.sign_in_dialog,null);
 
                 final EditText emailEt = dialogView.findViewById(R.id.email_input);
@@ -99,10 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 //final EditText lastNameEt = dialogView.findViewById(R.id.last_name_input);
                 final EditText passwordEt = dialogView.findViewById(R.id.password_input);
 
+
                 switch (item.getItemId()){
 
                     case R.id.item_sign_up:
-                        builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                        builder.setView(dialogView).setPositiveButton("Next", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String email = emailEt.getText().toString();
@@ -117,15 +123,31 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                        if(task.isSuccessful())
+                                        if(task.isSuccessful()){
+
+                                            SignupDetailsFragment signupDetailsFragment = SignupDetailsFragment.newInstance();
+
+
+                                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.recycler_container, signupDetailsFragment, SIGNUP_FRAGMENT_TAG);
+                                            transaction.addToBackStack(null).commit();
+
+
                                             Snackbar.make(coordinatorLayout, "Signup successful", Snackbar.LENGTH_SHORT).show();
-                                        else
+                                        }
+                                        else{
                                             Snackbar.make(coordinatorLayout, "Signup failed", Snackbar.LENGTH_SHORT).show();
+                                        }
+
 
                                     }
                                 });
+
+
                             }
                         }).show();
+
+
                         break;
                     case R.id.item_login:
                         fullNameEt.setVisibility(View.GONE);
