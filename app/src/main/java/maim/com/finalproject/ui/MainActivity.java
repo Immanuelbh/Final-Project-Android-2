@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     String fullName;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbGenres = database.getReference("genres");
+    DatabaseReference dbUsers = database.getReference("users");
 
 
     @Override
@@ -153,7 +153,25 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }).show();
                         break;
+                    case R.id.item_search:
+                        //TODO return to initial fragment (genres)
+                        break;
+
+                    case R.id.item_profile:
+                        //TODO open profile fragment
+                        break;
+                    case R.id.item_confirmations:
+                        //TODO open confirmation fragment
+                        break;
+                    case R.id.item_messages:
+                        //TODO open messages fragment
+                        break;
+                    case R.id.item_settings:
+                        //TODO open settings fragment
+                        break;
+
                     case R.id.item_logout:
+
                         firebaseAuth.signOut();
                         Snackbar.make(coordinatorLayout, "Logged out", Snackbar.LENGTH_SHORT).show();
 
@@ -195,12 +213,17 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
 
-                    //update ui -
+                    //update menu ui - user logged in
                     userTv.setText(user.getDisplayName() + " logged in");
                     ctl.setTitle(user.getDisplayName()+"");
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_search).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_profile).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_confirmations).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_messages).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
 
 
@@ -210,12 +233,19 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else{ //logged out or not sign in yet
+                    //update ui
                     userTv.setText("Please Log In");
                     ctl.setTitle("Please Log In");
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_search).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_profile).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_confirmations).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_messages).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
 
                     //genres.clear();
                     //adapter.notifyDataSetChanged();
