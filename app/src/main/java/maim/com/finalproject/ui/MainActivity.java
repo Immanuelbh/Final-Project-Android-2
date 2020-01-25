@@ -9,19 +9,13 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,12 +29,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import maim.com.finalproject.R;
-import maim.com.finalproject.model.Genre;
-import maim.com.finalproject.model.SubGenre;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseUser user;
 
     String fullName;
 
@@ -62,17 +53,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        /*
-        DatabaseReference pushedKey = dbGenres.child("genres").push();
-        List<SubGenre> subGenres = new ArrayList<>();
-        subGenres.add(new SubGenre("Guitar"));
-        subGenres.add(new SubGenre("Piano"));
-        subGenres.add(new SubGenre("Drums"));
-        Genre music = new Genre("Music", subGenres);
-        pushedKey.setValue(music);
-        */
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -100,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 final EditText passwordEt = dialogView.findViewById(R.id.password_input);
 
                 switch (item.getItemId()){
-
                     case R.id.item_sign_up:
                         builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
                             @Override
@@ -196,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 View headerView = navigationView.getHeaderView(0);
                 TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
 
-                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
 
                 //login or sign up
                 if(user != null){
@@ -208,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 fullName = null;
                                 if(task.isSuccessful())
-                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + "Welcome!", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, "Welcome " + user.getDisplayName() + "!", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -247,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
 
-                    //genres.clear();
-                    //adapter.notifyDataSetChanged();
                 }
             }
         };
@@ -266,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
-            //  Toast.makeText(this, "Home button pressed", Toast.LENGTH_SHORT).show();
             drawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);

@@ -30,6 +30,7 @@
             android:title="Settings"
             android:visible="false"/>
 
+
         <item android:id="@+id/item_logout"
             android:title="Log out"
             android:visible="false"/>

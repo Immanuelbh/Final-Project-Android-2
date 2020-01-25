@@ -17,10 +17,15 @@
         android:orientation="vertical"
         android:id="@+id/genre_rl"
 
-        android:background="@drawable/ic_launcher_background"
-        android:scaleType="centerCrop"
 
         >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:id="@+id/genre_cell_bg"
+            android:background="@drawable/ic_launcher_background"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,6 +36,8 @@
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
             android:layout_centerInParent="true"
+            android:textColor="#fff"
+            android:background="@color/holoGrey"
             />
 
     </RelativeLayout>

@@ -19,10 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import maim.com.finalproject.R;
-import maim.com.finalproject.model.Genre;
 import maim.com.finalproject.model.SubGenre;
-import maim.com.finalproject.ui.GenreFragment;
-import maim.com.finalproject.ui.SubGenreFragment;
 
 public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGenreViewHolder> {
 

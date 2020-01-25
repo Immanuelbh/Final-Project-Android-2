@@ -1,10 +1,11 @@
 package maim.com.finalproject.model;
 
-import android.net.Uri;
 
 public class SubGenre {
-    String name;
-    Uri imageUri;
+    private String name;
+    private String imageUrl;
+
+    public SubGenre() {    }
 
     public SubGenre(String name) {
         this.name = name;
@@ -16,5 +17,13 @@ public class SubGenre {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

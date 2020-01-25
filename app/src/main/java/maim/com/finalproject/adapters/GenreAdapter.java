@@ -16,11 +16,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.Serializable;
 import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Genre;
-import maim.com.finalproject.ui.GenreFragment;
 import maim.com.finalproject.ui.SubGenreFragment;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
@@ -46,12 +48,14 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
         RelativeLayout relativeLayout;
         TextView titleTv;
+        ImageView bgIv;
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
 
             relativeLayout = itemView.findViewById(R.id.genre_rl);
             titleTv = itemView.findViewById(R.id.genre_title_tv);
+            bgIv = itemView.findViewById(R.id.genre_cell_bg);
         }
     }
 
@@ -67,6 +71,9 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
                 //adding genres fragment
                 SubGenreFragment subGenreFragment = SubGenreFragment.newInstance();
                 Bundle bundle = new Bundle();
+
+                bundle.putSerializable("genre", (Serializable) genres.get(gvh.getAdapterPosition()));
+                bundle.putCharSequence("genre_name",genres.get(gvh.getAdapterPosition()).getName());
                 bundle.putInt("current_genre", gvh.getAdapterPosition());
                 subGenreFragment.setArguments(bundle);
 
@@ -86,6 +93,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
         Genre genre = genres.get(position);
         holder.titleTv.setText(genre.getName());
+        Glide.with(gCtx)
+                .load(genre.getImageUrl()+"")
+                .error(R.drawable.no_image_available_comp)
+                .into(holder.bgIv);
         //TODO change image
     }
 
