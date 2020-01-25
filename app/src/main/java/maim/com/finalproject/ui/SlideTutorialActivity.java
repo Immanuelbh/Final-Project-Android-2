@@ -1,13 +1,17 @@
 package maim.com.finalproject.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +31,7 @@ public class SlideTutorialActivity extends AppCompatActivity {
     private Button mBackBtn;
     private int mCurrentPage=0; //the current page
     private boolean flag=false;
-
+    private static final String MY_PREFERENCES = "my_preferences";
 
     public static final String TAG=SlideTutorialActivity.class.getSimpleName();
 
@@ -47,16 +51,28 @@ public class SlideTutorialActivity extends AppCompatActivity {
         addDotsIndicator(0);
         mSlideViewPager.addOnPageChangeListener(viewListener);
 
+
+        Boolean isFirstRun=getSharedPreferences("PREFERENCE",MODE_PRIVATE)
+                .getBoolean("isfirstrun",true);
+        //Log.d("First Run ...........",isFirstRun+"");
+        if(!isFirstRun) {
+                Intent intent = new Intent(SlideTutorialActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+        }
+
         mNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mSlideViewPager.setCurrentItem(mSlideViewPager.getCurrentItem() + 1);
                 if(flag) {
-                    Intent intent = new Intent(SlideTutorialActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                        Intent intent = new Intent(SlideTutorialActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        getSharedPreferences("PREFERENCE",MODE_PRIVATE).edit()
+                              .putBoolean("isfirstrun",false).apply();
+                        //Toast.makeText(SlideTutorialActivity.this, "First Run", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
             }
         });
 
@@ -67,7 +83,23 @@ public class SlideTutorialActivity extends AppCompatActivity {
                 flag=false;
             }
         });
+
+
     }
+
+    /*String prevStarted = "prevStarted";
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedpreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        if (!sharedpreferences.getBoolean(prevStarted, false)) {
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putBoolean(prevStarted, Boolean.TRUE);
+            editor.apply();
+        } else {
+            finish();
+        }
+    }*/
 
     //using Heading-count/Desc-count for the dots
     public void addDotsIndicator(int position){
