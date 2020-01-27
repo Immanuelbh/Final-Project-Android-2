@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 fullName = null;
                                 if(task.isSuccessful())
-                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + "Welcome!", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + " is now connected", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
