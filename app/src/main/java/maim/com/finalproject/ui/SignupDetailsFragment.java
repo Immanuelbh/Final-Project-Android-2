@@ -81,8 +81,8 @@ public class SignupDetailsFragment extends Fragment {
         final TextView signupRangeTv = rootView.findViewById(R.id.signup_range_tv);
         coordinatorLayout = rootView.findViewById(R.id.coordinator);
 
-        initPlaces();
-        setupPlaceAutoComplete();
+        //initPlaces();
+        //setupPlaceAutoComplete();
 
 
 
@@ -205,7 +205,7 @@ public class SignupDetailsFragment extends Fragment {
     }
 
     private void initPlaces() {
-        Places.initialize(this.context, getString(R.string.places_api_key));
+        //Places.initialize(this.context, getString(R.string.places_api_key));
         placesClient = Places.createClient(this.context);
     }
 }
