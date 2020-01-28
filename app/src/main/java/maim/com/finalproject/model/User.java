@@ -8,11 +8,14 @@ public class User {
     private String name;
     private String age;
     private String maxRange;
+    private String imageUrl;
     //Preferred Location
     //Skills I can teach
     //Skills I want to learn
     //User image (uri)
 
+
+    public User() {   }
 
     public User(String email, String UID, String name, String age, String maxRange) {
         this.email = email;
@@ -20,6 +23,7 @@ public class User {
         this.name = name;
         this.age = age;
         this.maxRange = maxRange;
+        //TODO add image url to db
     }
 
     public String getEmail() {
@@ -60,5 +64,13 @@ public class User {
 
     public void setMaxRange(String maxRange) {
         this.maxRange = maxRange;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

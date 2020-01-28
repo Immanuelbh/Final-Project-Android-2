@@ -14,6 +14,10 @@
     </group>
 
     <group>
+        <item android:id="@+id/item_users"
+            android:title="Users (for testing)"
+            />
+
         <item android:id="@+id/item_search"
             android:title="Search"
             android:visible="false"/>

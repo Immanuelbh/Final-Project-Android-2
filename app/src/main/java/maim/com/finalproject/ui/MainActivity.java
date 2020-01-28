@@ -40,11 +40,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 import maim.com.finalproject.R;
+import maim.com.finalproject.model.Genre;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
     private static final String SIGNUP_FRAGMENT_TAG = "signup_details_fragment";
+    private static final String PROFILE_FRAGMENT_TAG = "profile_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -95,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
 
 
                 switch (item.getItemId()){
+                    case R.id.item_users:
+                        //TODO return to initial fragment (genres)
+                        UsersFragment usersFragment = UsersFragment.newInstance();
+
+                        FragmentTransaction usersTransaction = getSupportFragmentManager().beginTransaction();
+                        usersTransaction.replace(R.id.recycler_container, usersFragment, PROFILE_FRAGMENT_TAG);
+                        usersTransaction.addToBackStack(null).commit();
+                        break;
                     case R.id.item_sign_up:
                         builder.setView(dialogView).setPositiveButton("Next", new DialogInterface.OnClickListener() {
                             @Override
@@ -164,7 +174,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.item_profile:
-                        //TODO open profile fragment
+                        ProfileFragment profileFragment = ProfileFragment.newInstance();
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, profileFragment, PROFILE_FRAGMENT_TAG);
+                        transaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_confirmations:
                         //TODO open confirmation fragment
@@ -179,7 +193,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_logout:
                         firebaseAuth.signOut();
                         Snackbar.make(coordinatorLayout, "Logged out", Snackbar.LENGTH_SHORT).show();
+                        GenreFragment genreFragment = GenreFragment.newInstance();
 
+                        FragmentTransaction homeTransaction = getSupportFragmentManager().beginTransaction();
+                        homeTransaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        homeTransaction.commit();
                         break;
                 }
 
@@ -268,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener=
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -276,17 +294,20 @@ public class MainActivity extends AppCompatActivity {
 
                     switch(menuItem.getItemId()){
                         case R.id.nav_home:
-                        selectedFragment =new GenreFragment();
-                        break;
+                            selectedFragment = new GenreFragment();
+                            break;
                         case R.id.nav_favorites:
-                        selectedFragment =new FavoritesFragment();
-                        break;
+                            //getActionBar().setTitle("Favorites");
+                            selectedFragment = new FavoritesFragment();
+                            break;
                         case R.id.nav_chat:
-                        selectedFragment =new ChatFragment();
-                        break;
+                            //getActionBar().setTitle("Chat");
+                            selectedFragment = new ChatFragment();
+                            break;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.recycler_container,
-                            selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.recycler_container, selectedFragment)
+                            .commit();
 
                     return true; //select the clicked item
                 }
