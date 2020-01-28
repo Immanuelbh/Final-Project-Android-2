@@ -184,7 +184,11 @@ public class MainActivity extends AppCompatActivity {
                         //TODO open confirmation fragment
                         break;
                     case R.id.item_messages:
-                        //TODO open messages fragment
+                        ChatFragment chatFragment = ChatFragment.newInstance();
+
+                        FragmentTransaction chatTransaction = getSupportFragmentManager().beginTransaction();
+                        chatTransaction.replace(R.id.recycler_container, chatFragment, PROFILE_FRAGMENT_TAG);
+                        chatTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_settings:
                         //TODO open settings fragment

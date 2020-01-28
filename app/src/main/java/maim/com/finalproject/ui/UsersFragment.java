@@ -48,40 +48,6 @@ public class UsersFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.users_fragment, container, false);
-/*
-        recyclerView = rootView.findViewById(R.id.users_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        recyclerView.setHasFixedSize(true);
-
-        //TODO add the adapter
-        UserAdapter adapter = new UserAdapter(rootView.getContext(), userList);
-        recyclerView.setAdapter(adapter);
-
-
-        final FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference dbUsers = FirebaseDatabase.getInstance().getReference("users");
-        dbUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    User user = ds.getValue(User.class);
-
-                    if(user.getUID().equals(fbUser.getUid())){
-                        userList.add(user);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
- */
-
 
         firebaseAuth = FirebaseAuth.getInstance();
         dbUsers = FirebaseDatabase.getInstance().getReference("users");

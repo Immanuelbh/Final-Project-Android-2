@@ -13,6 +13,13 @@ import maim.com.finalproject.R;
 
 public class ChatFragment extends Fragment {
 
+
+
+    public static ChatFragment newInstance() {
+        ChatFragment chatFragment  = new ChatFragment();
+        return chatFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
