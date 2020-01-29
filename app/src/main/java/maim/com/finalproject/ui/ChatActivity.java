@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,9 +29,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.GenreAdapter;
@@ -79,6 +82,8 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         myUid = user.getUid();
 
+        updateUserStatus("Online");
+
         //display chat messages
         recyclerView = findViewById(R.id.chat_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -103,13 +108,25 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    //User hisUser = ds.getValue(User.class);
-                    //String name = hisUser.getName();
-                    String name = ds.child("name").getValue()+"";
+                    User hisUser = ds.getValue(User.class);
+                    String name = hisUser.getName();
+                    //String name = ds.child("name").getValue()+"";
                     Log.d("CHAT_ACTIVITY", "his user name: " + name);
                     //TODO image = hisUser.getImageUrl();
 
+                    //check online status
+                    String status = hisUser.getOnlineStatus();
+
                     nameTv.setText(name);
+                    if(status.equals("Online"))
+                        userStatusTv.setText(status);
+                    else{
+                        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+                        calendar.setTimeInMillis(Long.parseLong(status));
+                        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
+                        userStatusTv.setText("Last seen at: " + dateTime);
+
+                    }
                     //set image with glide
 
 
@@ -121,22 +138,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-        /*
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-         */
-
-        
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,6 +158,14 @@ public class ChatActivity extends AppCompatActivity {
         readMessages();
         seenMessage();
         
+    }
+
+    private void updateUserStatus(String status) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(myUid);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("onlineStatus", status);
+        //update
+        userRef.updateChildren(hashMap);
     }
 
     private void seenMessage() {
@@ -272,6 +283,17 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        //set user status to time stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        updateUserStatus(timeStamp);
+
         seenDbReference.removeEventListener(seenListener);
+    }
+
+    @Override
+    protected void onResume() {
+        updateUserStatus("Online");
+        super.onResume();
     }
 }
