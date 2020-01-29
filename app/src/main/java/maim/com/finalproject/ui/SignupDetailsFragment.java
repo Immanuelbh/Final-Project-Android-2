@@ -163,7 +163,7 @@ public class SignupDetailsFragment extends Fragment {
                 getFragmentManager().popBackStackImmediate();
             }
         });
-        
+
         return rootView;
     }
 
