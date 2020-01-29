@@ -152,7 +152,8 @@ public class SignupDetailsFragment extends Fragment {
                             fbUser.getUid(),
                             fbUser.getDisplayName(),
                             ageProgress,
-                            rangeProgress);
+                            rangeProgress,
+                            "Online");
                     users.child(fbUser.getUid()).setValue(newUser);
 
                 }

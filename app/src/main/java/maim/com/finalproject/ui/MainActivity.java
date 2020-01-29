@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
     private static final String SIGNUP_FRAGMENT_TAG = "signup_details_fragment";
     private static final String PROFILE_FRAGMENT_TAG = "profile_fragment";
+    private static final String MESSAGES_FRAGMENT_TAG = "messages_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         ChatFragment chatFragment = ChatFragment.newInstance();
 
                         FragmentTransaction chatTransaction = getSupportFragmentManager().beginTransaction();
-                        chatTransaction.replace(R.id.recycler_container, chatFragment, PROFILE_FRAGMENT_TAG);
+                        chatTransaction.replace(R.id.recycler_container, chatFragment, MESSAGES_FRAGMENT_TAG);
                         chatTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_settings:

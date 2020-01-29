@@ -2,6 +2,7 @@ package maim.com.finalproject.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     Context uCtx;
     List<User> userList;
-    String userUid;
+    //String userUid;
 
     public UserAdapter(Context uCtx, List<User> users){
         this.uCtx = uCtx;
@@ -48,13 +49,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(uCtx).inflate(R.layout.users_row, parent, false);
-        UserViewHolder uvh = new UserViewHolder(view);
+        final UserViewHolder uvh = new UserViewHolder(view);
 
         uvh.rowLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(parent.getContext(), ChatActivity.class);
-                intent.putExtra("user_uid", userUid);
+                intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
                 uCtx.startActivity(intent);
             }
         });
@@ -64,7 +65,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
-        userUid = user.getUID();
+        String userUid = user.getUID();
+        Log.d("CHAT_ACTIVITY", "userAdapter: useruid : " + userUid);
         //TODO add image
         holder.nameTv.setText(user.getName());
     }

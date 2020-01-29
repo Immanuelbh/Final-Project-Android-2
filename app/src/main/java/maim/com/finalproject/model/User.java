@@ -9,6 +9,7 @@ public class User {
     private String age;
     private String maxRange;
     private String imageUrl;
+    private String onlineStatus;
     //Preferred Location
     //Skills I can teach
     //Skills I want to learn
@@ -17,12 +18,13 @@ public class User {
 
     public User() {   }
 
-    public User(String email, String UID, String name, String age, String maxRange) {
+    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus) {
         this.email = email;
         this.UID = UID;
         this.name = name;
         this.age = age;
         this.maxRange = maxRange;
+        this.onlineStatus = onlineStatus;
         //TODO add image url to db
     }
 
@@ -72,5 +74,13 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getOnlineStatus() {
+        return onlineStatus;
+    }
+
+    public void setOnlineStatus(String onlineStatus) {
+        this.onlineStatus = onlineStatus;
     }
 }

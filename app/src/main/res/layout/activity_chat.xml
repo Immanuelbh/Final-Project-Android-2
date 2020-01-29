@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:textColor="#fff"
                 />
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Online"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#fff"
                 />
         </LinearLayout>
@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/chat_recycler"
         android:layout_below="@id/chat_toolbar"
+        android:layout_above="@id/chat_ll"
 
         />
 
