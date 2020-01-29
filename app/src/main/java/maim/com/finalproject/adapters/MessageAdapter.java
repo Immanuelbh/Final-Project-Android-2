@@ -60,19 +60,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         if(viewType == MSG_TYPE_RIGHT){
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_right, parent, false);
-            MessageViewHolder mvh = new MessageViewHolder(view);
 
-            return mvh;
+            return new MessageViewHolder(view);
         }
         else { //left
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_left, parent, false);
-            //MessageViewHolder mvh = new MessageViewHolder(view);
 
             return new MessageViewHolder(view);
         }
 
-
-        //return null;
     }
 
     @Override

@@ -3,13 +3,14 @@ package maim.com.finalproject.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -30,13 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import maim.com.finalproject.R;
-import maim.com.finalproject.adapters.GenreAdapter;
 import maim.com.finalproject.adapters.MessageAdapter;
 import maim.com.finalproject.model.Message;
 import maim.com.finalproject.model.User;
@@ -64,7 +63,6 @@ public class ChatActivity extends AppCompatActivity {
     String hisUid;
     String hisImage;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +78,8 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.chat_send_btn);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        //get current user's id and update status
         myUid = user.getUid();
-
         updateUserStatus("Online");
 
         //display chat messages
@@ -95,13 +93,13 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new MessageAdapter(this, messages);
         recyclerView.setAdapter(adapter);
 
-
+        //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
-        Log.d("CHAT_ACTIVITY", "receiver uid: " + hisUid);
+        //Log.d("CHAT_ACTIVITY", "receiver uid: " + hisUid);
 
-        dbUsers = FirebaseDatabase.getInstance().getReference("users");
         //search user to get his information
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
         Query query = dbUsers.orderByChild("uid").equalTo(hisUid+"");
         Log.d("CHAT_ACTIVITY", "Query hisUid " + hisUid);
         query.addValueEventListener(new ValueEventListener() {
@@ -110,23 +108,35 @@ public class ChatActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     User hisUser = ds.getValue(User.class);
                     String name = hisUser.getName();
-                    //String name = ds.child("name").getValue()+"";
                     Log.d("CHAT_ACTIVITY", "his user name: " + name);
+
                     //TODO image = hisUser.getImageUrl();
 
                     //check online status
                     String status = hisUser.getOnlineStatus();
+                    String typingTo = hisUser.getTypingTo();
 
+                    //set ui
                     nameTv.setText(name);
-                    if(status.equals("Online"))
-                        userStatusTv.setText(status);
-                    else{
-                        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-                        calendar.setTimeInMillis(Long.parseLong(status));
-                        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-                        userStatusTv.setText("Last seen at: " + dateTime);
 
+                    try{
+                        if(typingTo.equals(myUid)){
+                            userStatusTv.setText("Typing...");
+                        }
+                        else{
+                            if(status.equals("Online"))
+                                userStatusTv.setText(status);
+                            else{
+                                userStatusTv.setText("Last seen at: " + currentTime(status));
+
+                            }
+                        }
                     }
+                    catch (NullPointerException e){
+                        Toast.makeText(ChatActivity.this, "failed to update ui", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
                     //set image with glide
 
 
@@ -140,6 +150,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        //handle sending message
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,16 +165,55 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        
+        //listen to et
+        messageEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().trim().length() == 0){
+                    updateUserTypeTo("noOne");
+                }
+                else{
+                    updateUserTypeTo(hisUid);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        //display messages
         readMessages();
         seenMessage();
         
+    }
+
+    private String currentTime(String time) {
+        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+        calendar.setTimeInMillis(Long.parseLong(time));
+        return DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
+
     }
 
     private void updateUserStatus(String status) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(myUid);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("onlineStatus", status);
+        //update
+        userRef.updateChildren(hashMap);
+    }
+
+    private void updateUserTypeTo(String typingTo) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(myUid);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("typingTo", typingTo);
         //update
         userRef.updateChildren(hashMap);
     }
@@ -175,10 +225,9 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Message message = ds.getValue(Message.class);
-                    if (message.getReceiver().equals(hisUid) && message.getSender().equals(myUid) ||
-                            message.getReceiver().equals(myUid) && message.getSender().equals(hisUid)) { //TODO create unique identifier to pull from
+                    if (message.getReceiver().equals(myUid) && message.getSender().equals(hisUid)) { //TODO create unique identifier to pull from
                         HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("isSeen", true);
+                        hashMap.put("seen", true);
                         ds.getRef().updateChildren(hashMap);
                     }
                 }
@@ -208,7 +257,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                 //TODO check if possible to snap recycler to bottom after each message
+
                 if(recyclerView.getAdapter().getItemCount() > 0)
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
 
@@ -220,30 +269,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-        /*
-        dbMessages.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                messages.clear();
-
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    Message message = ds.getValue(Message.class);
-                    if(message.getReceiver().equals(hisUid) && message.getSender().equals(myUid)||
-                            message.getReceiver().equals(myUid) && message.getSender().equals(hisUid)){ //TODO create unique identifier to pull from
-                        messages.add(message);
-                        Log.d("CHAT_ACTIVITY", message.toString());
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-         */
 
     }
 
@@ -257,7 +282,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("receiver", hisUid);
         hashMap.put("message", message);
         hashMap.put("timeStamp", timeStamp);
-        hashMap.put("isSeen", false);
+        hashMap.put("seen", false);
 
         dbChats.push().setValue(hashMap); //TODO have custom push value
 
@@ -287,7 +312,7 @@ public class ChatActivity extends AppCompatActivity {
         //set user status to time stamp
         String timeStamp = String.valueOf(System.currentTimeMillis());
         updateUserStatus(timeStamp);
-
+        updateUserTypeTo("noOne");
         seenDbReference.removeEventListener(seenListener);
     }
 

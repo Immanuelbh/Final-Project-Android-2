@@ -23,7 +23,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     Context uCtx;
     List<User> userList;
-    //String userUid;
 
     public UserAdapter(Context uCtx, List<User> users){
         this.uCtx = uCtx;

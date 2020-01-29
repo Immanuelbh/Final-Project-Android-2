@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 public class Message {
 
     String message, receiver, sender, timeStamp;
-    boolean isSeen;
+    boolean seen;
 
     public Message() {
     }
@@ -15,7 +15,7 @@ public class Message {
         this.receiver = receiver;
         this.sender = sender;
         this.timeStamp = timeStamp;
-        this.isSeen = isSeen;
+        this.seen = isSeen;
     }
 
     public String getMessage() {
@@ -51,12 +51,11 @@ public class Message {
     }
 
     public boolean isSeen() {
-        return isSeen;
+        return seen;
     }
 
-    //both don't catch : No setter found on class
     public void setSeen(boolean seen) {
-        isSeen = seen;
+        this.seen = seen;
     }
 
     @NonNull

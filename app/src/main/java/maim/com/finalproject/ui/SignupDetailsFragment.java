@@ -84,13 +84,9 @@ public class SignupDetailsFragment extends Fragment {
         //initPlaces();
         //setupPlaceAutoComplete();
 
-
-
         ageSb = rootView.findViewById(R.id.signup_age_seekbar);
         rangeSb = rootView.findViewById(R.id.signup_range_seekbar);
 
-        //signupAgeTv.setText(ageSb.getProgress());
-        //signupRangeTv.setText(ageSb.getProgress());
         ageProgress = String.valueOf(ageSb.getProgress() + MIN_AGE);
         ageSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -153,7 +149,8 @@ public class SignupDetailsFragment extends Fragment {
                             fbUser.getDisplayName(),
                             ageProgress,
                             rangeProgress,
-                            "Online");
+                            "Online",
+                            "noOne");
                     users.child(fbUser.getUid()).setValue(newUser);
 
                 }
@@ -166,17 +163,7 @@ public class SignupDetailsFragment extends Fragment {
                 getFragmentManager().popBackStackImmediate();
             }
         });
-        /*
-        View signupDialog = getLayoutInflater().inflate(R.layout.signup_details_layout, null);
-        builder.setView(signupDialog).setPositiveButton("Register", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-
-            }
-        }).show();
-        */
+        
         return rootView;
     }
 

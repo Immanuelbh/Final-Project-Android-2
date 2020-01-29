@@ -10,21 +10,24 @@ public class User {
     private String maxRange;
     private String imageUrl;
     private String onlineStatus;
+    private String typingTo;
+
     //Preferred Location
     //Skills I can teach
     //Skills I want to learn
-    //User image (uri)
+    //User image (url)
 
 
     public User() {   }
 
-    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus) {
+    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo) {
         this.email = email;
         this.UID = UID;
         this.name = name;
         this.age = age;
         this.maxRange = maxRange;
         this.onlineStatus = onlineStatus;
+        this.typingTo = typingTo;
         //TODO add image url to db
     }
 
@@ -82,5 +85,13 @@ public class User {
 
     public void setOnlineStatus(String onlineStatus) {
         this.onlineStatus = onlineStatus;
+    }
+
+    public String getTypingTo() {
+        return typingTo;
+    }
+
+    public void setTypingTo(String typingTo) {
+        this.typingTo = typingTo;
     }
 }
