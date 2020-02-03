@@ -76,11 +76,9 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
                 bundle.putInt("current_genre", gvh.getAdapterPosition());
                 subGenreFragment.setArguments(bundle);
 
-
                 FragmentTransaction transaction = ((AppCompatActivity)gCtx).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.recycler_container, subGenreFragment);
                 transaction.addToBackStack(null);
-
                 transaction.commit();
 
             }

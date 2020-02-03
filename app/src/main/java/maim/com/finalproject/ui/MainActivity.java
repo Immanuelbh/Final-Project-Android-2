@@ -4,22 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,11 +39,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import maim.com.finalproject.R;
+import maim.com.finalproject.adapters.GenreAdapter;
+import maim.com.finalproject.model.Genre;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
+    private static final String SEARCH_FRAGMENT_TAG = "search_fragment";
+
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -53,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbUsers = database.getReference("users");
 
+    ProgressDialog progressDialog;
+    DatabaseReference dbGenres;
+    private List<Genre> genresList = new ArrayList<>();
+    RecyclerView recyclerView;
+    SearchView searchView;
+    private GenreAdapter adapter;
+
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
+        searchView=findViewById(R.id.search_view_1);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -134,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                                             Snackbar.make(coordinatorLayout, "Login successful", Snackbar.LENGTH_SHORT).show();
                                         else
                                             Snackbar.make(coordinatorLayout, "Login failed", Snackbar.LENGTH_SHORT).show();
-
                                     }
                                 });
                             }
@@ -143,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_search:
                         //TODO return to initial fragment (genres)
                         break;
-
                     case R.id.item_profile:
                         //TODO open profile fragment
                         break;
@@ -161,14 +179,11 @@ public class MainActivity extends AppCompatActivity {
 
                         firebaseAuth.signOut();
                         Snackbar.make(coordinatorLayout, "Logged out", Snackbar.LENGTH_SHORT).show();
-
                         break;
                 }
-
                 return false;
             }
         });
-
 
         final CollapsingToolbarLayout ctl = findViewById(R.id.collapsing_layout);
         ctl.setTitle("Please Log In");
@@ -203,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                     //update menu ui - user logged in
                     userTv.setText(user.getDisplayName() + " logged in");
                     ctl.setTitle(user.getDisplayName()+"");
-
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_search).setVisible(true);
@@ -212,40 +226,31 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_messages).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
-
-
-
-
-
-
                 }
                 else{ //logged out or not sign in yet
                     //update ui
                     userTv.setText("Please Log In");
                     ctl.setTitle("Please Log In");
-
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.item_search).setVisible(false);
+
+                    navigationView.getMenu().findItem(R.id.item_search).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_profile).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_confirmations).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_messages).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
-
                 }
             }
         };
 
         //adding genres fragment
         GenreFragment genreFragment = GenreFragment.newInstance();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
         transaction.commit();
-
-
+        initSearch();
     }
 
 
@@ -253,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    Fragment selectedFragment=null;//ref to the frag we want to open
+                    Fragment selectedFragment=null;//dbGenres to the frag we want to open
 
                     switch(menuItem.getItemId()){
                         case R.id.nav_home:
@@ -268,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.recycler_container,
                             selectedFragment).commit();
-
                     return true; //select the clicked item
                 }
             };
@@ -293,4 +297,63 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
     }
+
+    public void initSearch(){
+
+        if(searchView!=null){
+            searchView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    searchView.setIconified(false);
+                }
+            });
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if(query.length()>0) {
+                        //adding genres fragment
+                        SearchFragment searchFragment = SearchFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putCharSequence("search_genre_query", query);
+                        searchFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, searchFragment, SEARCH_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    else{
+                        GenreFragment genreFragment = GenreFragment.newInstance();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        transaction.commit();
+
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    if(newText.length()>0) {
+                        //adding genres fragment
+                        SearchFragment searchFragment = SearchFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putCharSequence("search_genre_query", newText);
+                        searchFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, searchFragment, SEARCH_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    else{
+                        GenreFragment genreFragment = GenreFragment.newInstance();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    return true;
+                }
+            });
+        }
+
+    }
 }
+

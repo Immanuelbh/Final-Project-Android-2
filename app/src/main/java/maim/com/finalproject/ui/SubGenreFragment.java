@@ -53,11 +53,9 @@ public class SubGenreFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle!=null){
             String genreName = (String) bundle.getCharSequence("genre_name");
-
             Genre genre = (Genre) bundle.getSerializable("genre");
             if(genre != null){
                 List<SubGenre> list = new ArrayList<SubGenre>(genre.getSubGenres().values());
-
                 SubGenreAdapter adapter = new SubGenreAdapter(rootView.getContext(), list);
                 recyclerView.setAdapter(adapter);
             }

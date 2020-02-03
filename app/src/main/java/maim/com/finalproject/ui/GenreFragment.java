@@ -58,37 +58,8 @@ public class GenreFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.genre_fragment, container, false);
 
-
         firebaseAuth = FirebaseAuth.getInstance();
         dbGenres = FirebaseDatabase.getInstance().getReference("genres");
-
-
-
-
-        //fab
-        /*
-        fab = rootView.findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder genreBuilder = new AlertDialog.Builder(getContext());
-                View genreDialogView = getLayoutInflater().inflate(R.layout.add_genre_dialog, null);
-                final EditText editText = genreDialogView.findViewById(R.id.genre_name_et);
-                genreBuilder.setView(genreDialogView).setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String genreName = editText.getText().toString();
-                        genresList.add(new Genre(genreName));
-                        adapter.notifyItemInserted(genresList.size()-1);
-                        dbGenres.child(firebaseAuth.getCurrentUser().getUid()).setValue(genresList);
-                        Toast.makeText(getContext(), "Added genre " + genreName, Toast.LENGTH_SHORT).show();
-                    }
-                }).show();
-            }
-        });
-
-        */
 
         final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
@@ -116,7 +87,6 @@ public class GenreFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
                 progressDialog.dismiss();
-
             }
 
             @Override
@@ -124,9 +94,7 @@ public class GenreFragment extends Fragment {
 
             }
         });
-
         //TODO: add model
-
         return rootView;
     }
 }

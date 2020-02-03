@@ -14,6 +14,10 @@ public class User {
     //User image (uri)
 
 
+    public User() {
+    }
+
+
     public User(String firstName, String lastName, int age, int maxRange) {
         this.firstName = firstName;
         this.lastName = lastName;
