@@ -73,7 +73,7 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     //returns the type according to our logic
     @Override
     public int getItemViewType(int position) {
-        if(typeList.get(position) instanceof Genre){ //TODO this condition works BUT gotta change him to something else
+        if(typeList.get(position) instanceof Genre){
             return TYPE_GENRE;
         }
         return TYPE_SUBGENRE;
@@ -126,7 +126,7 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if(getItemViewType(position)==TYPE_GENRE){
-           //bind viewholder one
+            //bind viewholder one
             GenreViewHolder genreViewHolder = (GenreViewHolder) holder; //casting to the correct VH
             Genre genre = (Genre) typeList.get(position);
             genreViewHolder.titleTv.setText(genre.getName());
