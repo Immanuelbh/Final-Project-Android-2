@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SIGNUP_FRAGMENT_TAG = "signup_details_fragment";
     private static final String PROFILE_FRAGMENT_TAG = "profile_fragment";
     private static final String MESSAGES_FRAGMENT_TAG = "messages_fragment";
+    private static final String SEARCH_FRAGMENT_TAG = "search_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -68,15 +69,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbGenres = database.getReference("genres");
 
-
-    ProgressDialog progressDialog;
-    DatabaseReference dbGenres;
-    private List<Genre> genresList = new ArrayList<>();
-    RecyclerView recyclerView;
     SearchView searchView;
-    private GenreAdapter adapter;
 
-    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
