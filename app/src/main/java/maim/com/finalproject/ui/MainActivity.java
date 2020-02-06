@@ -14,16 +14,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,14 +47,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import maim.com.finalproject.R;
-import maim.com.finalproject.adapters.GenreAdapter;
 import maim.com.finalproject.model.Genre;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String GENRE_FRAGMENT_TAG = "genres_fragment";
-    private static final String SEARCH_FRAGMENT_TAG = "search_fragment";
-
+    private static final String SIGNUP_FRAGMENT_TAG = "signup_details_fragment";
+    private static final String PROFILE_FRAGMENT_TAG = "profile_fragment";
+    private static final String MESSAGES_FRAGMENT_TAG = "messages_fragment";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -62,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
     String fullName;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbUsers = database.getReference("users");
+    DatabaseReference dbGenres = database.getReference("genres");
+
 
     ProgressDialog progressDialog;
     DatabaseReference dbGenres;
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dialogView  = getLayoutInflater().inflate(R.layout.sign_in_dialog,null);
 
                 final EditText emailEt = dialogView.findViewById(R.id.email_input);
@@ -107,9 +112,18 @@ public class MainActivity extends AppCompatActivity {
                 //final EditText lastNameEt = dialogView.findViewById(R.id.last_name_input);
                 final EditText passwordEt = dialogView.findViewById(R.id.password_input);
 
+
                 switch (item.getItemId()){
+                    case R.id.item_users:
+                        //TODO return to initial fragment (genres)
+                        UsersFragment usersFragment = UsersFragment.newInstance();
+
+                        FragmentTransaction usersTransaction = getSupportFragmentManager().beginTransaction();
+                        usersTransaction.replace(R.id.recycler_container, usersFragment, PROFILE_FRAGMENT_TAG);
+                        usersTransaction.addToBackStack(null).commit();
+                        break;
                     case R.id.item_sign_up:
-                        builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                        builder.setView(dialogView).setPositiveButton("Next", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String email = emailEt.getText().toString();
@@ -124,10 +138,22 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                        if(task.isSuccessful())
+                                        if(task.isSuccessful()){
+
+                                            SignupDetailsFragment signupDetailsFragment = SignupDetailsFragment.newInstance();
+
+
+                                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.recycler_container, signupDetailsFragment, SIGNUP_FRAGMENT_TAG);
+                                            transaction.addToBackStack(null).commit();
+
+
                                             Snackbar.make(coordinatorLayout, "Signup successful", Snackbar.LENGTH_SHORT).show();
-                                        else
+                                        }
+                                        else{
                                             Snackbar.make(coordinatorLayout, "Signup failed", Snackbar.LENGTH_SHORT).show();
+                                        }
+
 
                                     }
                                 });
@@ -154,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                             Snackbar.make(coordinatorLayout, "Login successful", Snackbar.LENGTH_SHORT).show();
                                         else
                                             Snackbar.make(coordinatorLayout, "Login failed", Snackbar.LENGTH_SHORT).show();
+
                                     }
                                 });
                             }
@@ -162,14 +189,23 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_search:
                         //TODO return to initial fragment (genres)
                         break;
+
                     case R.id.item_profile:
-                        //TODO open profile fragment
+                        ProfileFragment profileFragment = ProfileFragment.newInstance();
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, profileFragment, PROFILE_FRAGMENT_TAG);
+                        transaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_confirmations:
                         //TODO open confirmation fragment
                         break;
                     case R.id.item_messages:
-                        //TODO open messages fragment
+                        ChatFragment chatFragment = ChatFragment.newInstance();
+
+                        FragmentTransaction chatTransaction = getSupportFragmentManager().beginTransaction();
+                        chatTransaction.replace(R.id.recycler_container, chatFragment, MESSAGES_FRAGMENT_TAG);
+                        chatTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_settings:
                         //TODO open settings fragment
@@ -179,11 +215,18 @@ public class MainActivity extends AppCompatActivity {
 
                         firebaseAuth.signOut();
                         Snackbar.make(coordinatorLayout, "Logged out", Snackbar.LENGTH_SHORT).show();
+                        GenreFragment genreFragment = GenreFragment.newInstance();
+
+                        FragmentTransaction homeTransaction = getSupportFragmentManager().beginTransaction();
+                        homeTransaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        homeTransaction.commit();
                         break;
                 }
+
                 return false;
             }
         });
+
 
         final CollapsingToolbarLayout ctl = findViewById(R.id.collapsing_layout);
         ctl.setTitle("Please Log In");
@@ -211,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                                 fullName = null;
                                 if(task.isSuccessful())
                                     Snackbar.make(coordinatorLayout, "Welcome " + user.getDisplayName() + "!", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + " is now connected", Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -218,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     //update menu ui - user logged in
                     userTv.setText(user.getDisplayName() + " logged in");
                     ctl.setTitle(user.getDisplayName()+"");
+
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_search).setVisible(true);
@@ -226,11 +271,18 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_messages).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
+
+
+
+
+
+
                 }
                 else{ //logged out or not sign in yet
                     //update ui
                     userTv.setText("Please Log In");
                     ctl.setTitle("Please Log In");
+
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(false);
@@ -241,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_messages).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
+
                 }
             }
         };
 
         //adding genres fragment
         GenreFragment genreFragment = GenreFragment.newInstance();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
         transaction.commit();
@@ -254,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener=
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -262,17 +316,21 @@ public class MainActivity extends AppCompatActivity {
 
                     switch(menuItem.getItemId()){
                         case R.id.nav_home:
-                        selectedFragment =new GenreFragment();
-                        break;
+                            selectedFragment = new GenreFragment();
+                            break;
                         case R.id.nav_favorites:
-                        selectedFragment =new FavoritesFragment();
-                        break;
+                            //getActionBar().setTitle("Favorites");
+                            selectedFragment = new FavoritesFragment();
+                            break;
                         case R.id.nav_chat:
-                        selectedFragment =new ChatFragment();
-                        break;
+                            //getActionBar().setTitle("Chat");
+                            selectedFragment = new ChatFragment();
+                            break;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.recycler_container,
-                            selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.recycler_container, selectedFragment)
+                            .commit();
+
                     return true; //select the clicked item
                 }
             };
@@ -356,4 +414,3 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-

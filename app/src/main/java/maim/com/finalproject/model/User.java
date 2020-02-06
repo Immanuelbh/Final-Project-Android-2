@@ -4,56 +4,94 @@ public class User {
 
     //private long id;
     private String email;
-    private String firstName;
-    private String lastName;
-    private int age;
-    private int maxRange;
+    private String UID;
+    private String name;
+    private String age;
+    private String maxRange;
+    private String imageUrl;
+    private String onlineStatus;
+    private String typingTo;
+
     //Preferred Location
     //Skills I can teach
     //Skills I want to learn
-    //User image (uri)
+    //User image (url)
 
 
-    public User() {
-    }
+    public User() {   }
 
-
-    public User(String firstName, String lastName, int age, int maxRange) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo) {
+        this.email = email;
+        this.UID = UID;
+        this.name = name;
         this.age = age;
         this.maxRange = maxRange;
+        this.onlineStatus = onlineStatus;
+        this.typingTo = typingTo;
+        //TODO add image url to db
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getUID() {
+        return UID;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
-    public int getAge() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
-    public int getMaxRange() {
+    public String getMaxRange() {
         return maxRange;
     }
 
-    public void setMaxRange(int maxRange) {
+    public void setMaxRange(String maxRange) {
         this.maxRange = maxRange;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getOnlineStatus() {
+        return onlineStatus;
+    }
+
+    public void setOnlineStatus(String onlineStatus) {
+        this.onlineStatus = onlineStatus;
+    }
+
+    public String getTypingTo() {
+        return typingTo;
+    }
+
+    public void setTypingTo(String typingTo) {
+        this.typingTo = typingTo;
     }
 }
