@@ -2,6 +2,7 @@ package maim.com.finalproject.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.User;
 import maim.com.finalproject.ui.ChatActivity;
+import maim.com.finalproject.ui.SearchUsersFragment;
+import maim.com.finalproject.ui.SearchedConfirmationFragment;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
 
@@ -53,9 +59,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         uvh.rowLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SearchedConfirmationFragment searchedConfirmationFragment = SearchedConfirmationFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", userList.get(uvh.getAdapterPosition()));
+                searchedConfirmationFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = ((AppCompatActivity)uCtx).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.recycler_container, searchedConfirmationFragment);
+                //transaction.addToBackStack(null);
+                transaction.commit();
+
+                /* opens user chat
                 Intent intent = new Intent(parent.getContext(), ChatActivity.class);
                 intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
                 uCtx.startActivity(intent);
+
+                 */
             }
         });
         return uvh;

@@ -70,7 +70,7 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
 
                 SearchUsersFragment searchUsersFragment = SearchUsersFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putCharSequence("subGenre", subGenres.get(svh.getAdapterPosition()).getName().toLowerCase());
+                bundle.putCharSequence("subGenre", subGenres.get(svh.getAdapterPosition()).getName());
 
                 searchUsersFragment.setArguments(bundle);
                 FragmentTransaction usersTransaction = ((AppCompatActivity)sCtx).getSupportFragmentManager().beginTransaction();

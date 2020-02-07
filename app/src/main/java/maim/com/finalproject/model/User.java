@@ -1,9 +1,10 @@
 package maim.com.finalproject.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class User {
+public class User implements Serializable {
 
     //private long id;
     private String email;

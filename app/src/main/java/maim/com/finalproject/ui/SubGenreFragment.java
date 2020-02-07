@@ -49,7 +49,6 @@ public class SubGenreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.genre_fragment, container, false);
 
-
         final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
         recyclerView.setHasFixedSize(true);

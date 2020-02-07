@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ public class SearchUsersFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     DatabaseReference dbUsers;
     UserAdapter adapter; //for now
+    String skillToFind;
 
     public static SearchUsersFragment newInstance() {
         SearchUsersFragment searchUsersFragment  = new SearchUsersFragment();
@@ -66,43 +68,54 @@ public class SearchUsersFragment extends Fragment {
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
-        final String skillToFind = getArguments().getCharSequence("subGenre").toString();
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            CharSequence skill = bundle.getCharSequence("subGenre");
+            if(skill != null){
+                skillToFind = skill.toString().toLowerCase();
 
-        dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        User user = snapshot.getValue(User.class);
-                        if(!user.getUID().equals(fbUser.getUid())){
-                            if(user.getMySkillsList().containsKey(skillToFind)){
-                                userList.add(user);
+                dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        userList.clear();
+                        if(dataSnapshot.exists()){
+                            for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                                User user = snapshot.getValue(User.class);
+                                if(!user.getUID().equals(fbUser.getUid())){
+                                    if(user.getMySkillsList().containsKey(skillToFind)){
+                                        userList.add(user);
+                                    }
+                                }
+                                //userList.add(user);
+                                //Log.d("GENRE_FRAGMENT:", genre.toString());
+                            }
+                            adapter.notifyDataSetChanged();
+                            if(userList.isEmpty()){
+                                recyclerView.setVisibility(View.GONE);
+                                noUsersTv.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                noUsersTv.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+
                             }
                         }
-                        //userList.add(user);
-                        //Log.d("GENRE_FRAGMENT:", genre.toString());
-                    }
-                    adapter.notifyDataSetChanged();
-                    if(userList.isEmpty()){
-                        recyclerView.setVisibility(View.GONE);
-                        noUsersTv.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        noUsersTv.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
 
                     }
-                }
-                progressDialog.dismiss();
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            else{
+                Toast.makeText(getContext(), "failed to transfer subgenre", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
 
-            }
-        });
 
 
 
