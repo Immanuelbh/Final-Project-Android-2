@@ -1,5 +1,8 @@
 package maim.com.finalproject.model;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class User {
 
     //private long id;
@@ -11,6 +14,7 @@ public class User {
     private String imageUrl;
     private String onlineStatus;
     private String typingTo;
+    private HashMap<String,SubGenre> mySkillsList;
 
     //Preferred Location
     //Skills I can teach
@@ -20,7 +24,7 @@ public class User {
 
     public User() {   }
 
-    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo) {
+    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo, HashMap<String,SubGenre> list)  {
         this.email = email;
         this.UID = UID;
         this.name = name;
@@ -28,6 +32,7 @@ public class User {
         this.maxRange = maxRange;
         this.onlineStatus = onlineStatus;
         this.typingTo = typingTo;
+        this.mySkillsList = list;
         //TODO add image url to db
     }
 
@@ -93,5 +98,13 @@ public class User {
 
     public void setTypingTo(String typingTo) {
         this.typingTo = typingTo;
+    }
+
+    public HashMap<String, SubGenre> getMySkillsList() {
+        return mySkillsList;
+    }
+
+    public void setMySkillsList(HashMap<String, SubGenre> mySkillsList) {
+        this.mySkillsList = mySkillsList;
     }
 }

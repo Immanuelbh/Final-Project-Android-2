@@ -1,9 +1,12 @@
 package maim.com.finalproject.model;
 
 
-public class SubGenre {
+import java.io.Serializable;
+
+public class SubGenre implements Serializable {
     private String name;
     private String imageUrl;
+    //private boolean checked;
 
     public SubGenre() {    }
 
@@ -26,4 +29,6 @@ public class SubGenre {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
 }
