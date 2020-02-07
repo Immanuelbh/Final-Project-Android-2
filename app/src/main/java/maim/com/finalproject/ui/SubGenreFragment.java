@@ -58,46 +58,25 @@ public class SubGenreFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle!=null){
-            String action = bundle.getCharSequence("action").toString();
+            CharSequence actionCs = bundle.getCharSequence("action");
+            String action = null;
+            if(actionCs != null){
+                action = actionCs.toString();
+            }
 
             Genre genre = (Genre) bundle.getSerializable("genre");
             if(genre != null){
                 List<SubGenre> list = new ArrayList<SubGenre>(genre.getSubGenres().values());
 
-                if(action != null){
+                if(action != null){ //during signup
                     final SignupSubGenreAdapter signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list);
                     recyclerView.setAdapter(signupSubGenreAdapter);
-/*
-                    try{
-                        this.getView().setFocusableInTouchMode(true);
-                        this.getView().requestFocus();
-                        this.getView().setOnKeyListener( new View.OnKeyListener()
-                        {
-                            @Override
-                            public boolean onKey( View v, int keyCode, KeyEvent event )
-                            {
-                                if( keyCode == KeyEvent.KEYCODE_BACK )
-                                {
-                                    FragmentManager fm = getFragmentManager();
-                                    Fragment ft = fm.findFragmentByTag(GenreFragment.GENRE_FRAGMENT_TAG);
-                                    ft.setTargetFragment(ft, GenreFragment.CODE_REQUEST);
-                                    //sendCurrentMySkills(Activity.RESULT_OK, signupSubGenreAdapter.getMySkills());
 
-                                    return true;
-                                }
-                                return false;
-                            }
-                        } );
-
-                    }
-                    catch (NullPointerException e){
-                        e.getStackTrace();
-                        Toast.makeText(getContext(), "failed on getView", Toast.LENGTH_SHORT).show();
-                    }*/
                 }
-                else{
+                else{ //during search
                     SubGenreAdapter subGenreAdapter = new SubGenreAdapter(rootView.getContext(), list);
                     recyclerView.setAdapter(subGenreAdapter);
+
                 }
 
 

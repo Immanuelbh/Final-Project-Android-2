@@ -2,7 +2,6 @@ package maim.com.finalproject.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,21 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import maim.com.finalproject.R;
-import maim.com.finalproject.adapters.GenreAdapter;
 import maim.com.finalproject.adapters.UserAdapter;
 import maim.com.finalproject.model.User;
 
-public class UsersFragment extends Fragment {
+public class SearchUsersFragment extends Fragment {
 
     RecyclerView recyclerView;
     private List<User> userList = new ArrayList<>();
     FirebaseAuth firebaseAuth;
     DatabaseReference dbUsers;
-    UserAdapter adapter;
+    UserAdapter adapter; //for now
 
-    public static UsersFragment newInstance() {
-        UsersFragment usersFragment  = new UsersFragment();
-        return usersFragment;
+    public static SearchUsersFragment newInstance() {
+        SearchUsersFragment searchUsersFragment  = new SearchUsersFragment();
+        return searchUsersFragment;
     }
 
 
@@ -65,6 +62,8 @@ public class UsersFragment extends Fragment {
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
+        final String skillToFind = getArguments().getCharSequence("subGenre").toString();
+
         dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,9 +72,9 @@ public class UsersFragment extends Fragment {
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
                         if(!user.getUID().equals(fbUser.getUid())){
-                            userList.add(user);
-
-
+                            if(user.getMySkillsList().containsKey(skillToFind)){
+                                userList.add(user);
+                            }
                         }
                         //userList.add(user);
                         //Log.d("GENRE_FRAGMENT:", genre.toString());
@@ -91,6 +90,7 @@ public class UsersFragment extends Fragment {
 
             }
         });
+
 
         return rootView;
     }

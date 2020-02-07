@@ -20,9 +20,11 @@ import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.SubGenre;
+import maim.com.finalproject.ui.SearchUsersFragment;
 
 public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGenreViewHolder> {
 
+    private static final String SEARCH_USERS_FRAGMENT = "search_users_fragment";
     private Context sCtx;
     private List<SubGenre> subGenres;
     private SubGenreListener listener;
@@ -64,8 +66,17 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
         svh.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add query
+                //TODO click starts search fragment -> finds matching users (in fragment) -> displays them
 
+                SearchUsersFragment searchUsersFragment = SearchUsersFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putCharSequence("subGenre", subGenres.get(svh.getAdapterPosition()).getName().toLowerCase());
+
+                searchUsersFragment.setArguments(bundle);
+                FragmentTransaction usersTransaction = ((AppCompatActivity)sCtx).getSupportFragmentManager().beginTransaction();
+                usersTransaction.replace(R.id.recycler_container, searchUsersFragment, SEARCH_USERS_FRAGMENT);
+                usersTransaction.addToBackStack(null).commit();
+                //searchUsersSkills(subGenres.get(svh.getAdapterPosition()));
             }
         });
         return svh;
