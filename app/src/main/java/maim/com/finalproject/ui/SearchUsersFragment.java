@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,6 +51,8 @@ public class SearchUsersFragment extends Fragment {
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         final RecyclerView recyclerView = rootView.findViewById(R.id.users_recycler);
+        TextView noUsersTv = rootView.findViewById(R.id.search_no_users_tv);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         recyclerView.setHasFixedSize(true);
         adapter = new UserAdapter(rootView.getContext(), userList);
@@ -91,6 +94,15 @@ public class SearchUsersFragment extends Fragment {
             }
         });
 
+        if(userList.isEmpty()){
+            recyclerView.setVisibility(View.GONE);
+            noUsersTv.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerView.setVisibility(View.VISIBLE);
+            noUsersTv.setVisibility(View.GONE);
+
+        }
 
         return rootView;
     }
