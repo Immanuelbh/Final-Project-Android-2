@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,10 +28,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     private static final int MSG_TYPE_RIGHT = 0;
     private static final int MSG_TYPE_LEFT = 1;
+    private static final int MSG_TYPE_CONFIRMATION = 2;
     Context mCtx;
     List<Message> messages = new ArrayList<>();
     String imageUrl;
     private FirebaseUser fbUser;
+    LinearLayout confirmationLl;
+
+    //TODO add confirmation message
 
     public MessageAdapter(Context mCtx, List<Message> messages){
         this.mCtx = mCtx;
@@ -42,6 +47,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         ImageView profileIv;
         TextView messageTv, timeTv, isSeenTv;
 
+
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -49,6 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageTv = itemView.findViewById(R.id.m_message_tv);
             timeTv = itemView.findViewById(R.id.m_time_stamp);
             isSeenTv = itemView.findViewById(R.id.m_delivered);
+            confirmationLl = itemView.findViewById(R.id.chat_confirmation_msg);
 
         }
     }
@@ -63,8 +70,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             return new MessageViewHolder(view);
         }
-        else { //left
+        else if (viewType == MSG_TYPE_LEFT){ //left
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_left, parent, false);
+
+            return new MessageViewHolder(view);
+        }else { //confirmation
+            View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_confirm, parent, false);
+
+            confirmationLl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
 
             return new MessageViewHolder(view);
         }
@@ -99,7 +118,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public int getItemViewType(int position) {
 
         fbUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(messages.get(position).getSender().equals(fbUser.getUid())){
+        if (messages.get(position).getType().equals("confirmation")){
+            return MSG_TYPE_CONFIRMATION;
+        }
+        else if(messages.get(position).getSender().equals(fbUser.getUid())){
             return MSG_TYPE_RIGHT;
         }
 

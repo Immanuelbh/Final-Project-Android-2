@@ -4,18 +4,19 @@ import androidx.annotation.NonNull;
 
 public class Message {
 
-    String message, receiver, sender, timeStamp;
+    String message, receiver, sender, timeStamp, type;
     boolean seen;
 
     public Message() {
     }
 
-    public Message(String message, String receiver, String sender, String timeStamp, boolean isSeen) {
+    public Message(String message, String receiver, String sender, String timeStamp, boolean isSeen, String type) {
         this.message = message;
         this.receiver = receiver;
         this.sender = sender;
         this.timeStamp = timeStamp;
         this.seen = isSeen;
+        this.type = type;
     }
 
     public String getMessage() {
@@ -56,6 +57,14 @@ public class Message {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @NonNull

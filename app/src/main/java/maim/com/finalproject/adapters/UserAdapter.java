@@ -67,7 +67,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
                 FragmentTransaction transaction = ((AppCompatActivity)uCtx).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.recycler_container, searchedConfirmationFragment);
-                //transaction.addToBackStack(null);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
                 /* opens user chat

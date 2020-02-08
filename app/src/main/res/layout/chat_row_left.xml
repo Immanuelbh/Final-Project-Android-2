@@ -51,7 +51,22 @@
         android:text="Delivered"
         android:visibility="gone"
         />
-
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:layout_gravity="end|bottom"
+        android:layout_weight="1"
+        android:id="@+id/chat_confirm_btn"
+        android:visibility="gone"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/chat_confirmation_msg"
+        android:visibility="gone"
+        />
 
 
 

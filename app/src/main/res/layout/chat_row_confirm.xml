@@ -6,44 +6,52 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/m_time_stamp"
+        android:text="01/02/2031 04:05"
+        android:layout_gravity="center"
+        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
+        android:background="@color/holoGrey"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:padding="3dp"
+        android:alpha="0.8"
+        android:id="@+id/chat_confirmation_msg"
         >
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/m_time_stamp"
-            android:text="01/02/2031 04:05"
-            />
-        <TextView
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/m_message_tv"
             android:textSize="16sp"
             android:textColor="@color/quantum_black_text"
-            android:text="His message"
-            android:background="@drawable/bg_sender"
+            android:text="Confirmation Message"
             android:padding="15dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             />
-
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/m_profile_iv"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="gone"
-            />
-
-
-
+            android:layout_gravity="end|center"
+            android:background="@drawable/ic_check"
+        />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/m_profile_iv"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="gone"
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,24 +59,10 @@
         android:textAlignment="textEnd"
         android:gravity="end"
         android:text="Delivered"
+        android:visibility="gone"
         />
 
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Confirm"
-        android:layout_gravity="end|bottom"
-        android:layout_weight="1"
-        android:id="@+id/chat_confirm_btn"
-        android:visibility="gone"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/chat_confirmation_msg"
-        android:visibility="gone"
-        />
+
 
 
 </LinearLayout>

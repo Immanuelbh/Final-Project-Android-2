@@ -96,6 +96,10 @@ public class ChatActivity extends AppCompatActivity {
         //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
+        String confirmationMsg = intent.getStringExtra("confirmation");
+        if(confirmationMsg != null){
+            sendMessage(confirmationMsg, "confirmation");
+        }
         //Log.d("CHAT_ACTIVITY", "receiver uid: " + hisUid);
 
         //search user to get his information
@@ -157,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                 // get text from et
                 String message = messageEt.getText().toString().trim();
                 if(!TextUtils.isEmpty(message)){
-                    sendMessage(message);
+                    sendMessage(message, "regular");
                 }
                 else{
                     Toast.makeText(ChatActivity.this, "Message is empty..", Toast.LENGTH_SHORT).show();
@@ -272,7 +276,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(String message, String type) {
         DatabaseReference dbChats = FirebaseDatabase.getInstance().getReference("chats");
 
         String timeStamp = String.valueOf(System.currentTimeMillis());
@@ -283,6 +287,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("message", message);
         hashMap.put("timeStamp", timeStamp);
         hashMap.put("seen", false);
+        hashMap.put("type", type);
 
         dbChats.push().setValue(hashMap); //TODO have custom push value
 

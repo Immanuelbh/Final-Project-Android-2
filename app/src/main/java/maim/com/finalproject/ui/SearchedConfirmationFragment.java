@@ -1,21 +1,26 @@
 package maim.com.finalproject.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +43,8 @@ import maim.com.finalproject.model.User;
 public class SearchedConfirmationFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
-    FirebaseUser user;
+    FirebaseUser myUser;
+    User hisUser;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
 
@@ -63,7 +69,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
         //init firebase
         firebaseAuth= FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
+        myUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         users = firebaseDatabase.getReference("users");
 
@@ -71,23 +77,27 @@ public class SearchedConfirmationFragment extends Fragment {
         nameTv = rootView.findViewById(R.id.profile_name_tv);
         ageTv = rootView.findViewById(R.id.profile_age_tv);
         recyclerView = rootView.findViewById(R.id.confirmation_myskills);
+        ImageView scheduleTime = rootView.findViewById(R.id.confirmation_schedule_time);
+        final BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.GONE);
+        Button scheduleBtn = rootView.findViewById(R.id.confirmation_schedule_btn);
 
         recyclerView.setLayoutManager((new GridLayoutManager(rootView.getContext(), 2, LinearLayoutManager.HORIZONTAL, true)));
         recyclerView.setHasFixedSize(true);
 
-        Toast.makeText(getContext(),"you made it", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),"you made it", Toast.LENGTH_SHORT).show();
         Bundle bundle = this.getArguments();
         if(bundle != null){
             //List<SubGenre> mySkills = (List<SubGenre>) bundle.getSerializable("subGenres");
 
 
 
-            User user = (User) bundle.getSerializable("user");
+            hisUser = (User) bundle.getSerializable("user");
 
             //update ui
-            nameTv.setText(user.getName());
-            ageTv.setText(user.getAge());
-            mySkillsList = user.getMySkillsList();
+            nameTv.setText(hisUser.getName());
+            ageTv.setText(hisUser.getAge());
+            mySkillsList = hisUser.getMySkillsList();
             
             if(mySkillsList != null){
 
@@ -105,36 +115,28 @@ public class SearchedConfirmationFragment extends Fragment {
             }
 
         }
-/*
-        //query the db
-        Query query = users.orderByChild("email").equalTo(user.getEmail());
-        query.addValueEventListener(new ValueEventListener() {
+
+        scheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onClick(View v) {
+                ScheduleTimeFragment scheduleTimeFragment = ScheduleTimeFragment.newInstance();
 
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    //get data
-                    String name = ds.child("name").getValue()+"";
-                    String age = ds.child("age").getValue()+"";
-                    String image = ds.child("imageUrl").getValue()+"";
-
-                    nameTv.setText(name);
-                    ageTv.setText(age);
-                    *//*
-                    Glide.with(rootView.getContext())
-                            .load(image)
-                            .error(R.drawable.ic_add_image)
-                            .into(profileIv);
-
-                     *//*
-                }
+                FragmentTransaction scheduleTransaction = ((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                scheduleTransaction.replace(R.id.recycler_container, scheduleTimeFragment, "schedule_time_fragment");
+                scheduleTransaction.commit();
             }
+        });
 
+        scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onClick(View v) {
 
+                Intent intent = new Intent(getContext(), ChatActivity.class);
+                intent.putExtra("user_uid", hisUser.getUID());
+                intent.putExtra("confirmation", "this is the confirmation message");
+                getContext().startActivity(intent);
             }
-        });*/
+        });
 
         return rootView;
     }
