@@ -22,6 +22,7 @@ import java.util.List;
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Genre;
 import maim.com.finalproject.model.SubGenre;
+import maim.com.finalproject.ui.SearchUsersFragment;
 import maim.com.finalproject.ui.SubGenreFragment;
 
 public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -114,7 +115,14 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             @Override
             public void onClick(View v) {
                 //TODO add query
+                SearchUsersFragment searchUsersFragment = SearchUsersFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putCharSequence("subGenre", ((SubGenre)typeList.get(svh.getAdapterPosition())).getName());
 
+                searchUsersFragment.setArguments(bundle);
+                FragmentTransaction usersTransaction = ((AppCompatActivity)gCtx).getSupportFragmentManager().beginTransaction();
+                usersTransaction.replace(R.id.recycler_container, searchUsersFragment);
+                usersTransaction.addToBackStack(null).commit();
             }
         });
         return svh;
