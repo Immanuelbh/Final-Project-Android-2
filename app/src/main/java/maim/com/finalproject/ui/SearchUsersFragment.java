@@ -44,7 +44,6 @@ public class SearchUsersFragment extends Fragment {
         return searchUsersFragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,11 +57,8 @@ public class SearchUsersFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         recyclerView.setHasFixedSize(true);
-        adapter = new UserAdapter(rootView.getContext(), userList);
-        recyclerView.setAdapter(adapter);
 
         //read genres from database
-
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage("Loading users, please wait..");
         progressDialog.show();
@@ -73,6 +69,9 @@ public class SearchUsersFragment extends Fragment {
             CharSequence skill = bundle.getCharSequence("subGenre");
             if(skill != null){
                 skillToFind = skill.toString().toLowerCase();
+
+                adapter = new UserAdapter(rootView.getContext(), userList, skillToFind);
+                recyclerView.setAdapter(adapter);
 
                 dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -86,8 +85,6 @@ public class SearchUsersFragment extends Fragment {
                                         userList.add(user);
                                     }
                                 }
-                                //userList.add(user);
-                                //Log.d("GENRE_FRAGMENT:", genre.toString());
                             }
                             adapter.notifyDataSetChanged();
                             if(userList.isEmpty()){
@@ -115,10 +112,6 @@ public class SearchUsersFragment extends Fragment {
             }
 
         }
-
-
-
-
 
         return rootView;
     }

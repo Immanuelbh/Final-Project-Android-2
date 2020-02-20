@@ -16,9 +16,9 @@ public class User implements Serializable {
     private String onlineStatus;
     private String typingTo;
     private HashMap<String,SubGenre> mySkillsList;
+    private HashMap<String,Confirmation> myConfirmations;
 
     //Preferred Location
-    //Skills I can teach
     //Skills I want to learn
     //User image (url)
 
@@ -107,5 +107,13 @@ public class User implements Serializable {
 
     public void setMySkillsList(HashMap<String, SubGenre> mySkillsList) {
         this.mySkillsList = mySkillsList;
+    }
+
+    public HashMap<String, Confirmation> getMyConfirmations() {
+        return myConfirmations;
+    }
+
+    public void setMyConfirmations(HashMap<String, Confirmation> myConfirmations) {
+        this.myConfirmations = myConfirmations;
     }
 }

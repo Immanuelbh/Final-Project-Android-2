@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String PROFILE_FRAGMENT_TAG = "profile_fragment";
     private static final String MESSAGES_FRAGMENT_TAG = "messages_fragment";
     private static final String SEARCH_FRAGMENT_TAG = "search_fragment";
+    private static final String CONFIRMATIONS_FRAGMENT_TAG = "confirmations_fragment";
+
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
@@ -192,7 +194,11 @@ public class MainActivity extends AppCompatActivity {
                         transaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_confirmations:
-                        //TODO open confirmation fragment
+                        ConfirmationsFragment confirmationsFragment = ConfirmationsFragment.newInstance();
+
+                        FragmentTransaction confirmationsTransaction = getSupportFragmentManager().beginTransaction();
+                        confirmationsTransaction.replace(R.id.recycler_container, confirmationsFragment, CONFIRMATIONS_FRAGMENT_TAG);
+                        confirmationsTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_messages:
                         ChatFragment chatFragment = ChatFragment.newInstance();
@@ -318,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_chat:
                             //getActionBar().setTitle("Chat");
-                            selectedFragment = new ChatFragment();
+                            selectedFragment = new UsersFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction()

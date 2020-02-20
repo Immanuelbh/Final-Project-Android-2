@@ -16,23 +16,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Serializable;
 import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.User;
 import maim.com.finalproject.ui.ChatActivity;
-import maim.com.finalproject.ui.SearchUsersFragment;
 import maim.com.finalproject.ui.SearchedConfirmationFragment;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
 
     Context uCtx;
     List<User> userList;
+    String skillWant;
 
     public UserAdapter(Context uCtx, List<User> users){
         this.uCtx = uCtx;
         this.userList = users;
+    }
+    public UserAdapter(Context uCtx, List<User> users, String skillWant){
+        this.uCtx = uCtx;
+        this.userList = users;
+        this.skillWant = skillWant;
     }
 
 
@@ -60,22 +64,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             @Override
             public void onClick(View v) {
 
-                SearchedConfirmationFragment searchedConfirmationFragment = SearchedConfirmationFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("user", userList.get(uvh.getAdapterPosition()));
-                searchedConfirmationFragment.setArguments(bundle);
 
-                FragmentTransaction transaction = ((AppCompatActivity)uCtx).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.recycler_container, searchedConfirmationFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if(skillWant != null){
+                    SearchedConfirmationFragment searchedConfirmationFragment = SearchedConfirmationFragment.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", userList.get(uvh.getAdapterPosition()));
+                    bundle.putCharSequence("skillWant", skillWant);
+                    searchedConfirmationFragment.setArguments(bundle);
 
-                /* opens user chat
-                Intent intent = new Intent(parent.getContext(), ChatActivity.class);
-                intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
-                uCtx.startActivity(intent);
+                    FragmentTransaction transaction = ((AppCompatActivity)uCtx).getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.recycler_container, searchedConfirmationFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+                else{
 
-                 */
+                    //opens user chat
+                    Intent intent = new Intent(parent.getContext(), ChatActivity.class);
+                    intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
+                    uCtx.startActivity(intent);
+
+                }
+
             }
         });
         return uvh;

@@ -16,8 +16,7 @@ public class ChatFragment extends Fragment {
 
 
     public static ChatFragment newInstance() {
-        ChatFragment chatFragment  = new ChatFragment();
-        return chatFragment;
+        return new ChatFragment();
     }
 
     @Nullable

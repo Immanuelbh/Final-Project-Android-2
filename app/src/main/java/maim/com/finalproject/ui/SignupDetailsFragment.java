@@ -79,7 +79,6 @@ public class SignupDetailsFragment extends Fragment {
     String ageProgress;
     ListView mySkillsLv;
 
-    //HashMap<String, HashMap<String,SubGenre>> mySkillsList;
     HashMap<String,SubGenre> theSkill;
 
     public static SignupDetailsFragment newInstance(){
@@ -91,7 +90,6 @@ public class SignupDetailsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        //SharedPreferences sharedPreferences = context.getSharedPreferences("mySkills", Context.MODE_PRIVATE);
         skills = (HashSet<String>) context.getSharedPreferences("mySkills", Context.MODE_PRIVATE).getStringSet("mySkills", new HashSet<String>());
         if(!skills.isEmpty()){
             skills.clear();
@@ -203,7 +201,6 @@ public class SignupDetailsFragment extends Fragment {
             ArrayAdapter<String> skillAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, skillList);
             mySkillsLv.setAdapter(skillAdapter);
 
-
             //get subgenres from db
             Query matchSubGenre = dbGenres;
             matchSubGenre.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -216,9 +213,6 @@ public class SignupDetailsFragment extends Fragment {
                                 //Toast.makeText(context, "found " + skill, Toast.LENGTH_SHORT).show();
                                 theSkill.put(skill.toLowerCase(), genres.child("subGenres").child(skill.toLowerCase()).getValue(SubGenre.class));
                             }
-                            else{
-                                //Toast.makeText(context, skill + " and " + genres.toString(), Toast.LENGTH_LONG).show();
-                            }
                         }
                     }
 
@@ -229,10 +223,7 @@ public class SignupDetailsFragment extends Fragment {
 
                 }
             });
-            //mySkillsList.put("mySkills", theSkill);
         }
-
-
 
         Button saveBtn = rootView.findViewById(R.id.signup_save_btn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -256,7 +247,6 @@ public class SignupDetailsFragment extends Fragment {
                     Toast.makeText(context, "exception when reading data", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-                //Snackbar.make(coordinatorLayout, "Added details!", Snackbar.LENGTH_SHORT).show();
                 bottomNav.setVisibility(View.VISIBLE);
 
                 Toast.makeText(context, "Added details!", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorTransparentWhite"
+        android:alpha="0.8"
+        android:id="@+id/bg_confirmation_details"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="50dp"
+        android:background="@color/colorWhite"
+        android:alpha="1"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="#ffd"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You will learn:"
+                android:padding="10dp"
+                android:textColor="@color/quantum_black_100"
+                android:id="@+id/conf_learn_1"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My skill"
+                android:padding="10dp"
+                android:id="@+id/conf_skill_1"
+                android:textColor="@color/quantum_black_100"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My date and time"
+                android:padding="10dp"
+                android:id="@+id/conf_date_1"
+                android:textColor="@color/quantum_black_100"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="#ffb"
+            android:id="@+id/conf_his_conf"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="For:"
+                android:padding="10dp"
+                android:textColor="@color/quantum_black_100"
+                android:id="@+id/conf_learn_2"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Skill he wants"
+                android:padding="10dp"
+                android:id="@+id/conf_skill_2"
+                android:textColor="@color/quantum_black_100"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="His date and time"
+                android:padding="10dp"
+                android:id="@+id/conf_date_2"
+                android:textColor="@color/quantum_black_100"
+
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
+

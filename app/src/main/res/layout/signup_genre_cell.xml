@@ -35,8 +35,13 @@
             android:id="@+id/signup_genre_cb"
             android:visibility="gone"
             />
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/signup_genre_rb"
+            android:visibility="gone"
+            />
     </LinearLayout>
-
-
 
 </androidx.cardview.widget.CardView>

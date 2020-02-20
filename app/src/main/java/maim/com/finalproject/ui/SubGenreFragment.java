@@ -1,10 +1,7 @@
 package maim.com.finalproject.ui;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import maim.com.finalproject.R;
@@ -68,7 +63,7 @@ public class SubGenreFragment extends Fragment {
                 List<SubGenre> list = new ArrayList<SubGenre>(genre.getSubGenres().values());
 
                 if(action != null){ //during signup
-                    final SignupSubGenreAdapter signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list);
+                    final SignupSubGenreAdapter signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox");
                     recyclerView.setAdapter(signupSubGenreAdapter);
 
                 }
@@ -78,7 +73,6 @@ public class SubGenreFragment extends Fragment {
 
                 }
 
-
             }
 
             else{
@@ -87,15 +81,6 @@ public class SubGenreFragment extends Fragment {
         }
 
         return rootView;
-    }
-
-    private void sendCurrentMySkills(int resultCode, HashSet<String> mySkills) {
-        if(getTargetFragment() == null)
-            return;
-
-        Intent intent = new Intent();
-        intent.putExtra("mySkills", mySkills);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 
 

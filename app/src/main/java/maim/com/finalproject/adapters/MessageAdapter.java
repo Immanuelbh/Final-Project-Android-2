@@ -1,6 +1,7 @@
 package maim.com.finalproject.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +26,7 @@ import java.util.Locale;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Message;
+import maim.com.finalproject.ui.ConfirmationDetailsFragment;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
@@ -35,8 +39,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private FirebaseUser fbUser;
     LinearLayout confirmationLl;
 
-    //TODO add confirmation message
-
     public MessageAdapter(Context mCtx, List<Message> messages){
         this.mCtx = mCtx;
         this.messages = messages;
@@ -46,7 +48,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         ImageView profileIv;
         TextView messageTv, timeTv, isSeenTv;
-
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         }
     }
+
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,25 +69,38 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         if(viewType == MSG_TYPE_RIGHT){
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_right, parent, false);
-
             return new MessageViewHolder(view);
         }
         else if (viewType == MSG_TYPE_LEFT){ //left
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_left, parent, false);
-
             return new MessageViewHolder(view);
         }else { //confirmation
             View view = LayoutInflater.from(mCtx).inflate(R.layout.chat_row_confirm, parent, false);
+            final MessageViewHolder mvh = new MessageViewHolder(view);
 
             confirmationLl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ConfirmationDetailsFragment confirmationDetailsFragment = ConfirmationDetailsFragment.newInstance();
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("senderUid", messages.get(mvh.getAdapterPosition()).getSender());
+                    bundle.putString("receiverUid", messages.get(mvh.getAdapterPosition()).getReceiver());
+                    bundle.putString("senderCid", messages.get(mvh.getAdapterPosition()).getSenderCid());
+                    bundle.putString("receiverCid", messages.get(mvh.getAdapterPosition()).getReceiverCid());
+
+                    confirmationDetailsFragment.setArguments(bundle);
+
+                    FragmentTransaction transaction = ((AppCompatActivity)mCtx).getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.cover_confirmation_frame, confirmationDetailsFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
 
                 }
             });
 
 
-            return new MessageViewHolder(view);
+            return mvh;
         }
 
     }
@@ -109,6 +124,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
         else{
             holder.isSeenTv.setVisibility(View.GONE);
+        }
+
+
+        if(message.getType().equals("confirmation")){
+            //holder.messageTv.setText((Confirmation) message.);
         }
 
 

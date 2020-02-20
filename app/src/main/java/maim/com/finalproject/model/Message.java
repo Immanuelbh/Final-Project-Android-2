@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 public class Message {
 
     String message, receiver, sender, timeStamp, type;
+    String senderCid, receiverCid;
     boolean seen;
 
     public Message() {
@@ -65,6 +66,22 @@ public class Message {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSenderCid() {
+        return senderCid;
+    }
+
+    public void setSenderCid(String senderCid) {
+        this.senderCid = senderCid;
+    }
+
+    public String getReceiverCid() {
+        return receiverCid;
+    }
+
+    public void setReceiverCid(String receiverCid) {
+        this.receiverCid = receiverCid;
     }
 
     @NonNull

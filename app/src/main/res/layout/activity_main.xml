@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     >
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
@@ -88,8 +89,14 @@
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_menu" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cover_confirmation_frame"
+
+        />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
@@ -98,4 +105,6 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header_layout"
         app:menu="@menu/drawer_menu" />
+
+
 </androidx.drawerlayout.widget.DrawerLayout>

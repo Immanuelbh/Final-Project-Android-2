@@ -37,13 +37,13 @@ import java.util.Locale;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.MessageAdapter;
+import maim.com.finalproject.model.Confirmation;
 import maim.com.finalproject.model.Message;
 import maim.com.finalproject.model.User;
 
 public class ChatActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
     DatabaseReference dbUsers;
 
     ValueEventListener seenListener;
@@ -63,6 +63,9 @@ public class ChatActivity extends AppCompatActivity {
     String hisUid;
     String hisImage;
 
+    DatabaseReference myDbRef;
+    DatabaseReference hisDbRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +81,7 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.chat_send_btn);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
+
         //get current user's id and update status
         myUid = user.getUid();
         updateUserStatus("Online");
@@ -96,8 +100,10 @@ public class ChatActivity extends AppCompatActivity {
         //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
-        String confirmationMsg = intent.getStringExtra("confirmation");
+        String confirmationMsg = intent.getStringExtra("confirmation_msg");
+        Confirmation myConfirmation = (Confirmation) intent.getSerializableExtra("confirmation_pojo");
         if(confirmationMsg != null){
+            createConfirmations(myConfirmation);
             sendMessage(confirmationMsg, "confirmation");
         }
         //Log.d("CHAT_ACTIVITY", "receiver uid: " + hisUid);
@@ -199,6 +205,25 @@ public class ChatActivity extends AppCompatActivity {
         
     }
 
+    private void createConfirmations(Confirmation myConfirmation) {
+        DatabaseReference myUserRef = FirebaseDatabase.getInstance().getReference("users").child(myUid);
+        DatabaseReference hisUserRef = FirebaseDatabase.getInstance().getReference("users").child(hisUid);
+
+        if(myConfirmation == null){
+            Toast.makeText(this, "confirmation is null", Toast.LENGTH_SHORT).show();
+        }
+
+        myDbRef = myUserRef.child("myConfirmations").push();
+        hisDbRef = hisUserRef.child("myConfirmations").push();
+
+        myConfirmation.setSenderCid(myDbRef.getKey());
+        myConfirmation.setReceiverCid(hisDbRef.getKey());
+
+        myDbRef.setValue(myConfirmation);
+        hisDbRef.setValue(myConfirmation);
+
+    }
+
     private String currentTime(String time) {
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(Long.parseLong(time));
@@ -288,12 +313,15 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("timeStamp", timeStamp);
         hashMap.put("seen", false);
         hashMap.put("type", type);
+        if(type.equals("confirmation")){
+            hashMap.put("senderCid", myDbRef.getKey());
+            hashMap.put("receiverCid", hisDbRef.getKey());
+        }
 
         dbChats.push().setValue(hashMap); //TODO have custom push value
 
         //reset message et
         messageEt.setText("");
-
 
     }
 

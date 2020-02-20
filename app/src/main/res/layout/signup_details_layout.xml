@@ -7,13 +7,10 @@
     >
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,8 +77,6 @@
 
             />
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,6 +133,7 @@
                     android:layout_height="wrap_content"
                     android:text="My Skills"
                     android:layout_weight="5"
+                    android:layout_gravity="center"
                     />
 
                 <ImageView
@@ -173,7 +169,6 @@
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
             />
-
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
