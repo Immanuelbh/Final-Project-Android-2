@@ -1,6 +1,7 @@
 package maim.com.finalproject.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,6 +79,7 @@ public class SignupDetailsFragment extends Fragment {
     String rangeProgress;
     String ageProgress;
     ListView mySkillsLv;
+    ImageView chooseLocationIv;
 
     HashMap<String,SubGenre> theSkill;
 
@@ -99,7 +101,7 @@ public class SignupDetailsFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.signup_details_layout, container, false);
 
         final TextView signupAgeTv = rootView.findViewById(R.id.signup_age_tv);
@@ -113,6 +115,7 @@ public class SignupDetailsFragment extends Fragment {
         rangeSb = rootView.findViewById(R.id.signup_range_seekbar);
         ImageView addMySkillBtn = rootView.findViewById(R.id.signup_add_myskill);
         mySkillsLv = rootView.findViewById(R.id.signup_mySkills_listview);
+        chooseLocationIv = rootView.findViewById(R.id.signup_choose_location);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 
@@ -167,6 +170,14 @@ public class SignupDetailsFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        chooseLocationIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(context, MapsActivity.class);
+                context.startActivity(mapIntent);
             }
         });
 

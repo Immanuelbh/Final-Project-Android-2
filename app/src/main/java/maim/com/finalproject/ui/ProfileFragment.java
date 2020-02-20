@@ -1,10 +1,12 @@
 package maim.com.finalproject.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,13 +34,15 @@ public class ProfileFragment extends Fragment {
 
     ImageView profileIv;
     TextView nameTv, ageTv, emailTv, rangeTv;
+    Button editProfileBtn;
 
+    Context context;
     View rootView;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
+        this.context = context;
 
     }
 
@@ -49,7 +53,7 @@ public class ProfileFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
         //init firebase
@@ -63,6 +67,7 @@ public class ProfileFragment extends Fragment {
         ageTv = rootView.findViewById(R.id.profile_age_tv);
         emailTv = rootView.findViewById(R.id.profile_email_tv);
         rangeTv = rootView.findViewById(R.id.profile_range_tv);
+        editProfileBtn = rootView.findViewById(R.id.profile_edit_btn);
 
         //query the db
         Query query = users.orderByChild("email").equalTo(user.getEmail());
@@ -91,6 +96,15 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(context, MapsActivity.class);
+                context.startActivity(mapIntent);
 
             }
         });

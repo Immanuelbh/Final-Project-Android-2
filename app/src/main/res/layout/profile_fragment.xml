@@ -47,6 +47,13 @@
             android:text="Max Range"
             />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_edit_btn"
+            android:text="edit profile"
+            />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
 

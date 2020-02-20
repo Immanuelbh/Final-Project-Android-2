@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">FinalProject</string>
     <string name="places_api_key">/*api key*/</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
