@@ -244,7 +244,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
                             }
 
-                            SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio");
+                            SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio", null);
                             recyclerView.setAdapter(radioSubGenreAdapter);
                         } else {
                             Toast.makeText(getContext(), "skill list is empty", Toast.LENGTH_SHORT).show();

@@ -1,7 +1,9 @@
 package maim.com.finalproject.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.function.Consumer;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.SignupSubGenreAdapter;
@@ -27,6 +37,11 @@ import maim.com.finalproject.model.SubGenre;
 public class SubGenreFragment extends Fragment {
 
     private DatabaseReference dbGenres;
+    HashSet<String> mySkills = new HashSet<>();
+    SignupSubGenreAdapter signupSubGenreAdapter;
+    View rootView;
+    List<SubGenre> list;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -42,7 +57,7 @@ public class SubGenreFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.genre_fragment, container, false);
+        rootView = inflater.inflate(R.layout.genre_fragment, container, false);
 
         final RecyclerView recyclerView = rootView.findViewById(R.id.genre_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
@@ -60,11 +75,43 @@ public class SubGenreFragment extends Fragment {
 
             Genre genre = (Genre) bundle.getSerializable("genre");
             if(genre != null){
-                List<SubGenre> list = new ArrayList<SubGenre>(genre.getSubGenres().values());
+                list = new ArrayList<SubGenre>(genre.getSubGenres().values());
 
                 if(action != null){ //during signup
-                    final SignupSubGenreAdapter signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox");
-                    recyclerView.setAdapter(signupSubGenreAdapter);
+
+                    //add listener to db - update local list
+                    //pass local list to adapter - show checkbox marks if appears on list
+
+                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    dbRef.child("mySkillsList").addValueEventListener(new ValueEventListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.N)
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d("SGF", "onDataChange");
+                            for(DataSnapshot ds: dataSnapshot.getChildren()){
+                                SubGenre subGenre = ds.getValue(SubGenre.class);
+                                mySkills.add(subGenre.getName());
+                                Log.d("SGF", "added " + subGenre.getName());
+
+                            }
+                            Log.d("SGF", "mySkills.isEmpty = " + mySkills.isEmpty());
+
+                            signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills);
+                            recyclerView.setAdapter(signupSubGenreAdapter);
+
+                            /*for (String str : mySkills){
+                                Log.d("SGF", "printing list: " + str);
+                            }*/
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    /*signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills);
+                    recyclerView.setAdapter(signupSubGenreAdapter);*/
 
                 }
                 else{ //during search
@@ -74,7 +121,6 @@ public class SubGenreFragment extends Fragment {
                 }
 
             }
-
             else{
                 Toast.makeText(this.getContext(), "couldn't open genre", Toast.LENGTH_SHORT).show();
             }

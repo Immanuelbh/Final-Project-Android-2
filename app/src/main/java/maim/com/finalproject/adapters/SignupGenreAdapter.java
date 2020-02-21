@@ -64,12 +64,10 @@ public class SignupGenreAdapter extends RecyclerView.Adapter<SignupGenreAdapter.
 
                 bundle.putSerializable("genre", (Serializable) genres.get(gvh.getAdapterPosition()));
                 bundle.putCharSequence("action","signup");
-                //bundle.putInt("current_genre", gvh.getAdapterPosition());
                 subGenreFragment.setArguments(bundle);
 
-
                 FragmentTransaction transaction = ((AppCompatActivity)sgCtx).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.recycler_container, subGenreFragment);
+                transaction.replace(R.id.as_recycler_container, subGenreFragment);
                 transaction.addToBackStack(null);
 
                 transaction.commit();

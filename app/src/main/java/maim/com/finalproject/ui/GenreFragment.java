@@ -105,9 +105,6 @@ public class GenreFragment extends Fragment {
 
             switch (action){
                 case "signup":
-                    //Toast.makeText(getContext(), "sign up genre list", Toast.LENGTH_SHORT).show();
-                    fab = getActivity().findViewById(R.id.fab);
-                    fab.show();
 
                     recyclerView.setLayoutManager(new LinearLayoutManager((rootView.getContext())));
                     recyclerView.setHasFixedSize(true);

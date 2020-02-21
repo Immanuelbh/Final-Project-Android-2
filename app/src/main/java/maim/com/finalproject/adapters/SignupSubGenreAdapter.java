@@ -19,6 +19,10 @@ import androidx.collection.ArraySet;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,23 +38,27 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
 
     private Context ssCtx;
     private List<SubGenre> subGenres;
-    private boolean checked = false;
     private String type;
-    private SubGenre rbSubGenre;
     private int skillSelected = -1;
-    SharedPreferences sp;
-    private HashSet<String> mySkills;// = new HashSet<>();
+    private SharedPreferences sp;
+    private HashSet<String> mySkills;
+    private HashMap<String, Object> hashMap = new HashMap<>();
+    private DatabaseReference skillRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-    public SignupSubGenreAdapter(Context ssCtx, List<SubGenre> subGenres, String type){
+    public SignupSubGenreAdapter(Context ssCtx, List<SubGenre> subGenres, String type, HashSet<String> mySkills){
         this.ssCtx = ssCtx;
         this.subGenres = subGenres;
         this.type = type;
+        this.mySkills = mySkills;
+        Log.d("SSGA", "1 mySkills.isEmpty = " + mySkills.isEmpty());
+
         if(type.equals("checkbox")){
             sp = ssCtx.getSharedPreferences("mySkills", Context.MODE_PRIVATE);
         }
         else{
             sp = ssCtx.getSharedPreferences("skillSelected", Context.MODE_PRIVATE);
         }
+
     }
 
     public class signupSubGenreViewHolder extends RecyclerView.ViewHolder{
@@ -77,22 +85,39 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
     public signupSubGenreViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ssCtx).inflate(R.layout.signup_genre_cell, parent, false);
 
-        SharedPreferences sharedPreferences =  ssCtx.getSharedPreferences("mySkills", Context.MODE_PRIVATE);
-        mySkills = (HashSet<String>) sharedPreferences.getStringSet("mySkills", new HashSet<String>());
-
         final signupSubGenreViewHolder gvh = new signupSubGenreViewHolder(view);
         gvh.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String name = subGenres.get(gvh.getAdapterPosition()).getName();
+                String imageUrl = subGenres.get(gvh.getAdapterPosition()).getImageUrl();
+
                 if(((CompoundButton) view).isChecked()){
-                    mySkills.add(subGenres.get(gvh.getAdapterPosition()).getName());
+                    HashMap<String, Object> dbSubGenre = new HashMap<>();
+                    dbSubGenre.put("imageUrl", imageUrl);
+                    dbSubGenre.put("name", name);
+
+                    hashMap.put(name.toLowerCase(), dbSubGenre);
+                    skillRef.child("mySkillsList").updateChildren(hashMap);
+                    mySkills.add(name);
+
                 }
                 else {
-                    mySkills.remove(subGenres.get(gvh.getAdapterPosition()).getName());
+
+                    hashMap.remove(name.toLowerCase());
+                    skillRef.child("mySkillsList").child(name.toLowerCase()).removeValue();
+                    mySkills.remove(name);
                 }
 
-                sp.edit().putStringSet("mySkills", mySkills).apply();
+                //update db
 
+
+                //Log.d("SSGA", "user uid from adapter: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+/*
+                for (String str : mySkills){
+                    Log.d("SSGA", "printing : " + str);
+                }*/
             }
         });
 
@@ -121,7 +146,18 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
                 break;
             case "checkbox":
                 holder.checkBox.setVisibility(View.VISIBLE);
+                //check if exists in db
+                //if it does - set checkbox to checked
+                DatabaseReference db = skillRef.child("mySkillsList").child(subGenre.getName().toLowerCase());
+
                 break;
+        }
+        Log.d("SSGA", "2 mySkills.isEmpty = " + mySkills.isEmpty());
+
+
+        Log.d("SSGA", "mySkills.contains(" + subGenre.getName() + ") = " + mySkills.contains(subGenre.getName()));
+        if(mySkills.contains(subGenre.getName())){
+            holder.checkBox.setChecked(true);
         }
 
         if (skillSelected == position){
@@ -134,10 +170,6 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
         }
         else{
             holder.radioButton.setChecked(false);
-        }
-
-        if (!mySkills.isEmpty() && mySkills.contains(subGenre.getName())){
-            holder.checkBox.setChecked(true);
         }
 
         /*

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,7 @@ public class ProfileFragment extends Fragment {
 
     ImageView profileIv;
     TextView nameTv, ageTv, emailTv, rangeTv, locationResultTv;
-    Button editProfileBtn;
+    Button editLocationBtn, editSkillsBtn;
     CoordinatorLayout coordinatorLayout;
 
     Context context;
@@ -74,9 +75,11 @@ public class ProfileFragment extends Fragment {
         ageTv = rootView.findViewById(R.id.profile_age_tv);
         emailTv = rootView.findViewById(R.id.profile_email_tv);
         rangeTv = rootView.findViewById(R.id.profile_range_tv);
-        editProfileBtn = rootView.findViewById(R.id.profile_edit_btn);
         locationResultTv = rootView.findViewById(R.id.location_result);
         coordinatorLayout = rootView.findViewById(R.id.coordinator);
+        editLocationBtn = rootView.findViewById(R.id.profile_edit_location_btn);
+        editSkillsBtn = rootView.findViewById(R.id.profile_edit_skills_btn);
+
 
 
         //query the db
@@ -113,7 +116,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+        editLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //ask permission
@@ -126,6 +129,18 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+        editSkillsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open addSkill Activity
+                Intent addSkillIntent = new Intent(context, SignupAddSkills.class);
+                startActivity(addSkillIntent);
+
+            }
+        });
+
+
 
 
         return rootView;

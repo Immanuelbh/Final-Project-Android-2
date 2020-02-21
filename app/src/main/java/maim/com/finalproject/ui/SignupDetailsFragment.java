@@ -85,6 +85,7 @@ public class SignupDetailsFragment extends Fragment {
     String ageProgress;
     ListView mySkillsLv;
     ImageView chooseLocationIv;
+    TextView signupAgeTv, signupRangeTv;
 
     HashMap<String,SubGenre> theSkill;
 
@@ -109,9 +110,10 @@ public class SignupDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.signup_details_layout, container, false);
 
-        final TextView signupAgeTv = rootView.findViewById(R.id.signup_age_tv);
-        final TextView signupRangeTv = rootView.findViewById(R.id.signup_range_tv);
+        signupAgeTv = rootView.findViewById(R.id.signup_age_tv);
+        signupRangeTv = rootView.findViewById(R.id.signup_range_tv);
         coordinatorLayout = rootView.findViewById(R.id.coordinator);
+
 
         //initPlaces();
         //setupPlaceAutoComplete();
@@ -129,6 +131,8 @@ public class SignupDetailsFragment extends Fragment {
         bottomNav.setVisibility(View.GONE);
 
         ageProgress = String.valueOf(ageSb.getProgress() + MIN_AGE);
+        //ageProgress = signupAgeTv.getText().toString();//String.valueOf(ageSb.getProgress() + MIN_AGE);
+        //ageSb.setSecondaryProgress(Integer.parseInt(ageProgress));
         ageSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -154,6 +158,8 @@ public class SignupDetailsFragment extends Fragment {
         });
 
         rangeProgress = String.valueOf((rangeSb.getProgress() * 5)+5);
+        //rangeProgress = signupRangeTv.getText().toString();//String.valueOf((rangeSb.getProgress() * 5)+5);
+        //rangeSb.setSecondaryProgress(Integer.parseInt(rangeProgress));
         rangeSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -161,8 +167,9 @@ public class SignupDetailsFragment extends Fragment {
                     if(progress >= 0 && progress <= rangeSb.getMax()){
                         rangeProgress = String.valueOf((progress * 5)+5);
 
-                        signupRangeTv.setText(rangeProgress + " km");
+                        signupRangeTv.setText(rangeProgress);
                         rangeSb.setSecondaryProgress(progress);
+
                     }
                 }
             }
@@ -199,80 +206,34 @@ public class SignupDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                GenreFragment genreFragment = GenreFragment.newInstance();
-                Bundle bundle = new Bundle();
+                //open addSkill Activity
+                Intent addSkillIntent = new Intent(context, SignupAddSkills.class);
+                startActivity(addSkillIntent);
 
-                bundle.putCharSequence("action", "signup");
-                //genreFragment.setTargetFragment(this, GENRE_FRAGMENT_REQ);
-                genreFragment.setArguments(bundle);
-                FragmentTransaction mySkillsTransaction = getFragmentManager().beginTransaction();
-                mySkillsTransaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
-                mySkillsTransaction.addToBackStack("signup").commit();
             }
         });
 
-
-        //TODO clear the list from the sharedpref at the beginning
-        skills = (HashSet<String>) context.getSharedPreferences("mySkills", Context.MODE_PRIVATE).getStringSet("mySkills", new HashSet<String>());
-        final String[] skillList = new String[skills.size()];
-        skills.toArray(skillList);
-        //mySkillsList = new HashMap<>();
-        theSkill = new HashMap<>();
-        if(!skills.isEmpty()){
-            Toast.makeText(context, skillList[0] + " and " + (skills.size()-1) + " other skills found", Toast.LENGTH_SHORT).show();
-
-            mySkills.put("mySkills", skills);
-
-            //update ui
-            ArrayAdapter<String> skillAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, skillList);
-            mySkillsLv.setAdapter(skillAdapter);
-
-            //get subgenres from db
-            Query matchSubGenre = dbGenres;
-            matchSubGenre.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    for (String skill : skills){
-                        for (DataSnapshot genres: dataSnapshot.getChildren()){
-                            if(genres.child("subGenres").hasChild(skill.toLowerCase())){
-                                //Toast.makeText(context, "found " + skill, Toast.LENGTH_SHORT).show();
-                                theSkill.put(skill.toLowerCase(), genres.child("subGenres").child(skill.toLowerCase()).getValue(SubGenre.class));
-                            }
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
 
         Button saveBtn = rootView.findViewById(R.id.signup_save_btn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseUser fbUser = firebaseAuth.getCurrentUser();
-                try{
+                DatabaseReference updateRef = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
 
-                    User newUser = new User(fbUser.getEmail(),
-                            fbUser.getUid(),
-                            fbUser.getDisplayName(),
-                            ageProgress,
-                            rangeProgress,
-                            "Online",
-                            "noOne",
-                            theSkill);
-                    users.child(fbUser.getUid()).setValue(newUser);
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("uid", fbUser.getUid());
+                hashMap.put("name", fbUser.getDisplayName());
+                hashMap.put("email", fbUser.getEmail());
+                hashMap.put("age", signupAgeTv.getText().toString());
+                hashMap.put("maxRange", signupRangeTv.getText().toString());
+                hashMap.put("onlineStatus", "Online");
+                hashMap.put("typingTo", "noOne");
+                //hashMap.put("mySkillsList", theSkill);
 
-                }
-                catch (NullPointerException e){
-                    Toast.makeText(context, "exception when reading data", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
+                updateRef.updateChildren(hashMap);
+
                 bottomNav.setVisibility(View.VISIBLE);
 
                 Toast.makeText(context, "Added details!", Toast.LENGTH_SHORT).show();
@@ -303,6 +264,15 @@ public class SignupDetailsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+    /*
+
     private void setupPlaceAutoComplete() {
         placesFragment = (AutocompleteSupportFragment) getChildFragmentManager()//getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.places_autocomplete_fragment);
@@ -332,6 +302,7 @@ public class SignupDetailsFragment extends Fragment {
         //Places.initialize(this.context, getString(R.string.places_api_key));
         placesClient = Places.createClient(this.context);
     }
+*/
 
 
 }

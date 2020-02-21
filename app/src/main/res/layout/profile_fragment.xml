@@ -50,8 +50,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_edit_btn"
-            android:text="edit profile"
+            android:id="@+id/profile_edit_location_btn"
+            android:text="edit location"
             />
         <TextView
             android:layout_width="match_parent"
@@ -59,6 +59,13 @@
             android:id="@+id/location_result"
             android:text="location result"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_edit_skills_btn"
+            android:text="edit skills"
+            />
+
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

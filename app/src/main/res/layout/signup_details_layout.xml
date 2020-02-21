@@ -54,16 +54,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="How far would you like to search?"
-                android:layout_weight="5"
+                android:layout_weight="7"
                 />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="end"
                 android:id="@+id/signup_range_tv"
-                android:text="50 km"
+                android:text="50"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="km"
                 />
         </LinearLayout>
 
@@ -99,13 +106,21 @@
                 android:id="@+id/signup_choose_location"
                 />
         </LinearLayout>
-
-        <fragment
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Haven't choosen a location"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp"
+            />
+       <!-- <fragment
             android:id="@+id/places_autocomplete_fragment"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+
+            />-->
 
         <TextView
             android:layout_width="match_parent"
@@ -153,12 +168,12 @@
                 />
         </LinearLayout>
 
-        <TextView
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Skills I want to learn"
             android:layout_margin="20dp"
-            />
+            />-->
 
 
         <Button
@@ -169,6 +184,7 @@
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
             />
+
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

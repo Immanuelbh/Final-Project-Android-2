@@ -44,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import maim.com.finalproject.R;
@@ -136,8 +137,19 @@ public class MainActivity extends AppCompatActivity {
 
                                         if(task.isSuccessful()){
 
-                                            SignupDetailsFragment signupDetailsFragment = SignupDetailsFragment.newInstance();
+                                            //task is successful so should not be null
+                                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+                                            //create initial entry in db
+                                            DatabaseReference initialRef = FirebaseDatabase.getInstance()
+                                                                            .getReference("users").child(currentUser.getUid());
+
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("uid", currentUser.getUid());
+                                            hashMap.put("name", currentUser.getDisplayName());
+
+                                            //open up signup extra detail fragment
+                                            SignupDetailsFragment signupDetailsFragment = SignupDetailsFragment.newInstance();
 
                                             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                                             transaction.replace(R.id.recycler_container, signupDetailsFragment, SIGNUP_FRAGMENT_TAG);
