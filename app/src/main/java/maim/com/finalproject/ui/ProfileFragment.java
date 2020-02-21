@@ -1,7 +1,9 @@
 package maim.com.finalproject.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,14 +32,16 @@ import com.google.firebase.database.ValueEventListener;
 import maim.com.finalproject.R;
 
 public class ProfileFragment extends Fragment {
+    private static final int FINE_PERMISSION_REQ = 202;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
 
     ImageView profileIv;
-    TextView nameTv, ageTv, emailTv, rangeTv;
+    TextView nameTv, ageTv, emailTv, rangeTv, locationResultTv;
     Button editProfileBtn;
+    CoordinatorLayout coordinatorLayout;
 
     Context context;
     View rootView;
@@ -68,6 +75,9 @@ public class ProfileFragment extends Fragment {
         emailTv = rootView.findViewById(R.id.profile_email_tv);
         rangeTv = rootView.findViewById(R.id.profile_range_tv);
         editProfileBtn = rootView.findViewById(R.id.profile_edit_btn);
+        locationResultTv = rootView.findViewById(R.id.location_result);
+        coordinatorLayout = rootView.findViewById(R.id.coordinator);
+
 
         //query the db
         Query query = users.orderByChild("email").equalTo(user.getEmail());
@@ -81,12 +91,15 @@ public class ProfileFragment extends Fragment {
                     String age = ds.child("age").getValue()+"";
                     String email = ds.child("email").getValue()+"";
                     String range = ds.child("maxRange").getValue()+"";
+                    String lat = ds.child("locationLat").getValue()+"";
+                    String lon = ds.child("locationLon").getValue()+"";
                     String image = ds.child("imageUrl").getValue()+"";
 
                     nameTv.setText(name);
                     ageTv.setText(age);
                     emailTv.setText(email);
                     rangeTv.setText(range);
+                    locationResultTv.setText("lat: " + lat + " lon: " + lon);
                     Glide.with(rootView.getContext())
                             .load(image)
                             .error(R.drawable.ic_add_image)
@@ -103,13 +116,39 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapIntent = new Intent(context, MapsActivity.class);
-                context.startActivity(mapIntent);
-
+                //ask permission
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    startMap();
+                } else {
+                    // Show rationale and request permission.
+                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_REQ);
+                }
             }
         });
 
 
         return rootView;
+    }
+
+    private void startMap() {
+        Intent mapIntent = new Intent(context, MapsActivity.class);
+        context.startActivity(mapIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FINE_PERMISSION_REQ) {
+            if (permissions.length == 1 &&
+                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startMap();
+            } else {
+                // Permission was denied. Display an error message.
+                Snackbar.make(coordinatorLayout, "The map cannot start without permission", Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }

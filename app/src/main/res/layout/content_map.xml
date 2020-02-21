@@ -15,14 +15,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MapsActivity" />
-
+<!--
     <fragment
         android:id="@+id/places_autocomplete_fragment"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:elevation="5dp"
         android:background="#fff"
+        android:elevation="5dp"
+        />-->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_location_pin"
+        android:translationY="-24dp"
+        />
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        style="@style/MaterialSearchBarLight"
+        app:mt_speechMode="false"
+        app:mt_hint="H.I.T Holon"
+        app:mt_maxSuggestionsCount="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchBar"
+        android:layout_margin="16dp"
+        app:mt_navIconEnabled="false"
+        app:mt_placeholder="Search"
+        />
+        <!--android:elevation="5dp"
+        android:outlineProvider="bounds"
+        />-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Location"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/map_set_location"
         />
 </RelativeLayout>

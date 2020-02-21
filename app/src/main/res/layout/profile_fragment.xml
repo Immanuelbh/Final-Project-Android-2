@@ -53,6 +53,12 @@
             android:id="@+id/profile_edit_btn"
             android:text="edit profile"
             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_result"
+            android:text="location result"
+            />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

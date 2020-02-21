@@ -1,8 +1,10 @@
 package maim.com.finalproject.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -32,6 +35,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +60,7 @@ public class SignupDetailsFragment extends Fragment {
     private static final int MIN_AGE = 18;
     private static final int GENRE_FRAGMENT_REQ = 1001;
     private static final String GENRE_FRAGMENT_TAG = "my_skils_genre_fragment";
+    private static final int FINE_PERMISSION_REQ = 202;
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -176,14 +181,24 @@ public class SignupDetailsFragment extends Fragment {
         chooseLocationIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapIntent = new Intent(context, MapsActivity.class);
-                context.startActivity(mapIntent);
+                //ask permission
+
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    startMap();
+                } else {
+                    // Show rationale and request permission.
+                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_REQ);
+
+                }
+
             }
         });
 
         addMySkillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 GenreFragment genreFragment = GenreFragment.newInstance();
                 Bundle bundle = new Bundle();
 
@@ -266,6 +281,26 @@ public class SignupDetailsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void startMap() {
+        Intent mapIntent = new Intent(context, MapsActivity.class);
+        context.startActivity(mapIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FINE_PERMISSION_REQ) {
+            if (permissions.length == 1 &&
+                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startMap();
+            } else {
+                // Permission was denied. Display an error message.
+                Snackbar.make(coordinatorLayout, "The map cannot start without permission", Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setupPlaceAutoComplete() {
