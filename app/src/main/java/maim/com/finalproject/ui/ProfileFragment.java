@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import maim.com.finalproject.R;
 
@@ -147,6 +148,7 @@ public class ProfileFragment extends Fragment {
             if(user.getPhotoUrl() != null){
                 Glide.with(rootView.getContext())
                         .load(user.getPhotoUrl())
+                        .dontAnimate()
                         .error(R.drawable.ic_add_image)
                         .into(profileIv);
             }
@@ -311,7 +313,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserProfileUrl(Uri uri) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(uri)
@@ -321,6 +323,10 @@ public class ProfileFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("imageUrl", user.getPhotoUrl().toString());
+                        dbRef.updateChildren(hashMap);
                         Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show();
                     }
                 })

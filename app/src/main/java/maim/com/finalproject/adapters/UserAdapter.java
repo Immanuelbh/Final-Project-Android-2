@@ -104,14 +104,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         //TODO add image
         holder.nameTv.setText(user.getName());
 
-        reference = FirebaseStorage.getInstance().getReference()
+        /*reference = FirebaseStorage.getInstance().getReference()
                 .child("profileImages")
                 .child(user.getUID() + ".jpeg");
-
+*/
         //if(user.getPhotoUrl() != null){
             Glide.with(holder.itemView.getContext())
-                    .load(reference.getPath())
-                    //.thumbnail(0.01f)
+                    .load(user.getImageUrl())
+                    .thumbnail(0.01f)
+                    .dontAnimate()
                     .error(R.drawable.ic_user) //change to default profile image
                     .into(holder.profileIv);
         //}

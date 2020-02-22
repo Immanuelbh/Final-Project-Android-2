@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -121,6 +122,12 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d("CHAT_ACTIVITY", "his user name: " + name);
 
                     //TODO image = hisUser.getImageUrl();
+                    Glide.with(ChatActivity.this)
+                            .load(hisUser.getImageUrl())
+                            .thumbnail(0.01f)
+                            .dontAnimate()
+                            .error(R.drawable.ic_user) //change to default profile image
+                            .into(profileIv);
 
                     //check online status
                     String status = hisUser.getOnlineStatus();
