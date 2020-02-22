@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 import maim.com.finalproject.R;
@@ -28,6 +32,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     Context uCtx;
     List<User> userList;
     String skillWant;
+    StorageReference reference;
 
     public UserAdapter(Context uCtx, List<User> users){
         this.uCtx = uCtx;
@@ -98,6 +103,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         Log.d("CHAT_ACTIVITY", "userAdapter: useruid : " + userUid);
         //TODO add image
         holder.nameTv.setText(user.getName());
+
+        reference = FirebaseStorage.getInstance().getReference()
+                .child("profileImages")
+                .child(user.getUID() + ".jpeg");
+
+        //if(user.getPhotoUrl() != null){
+            Glide.with(holder.itemView.getContext())
+                    .load(reference.getPath())
+                    //.thumbnail(0.01f)
+                    .error(R.drawable.ic_user) //change to default profile image
+                    .into(holder.profileIv);
+        //}
     }
 
     @Override

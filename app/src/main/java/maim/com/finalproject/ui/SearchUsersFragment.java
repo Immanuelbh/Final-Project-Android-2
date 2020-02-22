@@ -72,7 +72,12 @@ public class SearchUsersFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentUser = dataSnapshot.getValue(User.class);
-                userRadius = Double.parseDouble(currentUser.getMaxRange());
+                try{
+                    userRadius = Double.parseDouble(currentUser.getMaxRange());
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -50,7 +50,7 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
         this.subGenres = subGenres;
         this.type = type;
         this.mySkills = mySkills;
-        Log.d("SSGA", "1 mySkills.isEmpty = " + mySkills.isEmpty());
+        //Log.d("SSGA", "1 mySkills.isEmpty = " + mySkills.isEmpty());
 
         if(type.equals("checkbox")){
             sp = ssCtx.getSharedPreferences("mySkills", Context.MODE_PRIVATE);
@@ -86,51 +86,57 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
         View view = LayoutInflater.from(ssCtx).inflate(R.layout.signup_genre_cell, parent, false);
 
         final signupSubGenreViewHolder gvh = new signupSubGenreViewHolder(view);
-        gvh.checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if(type.equals("checkbox")){
 
-                String name = subGenres.get(gvh.getAdapterPosition()).getName();
-                String imageUrl = subGenres.get(gvh.getAdapterPosition()).getImageUrl();
+            gvh.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                if(((CompoundButton) view).isChecked()){
-                    HashMap<String, Object> dbSubGenre = new HashMap<>();
-                    dbSubGenre.put("imageUrl", imageUrl);
-                    dbSubGenre.put("name", name);
+                    String name = subGenres.get(gvh.getAdapterPosition()).getName();
+                    String imageUrl = subGenres.get(gvh.getAdapterPosition()).getImageUrl();
 
-                    hashMap.put(name.toLowerCase(), dbSubGenre);
-                    skillRef.child("mySkillsList").updateChildren(hashMap);
-                    mySkills.add(name);
+                    if(((CompoundButton) view).isChecked()){
+                        HashMap<String, Object> dbSubGenre = new HashMap<>();
+                        dbSubGenre.put("imageUrl", imageUrl);
+                        dbSubGenre.put("name", name);
 
-                }
-                else {
+                        hashMap.put(name.toLowerCase(), dbSubGenre);
+                        skillRef.child("mySkillsList").updateChildren(hashMap);
+                        mySkills.add(name);
 
-                    hashMap.remove(name.toLowerCase());
-                    skillRef.child("mySkillsList").child(name.toLowerCase()).removeValue();
-                    mySkills.remove(name);
-                }
+                    }
+                    else {
 
-                //update db
+                        hashMap.remove(name.toLowerCase());
+                        skillRef.child("mySkillsList").child(name.toLowerCase()).removeValue();
+                        mySkills.remove(name);
+                    }
+
+                    //update db
 
 
-                //Log.d("SSGA", "user uid from adapter: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    //Log.d("SSGA", "user uid from adapter: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
 /*
                 for (String str : mySkills){
                     Log.d("SSGA", "printing : " + str);
                 }*/
-            }
-        });
-
-        gvh.radioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (skillSelected >= 0){
+                }
+            });
+        }
+        else if (type.equals("radio")){
+            gvh.radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (skillSelected >= 0){
+                        notifyItemChanged(skillSelected);
+                    }
+                    skillSelected = gvh.getAdapterPosition();
                     notifyItemChanged(skillSelected);
                 }
-                skillSelected = gvh.getAdapterPosition();
-                notifyItemChanged(skillSelected);
-            }
-        });
+            });
+
+        }
+
 
         return gvh;
     }
@@ -143,34 +149,30 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
         switch (type){
             case "radio":
                 holder.radioButton.setVisibility(View.VISIBLE);
+                if (skillSelected == position){
+                    holder.radioButton.setChecked(true);
+                    //save to shared pref
+
+                    Log.d("SSGA", "Attempting to write skill selected (" + subGenre.getName() + ") to shared pref");
+                    sp.edit().putString("skillSelected", subGenre.getName().toLowerCase()).apply();
+
+                }
+                else{
+                    holder.radioButton.setChecked(false);
+                }
                 break;
             case "checkbox":
                 holder.checkBox.setVisibility(View.VISIBLE);
                 //check if exists in db
                 //if it does - set checkbox to checked
                 DatabaseReference db = skillRef.child("mySkillsList").child(subGenre.getName().toLowerCase());
-
+                if(mySkills.contains(subGenre.getName())){
+                    holder.checkBox.setChecked(true);
+                }
                 break;
         }
-        Log.d("SSGA", "2 mySkills.isEmpty = " + mySkills.isEmpty());
 
 
-        Log.d("SSGA", "mySkills.contains(" + subGenre.getName() + ") = " + mySkills.contains(subGenre.getName()));
-        if(mySkills.contains(subGenre.getName())){
-            holder.checkBox.setChecked(true);
-        }
-
-        if (skillSelected == position){
-            holder.radioButton.setChecked(true);
-            //save to shared pref
-
-            Log.d("SSGA", "Attempting to write skill selected (" + subGenre.getName() + ") to shared pref");
-            sp.edit().putString("skillSelected", subGenre.getName().toLowerCase()).apply();
-
-        }
-        else{
-            holder.radioButton.setChecked(false);
-        }
 
         /*
         Glide.with(sgCtx)

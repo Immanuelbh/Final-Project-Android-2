@@ -219,6 +219,9 @@ public class SignupDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                /*if(checkAllFieldsVaild()){
+
+                }*/
                 FirebaseUser fbUser = firebaseAuth.getCurrentUser();
                 DatabaseReference updateRef = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
 
