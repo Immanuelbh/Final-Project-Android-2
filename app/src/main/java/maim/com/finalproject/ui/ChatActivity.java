@@ -1,12 +1,19 @@
 package maim.com.finalproject.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -39,8 +46,17 @@ import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.MessageAdapter;
 import maim.com.finalproject.model.Message;
 import maim.com.finalproject.model.User;
+import maim.com.finalproject.notifications.APIService;
+import maim.com.finalproject.notifications.Client;
+import maim.com.finalproject.notifications.Data;
+import maim.com.finalproject.notifications.Response;
+import maim.com.finalproject.notifications.Sender;
+import maim.com.finalproject.notifications.Token;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ChatActivity extends AppCompatActivity {
+    final int ALARM_SERVICE_ID = 1;
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
@@ -62,7 +78,10 @@ public class ChatActivity extends AppCompatActivity {
     String myUid;
     String hisUid;
     String hisImage;
-
+    //-------------------
+    APIService apiService;
+    boolean notify=false;
+    //-------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +112,8 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new MessageAdapter(this, messages);
         recyclerView.setAdapter(adapter);
 
+        //create api service
+        apiService = Client.getRetrofit("https://fcm.googleleapis.com/").create(APIService.class);
         //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
@@ -158,14 +179,23 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //-------------
+                notify=true;
+                //-------------
+
                 // get text from et
                 String message = messageEt.getText().toString().trim();
                 if(!TextUtils.isEmpty(message)){
                     sendMessage(message, "regular");
+
                 }
                 else{
                     Toast.makeText(ChatActivity.this, "Message is empty..", Toast.LENGTH_SHORT).show();
                 }
+                //----------------
+                //reset message et after sending message
+                messageEt.setText("");
+                //----------------
             }
         });
 
@@ -198,6 +228,7 @@ public class ChatActivity extends AppCompatActivity {
         seenMessage();
         
     }
+
 
     private String currentTime(String time) {
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
@@ -276,7 +307,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(String message, String type) {
+    private void sendMessage(final String message, String type) {
         DatabaseReference dbChats = FirebaseDatabase.getInstance().getReference("chats");
 
         String timeStamp = String.valueOf(System.currentTimeMillis());
@@ -291,12 +322,64 @@ public class ChatActivity extends AppCompatActivity {
 
         dbChats.push().setValue(hashMap); //TODO have custom push value
 
-        //reset message et
+        /*//reset message et after sending message
         messageEt.setText("");
+        */
+        //-----------------------------
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user= dataSnapshot.getValue(User.class);
 
+                if(notify){
+                    senNotification(hisUid,user.getName(),message);
+                }
+                notify=false;
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        //-----------------------------
     }
+    //-----------------------------
+    private void senNotification(final String hisUid,final String name, final String message) {
+        DatabaseReference allTokens=FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = allTokens.orderByKey().equalTo(hisUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    Token token =ds.getValue(Token.class);
 
+                    Data data=new Data(myUid,name+":"+message,"New Message",hisUid,R.drawable.sleep_icon);
+
+                    Sender sender=new Sender(data,token.getToken());
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<Response>() {
+                                @Override
+                                public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                                    Toast.makeText(ChatActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Response> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //-----------------------------
     @Override
     protected void onStart() {
         FirebaseUser user = firebaseAuth.getCurrentUser();

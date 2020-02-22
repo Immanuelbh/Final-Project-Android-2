@@ -1,7 +1,9 @@
 package maim.com.finalproject.ui;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,8 @@ public class SearchUsersFragment extends Fragment {
     DatabaseReference dbUsers;
     UserAdapter adapter; //for now
     String skillToFind;
+    SharedPreferences sp;
+
 
     public static SearchUsersFragment newInstance() {
         SearchUsersFragment searchUsersFragment  = new SearchUsersFragment();
@@ -60,18 +64,18 @@ public class SearchUsersFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         adapter = new UserAdapter(rootView.getContext(), userList);
         recyclerView.setAdapter(adapter);
-
+        sp= PreferenceManager.getDefaultSharedPreferences(getContext());
         //read genres from database
-
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage("Loading users, please wait..");
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
+        final String age_seekbar_sp= String.valueOf(sp.getInt("age_preference_seekbar",0)); //Age Seek-bar value from sp
         Bundle bundle = getArguments();
         if (bundle != null){
             CharSequence skill = bundle.getCharSequence("subGenre");
-            if(skill != null){
+            if(skill != null && sp != null){
                 skillToFind = skill.toString().toLowerCase();
 
                 dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -81,7 +85,7 @@ public class SearchUsersFragment extends Fragment {
                         if(dataSnapshot.exists()){
                             for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                                 User user = snapshot.getValue(User.class);
-                                if(!user.getUID().equals(fbUser.getUid())){
+                                if(!user.getUID().equals(fbUser.getUid()) && user.getAge().compareTo(age_seekbar_sp)<=0){
                                     if(user.getMySkillsList().containsKey(skillToFind)){
                                         userList.add(user);
                                     }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory android:title="@string/notifications">
+
+        <CheckBoxPreference
+            android:key="all_preference_checkbox"
+            android:summary="@string/all_notifications"
+            android:title="@string/notifications" />
+
+        <CheckBoxPreference
+            android:key="new_preference_checkbox"
+            android:summary="@string/new_notifications_summary"
+            android:title="@string/new_notifications" />
+
+        <CheckBoxPreference
+            android:key="user_preference_checkbox"
+            android:summary="@string/user_notifications_summary"
+            android:title="@string/user_notifications" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/search_settings">
+
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:key="age_preference_seekbar"
+            android:max="120"
+            android:summary="Choose Age range"
+            android:title="Age Range"
+            app:showSeekBarValue="true" />
+
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:key="range_preference_seekbar"
+            android:max="5"
+            android:summary="Choose Search Range"
+            android:title="Search Range"
+            app:showSeekBarValue="true" />
+
+        <DropDownPreference
+            android:entries="@array/dropdown_entries"
+            android:entryValues="@array/dropdown_values"
+            android:key="dropdown_preference"
+            android:title="Repeat_mode"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
+
