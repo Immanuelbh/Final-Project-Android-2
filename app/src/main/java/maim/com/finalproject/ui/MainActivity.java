@@ -352,12 +352,25 @@ public class MainActivity extends AppCompatActivity {
     }
     //----------------------
     public void updateToken(String token){
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Tokens");
-        Token mToken =new Token(token);
-        if(user!=null) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null){
+            Log.d("MA", "current user is not null");
+            String currentUserUID = currentUser.getUid();
+            ref.child(currentUserUID).setValue(mToken);
+
+        }
+        else{
+            Log.d("MA", "current user is null");
+
+        }
+
+        /*if(user!=null) {
             DatabaseReference temp = ref.child(mUID);
             temp.setValue(mToken);
-        }
+        }*/
     }
     //----------------------
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =

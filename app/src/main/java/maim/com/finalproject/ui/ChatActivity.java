@@ -120,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //create api service
-        apiService = Client.getRetrofit("https://fcm.googleleapis.com/").create(APIService.class);
+        apiService = Client.getRetrofit("https://fcm.googleapis.com/").create(APIService.class);
         //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
@@ -177,9 +177,6 @@ public class ChatActivity extends AppCompatActivity {
                         Toast.makeText(ChatActivity.this, "failed to update ui", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
-
-                    //set image with glide
-
 
                 }
             }
@@ -323,14 +320,12 @@ public class ChatActivity extends AppCompatActivity {
                     if(message.getReceiver().equals(hisUid) && message.getSender().equals(myUid)||
                             message.getReceiver().equals(myUid) && message.getSender().equals(hisUid)){ //TODO create unique identifier to pull from
                         messages.add(message);
-                        //Log.d("CHAT_ACTIVITY", message.toString());
                     }
                 }
                 adapter.notifyDataSetChanged();
 
                 if(recyclerView.getAdapter().getItemCount() > 0)
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-
 
             }
 
@@ -361,11 +356,8 @@ public class ChatActivity extends AppCompatActivity {
 
         dbChats.push().setValue(hashMap); //TODO have custom push value
 
-        //reset message et
-        //messageEt.setText("");
-
         //-----------------------------
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference("users").child(myUid);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -386,19 +378,22 @@ public class ChatActivity extends AppCompatActivity {
     }
     //-----------------------------
     private void senNotification(final String hisUid,final String name, final String message) {
-        DatabaseReference allTokens=FirebaseDatabase.getInstance().getReference("Tokens");
+        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = allTokens.orderByKey().equalTo(hisUid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    Token token =ds.getValue(Token.class);
+                    Token token = ds.getValue(Token.class);
 
-                    Data data=new Data(myUid,name+":"+message,"New Message",hisUid,R.drawable.sleep_icon);
+                    Data data = new Data(myUid,name+":"+message,"New Message",hisUid,R.drawable.sleep_icon);
 
-                    Sender sender=new Sender(data,token.getToken());
+                    Sender sender = new Sender(data,token.getToken());
+
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<Response>() {
+
                                 @Override
                                 public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                                     Toast.makeText(ChatActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
@@ -406,6 +401,8 @@ public class ChatActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<Response> call, Throwable t) {
+                                    Toast.makeText(ChatActivity.this, "Failed to send notification", Toast.LENGTH_SHORT).show();
+                                    t.printStackTrace();
 
                                 }
                             });

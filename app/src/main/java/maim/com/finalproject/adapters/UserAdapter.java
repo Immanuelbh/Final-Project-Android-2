@@ -84,6 +84,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 }
                 else{
 
+
+
                     //opens user chat
                     Intent intent = new Intent(parent.getContext(), ChatActivity.class);
                     intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
