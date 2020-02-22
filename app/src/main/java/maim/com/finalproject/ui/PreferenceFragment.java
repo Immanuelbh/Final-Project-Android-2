@@ -26,6 +26,12 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
 import maim.com.finalproject.R;
 import maim.com.finalproject.services.AlarmReceiver;
 
@@ -38,6 +44,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     CheckBoxPreference all_checkBoxPreference;
     NotificationManager notificationManager;
     SeekBarPreference age_seekBarPreference;
+    SeekBarPreference range_seekBarPreference;
     DropDownPreference dropDownPreference;
     long totalTime;
 
@@ -46,6 +53,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     public static final String CHANNEL_1_ID = "New";
     public static final String CHANNEL_2_ID = "Users";
+    private int updateMaxRange;
 
     //The settings will automatically be saved in the shared preferences.
     @Override
@@ -59,6 +67,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         user_checkBoxPreference =  getPreferenceManager().findPreference("user_preference_checkbox");
         all_checkBoxPreference =  getPreferenceManager().findPreference("all_preference_checkbox");
         age_seekBarPreference = getPreferenceManager().findPreference("age_preference_seekbar");
+        range_seekBarPreference = getPreferenceManager().findPreference("range_preference_seekbar");
         dropDownPreference =  getPreferenceManager().findPreference("dropdown_preference");
 
         if (Build.VERSION.SDK_INT >= 26) {
@@ -135,11 +144,26 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         });
 
         age_seekBarPreference.setMin(18);
-        age_seekBarPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        age_seekBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                age_seekBarPreference.getValue();
-                Toast.makeText(getActivity(), String.valueOf(age_seekBarPreference.getValue()), Toast.LENGTH_SHORT).show();
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                age_seekBarPreference.setValue((Integer) newValue);
+                //Toast.makeText(getActivity(), String.valueOf(age_seekBarPreference.getValue()), Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
+
+        range_seekBarPreference.setMin(5);
+        range_seekBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                //updateMaxRange = range_seekBarPreference.getValue();
+
+                range_seekBarPreference.setValue((Integer) newValue);
+
+
+
                 return false;
             }
         });
@@ -163,21 +187,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     }
 
-    /*public void WeatherChannel() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_2_ID); // 1. building the notif
-        builder.setSmallIcon(android.R.drawable.ic_menu_compass);
-        RemoteViews remoteViews = new RemoteViews(getActivity().getPackageName(), R.layout.weather_pending_intent); // 3.after attaching PendingIntent(2) ,inflate it and wrap it in RemoteViews (adding a custom view)
-
-        Intent weatherIntent = new Intent(getActivity(), MainActivity.class);
-        weatherIntent.putExtra("notif1_txt", "author");
-        //Intent.ACTION_VIEW, Uri.parse(article.getUrl())
-
-        PendingIntent newsPendingIntent = PendingIntent.getActivity(getActivity(), 0, weatherIntent, PendingIntent.FLAG_UPDATE_CURRENT); // 2.pending intent to wrap Intent then need to attach to RmoteView
-        remoteViews.setOnClickPendingIntent(R.id.toppphead1, newsPendingIntent); // 4.attach to the View we made in the custom layout ,an event
-
-        builder.setContent(remoteViews);
-        notificationManager.notify(NOTIF_WEATHER_ID, builder.build());
-    }*/
 
     private void cancelAlarm(int requestCode) {
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
@@ -198,6 +207,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + progress, pendingIntent);
 
     }
+
+
 
 }
 

@@ -25,7 +25,7 @@
     <PreferenceCategory android:title="@string/search_settings">
 
         <SeekBarPreference
-            android:defaultValue="0"
+            android:defaultValue="120"
             android:key="age_preference_seekbar"
             android:max="120"
             android:summary="Choose Age range"
@@ -33,9 +33,9 @@
             app:showSeekBarValue="true" />
 
         <SeekBarPreference
-            android:defaultValue="0"
+            android:defaultValue="50"
             android:key="range_preference_seekbar"
-            android:max="5"
+            android:max="50"
             android:summary="Choose Search Range"
             android:title="Search Range"
             app:showSeekBarValue="true" />
