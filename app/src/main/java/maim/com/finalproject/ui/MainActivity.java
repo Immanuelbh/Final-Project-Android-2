@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
 import java.util.ArrayList;
@@ -49,6 +53,7 @@ import java.util.List;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Genre;
+import maim.com.finalproject.notifications.Token;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseAuth.AuthStateListener authStateListener;
     FirebaseUser user;
+    String mUID;
 
     String fullName;
 
@@ -220,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
                         chatTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_settings:
-                        //TODO open settings fragment
+                        //TODO open settings activity
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
 
                     case R.id.item_logout:
@@ -257,6 +264,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //login or sign up
                 if(user != null){
+                    //----------------------------
+                    mUID=user.getUid();
+                    //----------------------------
                     if(fullName != null){ //sign up
                         user.updateProfile(new UserProfileChangeRequest.Builder()
                                 .setDisplayName(fullName).build())
@@ -284,9 +294,13 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
 
-
-
-
+                    //---------------------------
+                    //save uid of currently signed in user in shared preferences
+                    SharedPreferences sp =getSharedPreferences("SP_USER",MODE_PRIVATE);
+                    SharedPreferences.Editor editor= sp.edit();
+                    editor.putString("Current_USERID",mUID);
+                    editor.apply();
+                    //---------------------------
 
 
                 }
@@ -316,10 +330,36 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
         transaction.commit();
+
         initSearch();
+
+
+        //update Token -------------------
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if(task.isSuccessful()){
+                            String token =task.getResult().getToken();
+                            Log.d("Token---" ,token);
+                            Log.d("Token---getResult" ,task.getResult().toString());
+                            updateToken(token);
+                        }
+                    }
+                });
+        //updateToken(String.valueOf(FirebaseInstanceId.getInstance().getInstanceId()));
+        //----------------------
     }
-
-
+    //----------------------
+    public void updateToken(String token){
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken =new Token(token);
+        if(user!=null) {
+            DatabaseReference temp = ref.child(mUID);
+            temp.setValue(mToken);
+        }
+    }
+    //----------------------
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -346,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
                     return true; //select the clicked item
                 }
             };
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -34,6 +34,7 @@
         <activity android:name=".ui.MapsActivity"></activity>
         <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.SettingsActivity"></activity>
         <activity android:name=".ui.SlideTutorialActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +53,23 @@
                 android:resource="@xml/file_paths">
             </meta-data>
         </provider>
+
+
+
+        <service android:name=".notifications.FirebaseService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_SERVICE"/>
+            </intent-filter>
+        </service>
+        <service android:name=".notifications.FirebaseMessaging"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

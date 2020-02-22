@@ -232,13 +232,14 @@ public class SearchedConfirmationFragment extends Fragment {
                         Log.d("SCF", "User is not null!");
 
                         //update ui
-                        Glide.with(getContext())
+
+                        /*Glide.with(getContext())
                                 .load(hisUser.getImageUrl())
                                 .thumbnail(0.01f)
                                 .dontAnimate()
                                 .error(R.drawable.ic_user) //change to default profile image
                                 .into(profileIv);
-
+*/
                         nameTv.setText(hisUser.getName());
                         ageTv.setText(hisUser.getAge());
                         mySkillsList = hisUser.getMySkillsList();

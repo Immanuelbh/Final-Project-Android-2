@@ -1,7 +1,9 @@
 package maim.com.finalproject.ui;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,8 @@ public class SearchUsersFragment extends Fragment {
     String skillToFind;
     User currentUser;
     Double userRadius, lat2, long2;
+    SharedPreferences sp;
+
 
     public static SearchUsersFragment newInstance() {
         SearchUsersFragment searchUsersFragment  = new SearchUsersFragment();
@@ -60,6 +64,7 @@ public class SearchUsersFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         recyclerView.setHasFixedSize(true);
+        sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //read genres from database
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
@@ -86,10 +91,11 @@ public class SearchUsersFragment extends Fragment {
             }
         });
 
+        final String age_seekbar_sp= String.valueOf(sp.getInt("age_preference_seekbar",0)); //Age Seek-bar value from sp
         Bundle bundle = getArguments();
         if (bundle != null){
             CharSequence skill = bundle.getCharSequence("subGenre");
-            if(skill != null){
+            if(skill != null && sp != null){
                 skillToFind = skill.toString().toLowerCase();
 
                 adapter = new UserAdapter(rootView.getContext(), userList, skillToFind);
@@ -103,7 +109,7 @@ public class SearchUsersFragment extends Fragment {
                             for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                                 User user = snapshot.getValue(User.class);
                                 try{
-                                    if(!user.getUID().equals(fbUser.getUid())){
+                                    if(!user.getUID().equals(fbUser.getUid()) && user.getAge().compareTo(age_seekbar_sp)<=0){
                                         if(user.getMySkillsList().containsKey(skillToFind) &&
                                                 haversine(user.getLocationLat(),
                                                         user.getLocationLon()) <= userRadius){

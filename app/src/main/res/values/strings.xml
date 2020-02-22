@@ -2,5 +2,26 @@
 <resources>
     <string name="app_name">FinalProject</string>
     <string name="places_api_key">/*api key*/</string>
+    <string name="notifications">Notifications</string>
+    <string name="all_notifications">Turn on or turn off all notification</string>
+    <string name="new_notifications">New Notifications</string>
+    <string name="user_notifications">User Notifications</string>
+    <string name="new_notifications_summary">Turn on or turn off new notifications</string>
+    <string name="user_notifications_summary">Turn on or turn off user notifications</string>
+    <string name="search_settings">Search Settings</string>
     <string name="title_activity_maps">Map</string>
+
+    <string-array name="dropdown_entries">
+        <item>5 Seconds</item>
+        <item>15 Seconds</item>
+        <item>30 Seconds</item>
+        <item>60 Seconds</item>
+    </string-array>
+
+    <string-array name="dropdown_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
 </resources>

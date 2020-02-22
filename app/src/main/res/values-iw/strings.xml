@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FinalProject</string>
+    <string name="places_api_key">מפתח מוצר</string>
+    <string name="notifications">התראות</string>
+    <string name="all_notifications">הפעל או כבה את כל ההתראות</string>
+    <string name="new_notifications">התראות חדשות</string>
+    <string name="user_notifications">התראות ממשתמשים</string>
+    <string name="new_notifications_summary">הפעל או כבה התראות מהודעות חדשות</string>
+    <string name="user_notifications_summary">הפעל או כבה התראות ממשתמשים חדשים</string>
+    <string name="search_settings">הגדרות חיפוש</string>
+
+    <string-array name="dropdown_entries">
+        <item>5 שניות</item>
+        <item>15 שניות</item>
+        <item>30 שניות</item>
+        <item>60 שניות</item>
+    </string-array>
+</resources>
