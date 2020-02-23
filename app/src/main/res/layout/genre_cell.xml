@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="4dp"
     app:elevation="8dp"
     app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@android:color/holo_blue_dark"
+    android:id="@+id/genre_card"
     >
 
     <RelativeLayout
@@ -21,10 +22,11 @@
         >
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:id="@+id/genre_cell_bg"
             android:background="@drawable/ic_launcher_background"
+
             />
         <TextView
             android:layout_width="wrap_content"
