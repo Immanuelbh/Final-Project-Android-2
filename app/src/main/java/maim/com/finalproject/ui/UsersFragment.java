@@ -72,11 +72,15 @@ public class UsersFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
-                        if(!user.getUID().equals(fbUser.getUid())){
-                            userList.add(user);
-
-
+                        try{
+                            if(!user.getUID().equals(fbUser.getUid())){
+                                userList.add(user);
+                            }
                         }
+                        catch (NullPointerException e){
+                            continue;
+                        }
+
                         //userList.add(user);
                         //Log.d("GENRE_FRAGMENT:", genre.toString());
                     }

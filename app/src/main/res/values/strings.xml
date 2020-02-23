@@ -36,7 +36,7 @@
     <string name="age_tv">Age</string>
     <string name="email_tv">Email</string>
     <string name="max_range_tv">Max Range</string>
-    <string name="edit_location_btn">Edit Location</string>
+    <string name="edit_location_btn">Edit</string>
     <string name="location_result_tv">Location Result</string>
     <string name="edit_skills_btn">Edit Skills</string>
     <string name="schedule_time_tv">Schedule Time:</string>

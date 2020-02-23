@@ -25,6 +25,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,10 +49,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import maim.com.finalproject.R;
+import maim.com.finalproject.adapters.SubGenreAdapter;
+import maim.com.finalproject.model.SubGenre;
+import maim.com.finalproject.model.User;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,10 +78,15 @@ public class ProfileFragment extends Fragment {
     private TextView nameTv, ageTv, emailTv, rangeTv, locationResultTv;
     private Button editLocationBtn, editSkillsBtn, editLearnBtn;
     private CoordinatorLayout coordinatorLayout;
+    private RecyclerView skillRecycler, learnRecycler;
 
     private Context context;
     private View rootView;
     private Bitmap profileImgBitmap = null;
+    private HashMap<String, SubGenre> skillHashMap;
+    private HashMap<String, SubGenre> learnHashMap;
+    private List<SubGenre> skillList = new ArrayList<>();
+    private List<SubGenre> learnList = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -109,6 +121,10 @@ public class ProfileFragment extends Fragment {
         editLocationBtn = rootView.findViewById(R.id.profile_edit_location_btn);
         editSkillsBtn = rootView.findViewById(R.id.profile_edit_skills_btn);
         editLearnBtn = rootView.findViewById(R.id.profile_edit_learn_btn);
+        skillRecycler = rootView.findViewById(R.id.profile_skill_recycler);
+        learnRecycler = rootView.findViewById(R.id.profile_learn_recycler);
+
+        loadRecyclers();
 
 
         profileIv.setOnClickListener(new View.OnClickListener() {
@@ -167,13 +183,15 @@ public class ProfileFragment extends Fragment {
                         String range = ds.child("maxRange").getValue()+"";
                         String lat = ds.child("locationLat").getValue()+"";
                         String lon = ds.child("locationLon").getValue()+"";
+                        String address = ds.child("locationAddress").getValue()+"";
+                        Log.d("PF", "address : " + address);
                         String image = ds.child("imageUrl").getValue()+"";
 
                         nameTv.setText(name);
                         ageTv.setText(age);
                         emailTv.setText(email);
                         rangeTv.setText(range);
-                        locationResultTv.setText("lat: " + lat + " lon: " + lon);
+                        locationResultTv.setText(address);
 
                         /*Glide.with(rootView.getContext())
                                 .load(image)
@@ -227,6 +245,62 @@ public class ProfileFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void loadRecyclers() {
+
+        //skill
+        skillRecycler.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        skillRecycler.setHasFixedSize(true);
+
+        //learn
+        learnRecycler.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        learnRecycler.setHasFixedSize(true);
+
+
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    if(currentUser != null){
+                        //update adapters
+                        skillHashMap = currentUser.getMySkillsList();
+                        learnHashMap = currentUser.getMyLearnList();
+
+                        if(skillHashMap != null) {
+                            skillList.clear();
+                            for (String subGenre : skillHashMap.keySet()) {
+                                skillList.add(skillHashMap.get(subGenre));
+                            }
+                        }
+
+                        SubGenreAdapter skillSubGenreAdapter = new SubGenreAdapter(rootView.getContext(), skillList);
+                        skillRecycler.setAdapter(skillSubGenreAdapter);
+
+                        if(learnHashMap != null) {
+                            learnList.clear();
+                            for (String subGenre : learnHashMap.keySet()) {
+                                learnList.add(learnHashMap.get(subGenre));
+                            }
+                        }
+
+                        SubGenreAdapter learnSubGenreAdapter = new SubGenreAdapter(rootView.getContext(), learnList);
+                        learnRecycler.setAdapter(learnSubGenreAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     private File createImageFile() throws IOException{
@@ -290,7 +364,7 @@ public class ProfileFragment extends Fragment {
 
     private void handleUpload(Bitmap profileImgBitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        profileImgBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos); //save 70% quality to db
+        profileImgBitmap.compress(Bitmap.CompressFormat.JPEG,60,baos); //save 60% quality to db
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final StorageReference reference = FirebaseStorage.getInstance().getReference()

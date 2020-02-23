@@ -8,7 +8,8 @@
     <item
         android:id="@+id/nav_favorites"
         android:icon="@drawable/ic_favorite_black_24dp"
-        android:title="@string/favorites_bnv"/>
+        android:title="@string/favorites_bnv"
+        android:visible="false"/>
     <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/ic_chat_black_24dp"

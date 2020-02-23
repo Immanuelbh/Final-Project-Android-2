@@ -106,4 +106,5 @@
     <string name="messages_dnv">הודעות</string>
     <string name="settings_dnv">הגדרות</string>
     <string name="log_out_dnv">התנתק</string>
+    <string name="title_activity_maps">מפה</string>
 </resources>

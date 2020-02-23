@@ -15,6 +15,7 @@
     <group>
         <item android:id="@+id/item_users"
             android:title="@string/users_dnv"
+            android:visible="false"
             />
 
         <item android:id="@+id/item_search"

@@ -1,12 +1,16 @@
 package maim.com.finalproject.ui;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,10 +58,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import maim.com.finalproject.R;
 
@@ -78,6 +84,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button setLocationBtn;
     private LatLng chosenLocation;
 
+    private Context context;
+
 /*
 
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
@@ -85,6 +93,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                     Place.Field.ADDRESS);
     AutocompleteSupportFragment placesFragment;
 */
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        super.onAttachFragment(fragment);
+        this.context = fragment.getContext();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,29 +242,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Point x_y_points = new Point(mWidth, mHeight);
                 LatLng centerScreen = mMap.getProjection().fromScreenLocation(x_y_points);
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(context, Locale.getDefault());
+                String address = "Error";
+                try {
+                    addresses = geocoder.getFromLocation(centerScreen.latitude, centerScreen.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                if(chosenLocation != null){
-                    Toast.makeText(MapsActivity.this, "lat " + chosenLocation.latitude + " lon " + chosenLocation.longitude, Toast.LENGTH_SHORT).show();
+                    Log.d("MA", "address is : " + address);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                else if(centerScreen != null){
-                    Toast.makeText(MapsActivity.this, getString(R.string.screen_center_toast) + centerScreen.toString(), Toast.LENGTH_SHORT).show();
+
+
+                if(centerScreen != null){ //always true
                     //write to db
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid()); //won't be null - must be signed in to reach this page
+                            FirebaseAuth.getInstance().getCurrentUser().getUid()); //won't be null - must be signed in to reach this page
                     HashMap<String,Object> hashMap = new HashMap<>();
                     hashMap.put("locationLat", centerScreen.latitude);
                     hashMap.put("locationLon", centerScreen.longitude);
+                    hashMap.put("locationAddress", address);
                     userRef.updateChildren(hashMap);
                     //close activity
                     finish();
                 }
-                else if(lastKnownLocation != null){
-                    Toast.makeText(MapsActivity.this, "gps: lat: " + lastKnownLocation.getLatitude() + " lon : " +lastKnownLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(MapsActivity.this, getString(R.string.no_location_chosen_toast), Toast.LENGTH_SHORT).show();
 
-                }
             }
         });
 
@@ -324,22 +342,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-/*
-        // Add a marker in Sydney and move the camera
-        LatLng holon = new LatLng(32.011261, 34.774811);
-        mMap.addMarker(new MarkerOptions().position(holon).title("Marker in Holon"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(holon, 10));
-
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                mMap.clear();
-                MarkerOptions marker = new MarkerOptions().position(new LatLng(point.latitude, point.longitude)).title("My Location");
-                mMap.addMarker(marker);
-                //System.out.println(point.latitude+"---"+ point.longitude);
-            }
-        });*/
     }
 
     @Override

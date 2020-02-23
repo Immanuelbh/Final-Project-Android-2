@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
+    CollapsingToolbarLayout ctl;
+    AppBarLayout appBarLayout;
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseAuth.AuthStateListener authStateListener;
@@ -90,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
+        appBarLayout = findViewById(R.id.app_bar_layout);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,6 +102,24 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                    // Collapsed
+                    //Toast.makeText(MainActivity.this, "Collapsing", Toast.LENGTH_SHORT).show();
+
+                } else if (verticalOffset == 0) {
+                    // Expanded
+                } else {
+                    // Somewhere in between
+                }
+            }
+        });
+
+
 
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -249,8 +272,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        final CollapsingToolbarLayout ctl = findViewById(R.id.collapsing_layout);
+        ctl = findViewById(R.id.collapsing_layout);
+        //ctl.setCollapsedTitleTextColor(R.color.white);
         ctl.setTitle(getString(R.string.please_log_in_tv));
+
 
 
         //initializing authlistener
@@ -285,7 +310,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //update menu ui - user logged in
                     userTv.setText(user.getDisplayName() + getString(R.string.is_now_connected_sb));
-                    ctl.setTitle(user.getDisplayName()+"");
+                    ctl.setTitle("Welcome");
+
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
@@ -298,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //---------------------------
                     //save uid of currently signed in user in shared preferences
-                    SharedPreferences sp =getSharedPreferences("SP_USER",MODE_PRIVATE);
+                    SharedPreferences sp = getSharedPreferences("SP_USER",MODE_PRIVATE);
                     SharedPreferences.Editor editor= sp.edit();
                     editor.putString("Current_USERID",mUID);
                     editor.apply();
@@ -402,11 +428,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        int id = item.getItemId();
+
+        if(id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
+        }
+        else if(id == R.id.toolbar_menu){
+            //return true;
         }
         return super.onOptionsItemSelected(item);
     }
