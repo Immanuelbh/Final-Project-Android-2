@@ -259,32 +259,58 @@ public class SignupDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                /*if(checkAllFieldsVaild()){
 
-                }*/
                 FirebaseUser fbUser = firebaseAuth.getCurrentUser();
                 DatabaseReference updateRef = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
 
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("uid", fbUser.getUid());
-                hashMap.put("name", fbUser.getDisplayName());
-                hashMap.put("email", fbUser.getEmail());
-                hashMap.put("age", signupAgeTv.getText().toString());
-                hashMap.put("maxRange", signupRangeTv.getText().toString());
-                hashMap.put("onlineStatus", "Online");
-                hashMap.put("typingTo", "noOne");
-                //hashMap.put("mySkillsList", theSkill);
+                Log.d("SDF", "skillList.size = " + skillList.size());
+                Log.d("SDF", "learnList.size = " + learnList.size());
+                if(validLocation() && skillList.size() > 0 && learnList.size() > 0){//validSkills()){
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("uid", fbUser.getUid());
+                    hashMap.put("name", fbUser.getDisplayName());
+                    hashMap.put("email", fbUser.getEmail());
+                    hashMap.put("age", signupAgeTv.getText().toString());
+                    hashMap.put("maxRange", signupRangeTv.getText().toString());
+                    hashMap.put("onlineStatus", "Online");
+                    hashMap.put("typingTo", "noOne");
 
-                updateRef.updateChildren(hashMap);
+                    updateRef.updateChildren(hashMap);
 
-                bottomNav.setVisibility(View.VISIBLE);
+                    bottomNav.setVisibility(View.VISIBLE);
 
-                Toast.makeText(context, getString(R.string.added_details_toast), Toast.LENGTH_SHORT).show();
-                getFragmentManager().popBackStackImmediate();
+                    Toast.makeText(context, getString(R.string.added_details_toast), Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStackImmediate();
+
+                }
+                else{
+                    if (skillList.size() == 0){
+                        Snackbar.make(getActivity().findViewById(R.id.coordinator), "Please choose at least one skill you know", Snackbar.LENGTH_SHORT).show();
+                    }
+                    else if (learnList.size() == 0){
+                        Snackbar.make(getActivity().findViewById(R.id.coordinator), "Please choose at least one skill to learn", Snackbar.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Snackbar.make(getActivity().findViewById(R.id.coordinator), "Please enter a location", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
         return rootView;
+    }
+
+    private boolean validLocation() {
+        FirebaseUser fbUser = firebaseAuth.getCurrentUser();
+        DatabaseReference updateRef = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
+
+        //validation if tree
+        String curLocation = locationResultTv.getText().toString();
+        if(!curLocation.equals("")){
+            return true;
+        }
+
+        return false;
     }
 
     private void loadRecyclers() {

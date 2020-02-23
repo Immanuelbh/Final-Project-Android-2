@@ -146,7 +146,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/havnt_chosen_location_tv"
+                android:text=""
                 android:paddingTop="10dp"
                 android:layout_marginStart="5dp"
                 android:id="@+id/signup_location_result_tv"
