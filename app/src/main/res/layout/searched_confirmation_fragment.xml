@@ -76,7 +76,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/confirmation_myskills"
+                    android:id="@+id/confirmation_myskills_recycler"
                     />
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/profile_learn_recycler"
+                    android:id="@+id/confirmation_learn_recycler"
                     />
             </LinearLayout>
 

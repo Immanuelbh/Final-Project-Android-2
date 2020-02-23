@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,28 +58,38 @@ import maim.com.finalproject.model.User;
 
 public class SearchedConfirmationFragment extends Fragment {
 
-    FirebaseAuth firebaseAuth;
-    FirebaseUser myUser;
-    User hisUser;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference users;
-    String senderUid, receiverUid, senderCid, receiverCid;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser myUser;
+    private User hisUser;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference users;
+    private String senderUid, receiverUid, senderCid, receiverCid;
 
-    ImageView profileIv;
-    TextView nameTv, ageTv;
-    TextView dateTimeTv;
-    View rootView;
-    RecyclerView recyclerView;
-    private HashMap<String,SubGenre> mySkillsList;
-    List<SubGenre> mySkills = new ArrayList<>();
+    private ImageView profileIv;
+    private TextView nameTv, ageTv;
+    private TextView dateTimeTv;
+    private View rootView;
+    private RecyclerView skillRecyclerView;
+    private RecyclerView learnRecyclerView;
+    private List<SubGenre> mySkills = new ArrayList<>();
+    private List<SubGenre> learnList = new ArrayList<>();
     private CharSequence skillWant;
-    Calendar calendar;
-    BottomNavigationView bottomNav;
-    Bundle bundle;
+    private Calendar calendar;
+    private BottomNavigationView bottomNav;
+    private Bundle bundle;
+    private HashMap<String,SubGenre> mySkillsList;
+    private HashMap<String, SubGenre> myLearnList;
+    private Context context;
 
     public static SearchedConfirmationFragment newInstance(){
 
         return new SearchedConfirmationFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Nullable
@@ -96,15 +107,19 @@ public class SearchedConfirmationFragment extends Fragment {
         profileIv = rootView.findViewById(R.id.profileIv);
         nameTv = rootView.findViewById(R.id.profile_name_tv);
         ageTv = rootView.findViewById(R.id.profile_age_tv);
-        recyclerView = rootView.findViewById(R.id.confirmation_myskills);
+        skillRecyclerView = rootView.findViewById(R.id.confirmation_myskills_recycler);
+        learnRecyclerView = rootView.findViewById(R.id.confirmation_learn_recycler);
         ImageView scheduleTime = rootView.findViewById(R.id.confirmation_schedule_time);
         bottomNav = getActivity().findViewById(R.id.bottom_navigation);
         //bottomNav.setVisibility(View.GONE);
         Button scheduleBtn = rootView.findViewById(R.id.confirmation_schedule_btn);
 
         //create simple adapter with radio button
-        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        recyclerView.setHasFixedSize(true);
+        skillRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        skillRecyclerView.setHasFixedSize(true);
+
+        learnRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        learnRecyclerView.setHasFixedSize(true);
 
         bundle = this.getArguments();
         if(bundle != null){
@@ -124,16 +139,18 @@ public class SearchedConfirmationFragment extends Fragment {
                     for (String subGenre:
                             mySkillsList.keySet()) {
                         mySkills.add(mySkillsList.get(subGenre));
-
                     }
 
                     //SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio");
                     SubGenreAdapter subGenreAdapter = new SubGenreAdapter(rootView.getContext(), mySkills);
-                    recyclerView.setAdapter(subGenreAdapter);
+                    skillRecyclerView.setAdapter(subGenreAdapter);
                 }
                 else{
                     Toast.makeText(getContext(), getString(R.string.skill_list_is_empty_toast), Toast.LENGTH_SHORT).show();
                 }
+
+
+
             }
             else if (bundle.containsKey("confirmation")){
                 Confirmation confirmation = (Confirmation) bundle.getSerializable("confirmation");
@@ -181,7 +198,8 @@ public class SearchedConfirmationFragment extends Fragment {
 
                         intent.putExtra("confirmation_msg",
                                 myUser.getDisplayName() + " would like to schedule a skill swap with you at: " +
-                                        DateFormat.format("hh:mm aa dd/MM/yy", calendar).toString()
+                                        DateFormat.format("hh:mm aa dd/MM/yy", calendar).toString() +
+                                        ". Please click to confirm"
                         );
 
                         getContext().startActivity(intent);
@@ -232,30 +250,47 @@ public class SearchedConfirmationFragment extends Fragment {
                         Log.d("SCF", "User is not null!");
 
                         //update ui
+/*
 
-                        /*Glide.with(getContext())
+                        Glide.with(context)
                                 .load(hisUser.getImageUrl())
                                 .thumbnail(0.01f)
                                 .dontAnimate()
                                 .error(R.drawable.ic_user) //change to default profile image
                                 .into(profileIv);
 */
+
                         nameTv.setText(hisUser.getName());
                         ageTv.setText(hisUser.getAge());
                         mySkillsList = hisUser.getMySkillsList();
+                        myLearnList = hisUser.getMyLearnList();
 
                         if (mySkillsList != null) {
 
                             for (String subGenre : mySkillsList.keySet()) {
                                 mySkills.add(mySkillsList.get(subGenre));
-
                             }
-
                             SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio", null, null);
-                            recyclerView.setAdapter(radioSubGenreAdapter);
+                            skillRecyclerView.setAdapter(radioSubGenreAdapter);
                         } else {
                             Toast.makeText(getContext(), getString(R.string.skill_list_is_empty_toast), Toast.LENGTH_SHORT).show();
                         }
+
+                        if (myLearnList != null) {
+
+                            for (String subGenre : myLearnList.keySet()) {
+                                learnList.add(myLearnList.get(subGenre));
+                            }
+                            Log.d("SCF", "learnList size : " + learnList.size());
+                            SignupSubGenreAdapter learnSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), learnList, "plain", null, null);
+                            learnRecyclerView.setAdapter(learnSubGenreAdapter);
+                            Log.d("SCF", "attempting to write to adapter");
+
+                        } else {
+                            //Toast.makeText(getContext(), getString(R.string.skill_list_is_empty_toast), Toast.LENGTH_SHORT).show();
+                        }
+
+
                     }
                 }
                 else{
@@ -364,12 +399,4 @@ public class SearchedConfirmationFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    @Override
-    public void onPause() {
-        /*
-        if(bottomNav.getVisibility() == View.GONE)
-            bottomNav.setVisibility(View.VISIBLE);
-        */
-        super.onPause();
-    }
 }

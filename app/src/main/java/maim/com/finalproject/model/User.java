@@ -17,6 +17,7 @@ public class User implements Serializable {
     private String typingTo;
     private double locationLat;
     private double locationLon;
+    private String locationAddress;
     private HashMap<String,SubGenre> mySkillsList;
     private HashMap<String,SubGenre> myLearnList;
     private HashMap<String,Confirmation> myConfirmations;
@@ -114,6 +115,14 @@ public class User implements Serializable {
 
     public void setLocationLon(double locationLon) {
         this.locationLon = locationLon;
+    }
+
+    public String getLocationAddress() {
+        return locationAddress;
+    }
+
+    public void setLocationAddress(String locationAddress) {
+        this.locationAddress = locationAddress;
     }
 
     public HashMap<String, SubGenre> getMySkillsList() {

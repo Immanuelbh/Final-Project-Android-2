@@ -177,6 +177,11 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
                     holder.checkBox.setChecked(true);
                 }
                 break;
+            case "plain":
+                holder.checkBox.setVisibility(View.GONE);
+                holder.radioButton.setVisibility(View.GONE);
+
+
         }
 
 

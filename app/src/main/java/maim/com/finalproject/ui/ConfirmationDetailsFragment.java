@@ -27,11 +27,11 @@ import maim.com.finalproject.model.Confirmation;
 
 public class ConfirmationDetailsFragment extends Fragment {
 
-    TextView learn1, learn2, skill1Tv, skill2Tv, date1Tv, date2Tv;
-    RelativeLayout bgRl;
-    LinearLayout receiverConfirmationLl;
-    String senderUid, receiverUid, senderCid, receiverCid;
-    FirebaseUser fbUser;
+    private TextView learn1, learn2, skill1Tv, skill2Tv, date1Tv, date2Tv, chooseSkillTv;
+    private RelativeLayout bgRl, user2Rl;
+    private LinearLayout receiverConfirmationLl;
+    private String senderUid, receiverUid, senderCid, receiverCid;
+    private FirebaseUser fbUser;
 
     public static ConfirmationDetailsFragment newInstance(){
         return new ConfirmationDetailsFragment();
@@ -50,6 +50,8 @@ public class ConfirmationDetailsFragment extends Fragment {
         learn2 = rootView.findViewById(R.id.conf_learn_2);
         skill2Tv = rootView.findViewById(R.id.conf_skill_2);
         date2Tv = rootView.findViewById(R.id.conf_date_2);
+        chooseSkillTv = rootView.findViewById(R.id.conf_choose_skill);
+        user2Rl = rootView.findViewById(R.id.conf_user2_layout);
 
 
         fbUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,12 +76,24 @@ public class ConfirmationDetailsFragment extends Fragment {
                         confirmation.getReceiverUid().equals(fbUser.getUid())){
                         //found the correct confirmation || applies for a single confirmation
                         //load ui
-                        learn1.setText(confirmation.getSenderName());
-                        learn2.setText(confirmation.getReceiverName());
+                        learn1.setText(confirmation.getSenderName() + " wants to learn ");
                         skill1Tv.setText(confirmation.getSkill1());
-                        skill2Tv.setText(confirmation.getSkill2());
                         date1Tv.setText(confirmation.getDate1());
+
+                        learn2.setText(confirmation.getReceiverName());
+
+                        skill2Tv.setText(confirmation.getSkill2());
                         date2Tv.setText(confirmation.getDate2());
+                        /*
+                        if(skill2Tv.getText().toString().equals("")){
+                            chooseSkillTv.setVisibility(View.VISIBLE);
+                            user2Rl.setVisibility(View.GONE);
+                        }
+                        else{
+                            user2Rl.setVisibility(View.VISIBLE);
+                            chooseSkillTv.setVisibility(View.GONE);
+
+                        }*/
 
                     }
                 }
@@ -100,22 +114,23 @@ public class ConfirmationDetailsFragment extends Fragment {
             }
         });
 
+        if(fbUser.getUid().equals(receiverUid)){
+            receiverConfirmationLl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //open the confirmation profile of the other user
 
-        receiverConfirmationLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //open the confirmation profile of the other user
+                    SearchedConfirmationFragment searchedConfirmationFragment = SearchedConfirmationFragment.newInstance();
+                    Bundle bundleToSend = bundle;
+                    searchedConfirmationFragment.setArguments(bundleToSend);
 
-                SearchedConfirmationFragment searchedConfirmationFragment = SearchedConfirmationFragment.newInstance();
-                Bundle bundleToSend = bundle;
-                searchedConfirmationFragment.setArguments(bundleToSend);
-
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.cover_confirmation_frame, searchedConfirmationFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.cover_confirmation_frame, searchedConfirmationFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
+        }
 
 
         return rootView;
