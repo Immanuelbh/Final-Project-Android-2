@@ -95,12 +95,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
                     setAlarm("NEW", totalTime, 0);
 
-                    Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     cancelAlarm(0);
                     notificationManager.cancel(NOTIF_NEW_ID);
-                    Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
                     return true;
                 }
 
@@ -217,7 +217,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + progress, pendingIntent);
-        Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
     }
 
 

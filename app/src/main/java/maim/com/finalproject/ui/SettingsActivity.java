@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("maxRange", String.valueOf(maxRange));
         ref.updateChildren(hashMap);
-        Toast.makeText(this, "new max range: " + maxRange, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "new max range: " + maxRange, Toast.LENGTH_SHORT).show();
 
         super.onBackPressed();
     }

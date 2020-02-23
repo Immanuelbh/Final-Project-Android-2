@@ -8,7 +8,8 @@
         <CheckBoxPreference
             android:key="all_preference_checkbox"
             android:summary="@string/all_notifications"
-            android:title="@string/notifications" />
+            android:title="@string/notifications"
+            app:isPreferenceVisible="false"/>
 
         <CheckBoxPreference
             android:key="new_preference_checkbox"
@@ -18,7 +19,15 @@
         <CheckBoxPreference
             android:key="user_preference_checkbox"
             android:summary="@string/user_notifications_summary"
-            android:title="@string/user_notifications" />
+            android:title="@string/user_notifications"
+            app:isPreferenceVisible="false"/>
+        <DropDownPreference
+            android:entries="@array/dropdown_entries"
+            android:entryValues="@array/dropdown_values"
+            android:key="dropdown_preference"
+            android:title="@string/repeat_mode"
+            android:summary="@string/choose_repeating_time_ptv"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -40,13 +49,7 @@
             android:title="@string/search_range_ptv"
             app:showSeekBarValue="true" />
 
-        <DropDownPreference
-            android:entries="@array/dropdown_entries"
-            android:entryValues="@array/dropdown_values"
-            android:key="dropdown_preference"
-            android:title="@string/repeat_mode"
-            android:summary="@string/choose_repeating_time_ptv"
-            app:useSimpleSummaryProvider="true" />
+
 
     </PreferenceCategory>
 

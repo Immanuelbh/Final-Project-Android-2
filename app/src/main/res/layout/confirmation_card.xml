@@ -7,7 +7,7 @@
     app:contentPadding="4dp"
     app:elevation="8dp"
     app:cardCornerRadius="1dp"
-    android:backgroundTint="@android:color/holo_orange_light"
+    android:backgroundTint="@color/white"
     >
 
     <LinearLayout
@@ -36,62 +36,149 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
+                android:background="@color/colorPrimaryWhite"
+
                 >
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:text="Sender name"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_sname"
-                    />
-                <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_teach"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sender name"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_sname"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="Sender skill"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_skill1"
-                    />
-                <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_skill"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sender skill"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_skill1"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:text="1/1/01 22:00"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_date1"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_date"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1/1/01 22:00"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_date1"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
+                android:background="@color/colorPrimaryBright"
                 >
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:text="Receiver name"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_rname"
-                    />
-                <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_teach"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Receiver name"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_rname"
+                        android:layout_gravity="center_vertical"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="Receiver skill"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_skill2"
-                    />
-                <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_skill"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Receiver skill"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_skill2"
+                        android:layout_gravity="center_vertical"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:text="1/1/01 22:00"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/confirmation_card_date2"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_confirmation_date"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1/1/01 22:00"
+                        android:gravity="center"
+                        android:id="@+id/confirmation_card_date2"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
