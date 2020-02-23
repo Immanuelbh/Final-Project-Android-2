@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import maim.com.finalproject.R;
@@ -47,12 +49,14 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
 
         RelativeLayout relativeLayout;
         TextView titleTv;
+        ImageView imageView;
 
         public SubGenreViewHolder(@NonNull View itemView) {
             super(itemView);
 
             relativeLayout = itemView.findViewById(R.id.genre_rl);
             titleTv = itemView.findViewById(R.id.genre_title_tv);
+            imageView = itemView.findViewById(R.id.genre_cell_bg);
         }
     }
 
@@ -86,7 +90,10 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
     public void onBindViewHolder(@NonNull SubGenreViewHolder holder, int position) {
         SubGenre subGenre = subGenres.get(position);
         holder.titleTv.setText(subGenre.getName());
-        //TODO change image
+        Glide.with(sCtx)
+                .load(subGenre.getImageUrl()+"")
+                .error(R.drawable.no_image_available_comp)
+                .into(holder.imageView);
     }
 
     @Override
