@@ -31,7 +31,7 @@
         android:layout_below="@+id/slideViewPager"
         android:layout_alignStart="@id/slideViewPager"
         android:background="@android:color/transparent"
-        android:text="Back"
+        android:text="@string/back_btn"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:visibility="invisible" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/slideViewPager"
         android:layout_alignEnd="@id/slideViewPager"
-        android:text="Next"
+        android:text="@string/next_btn"
         android:textColor="@color/colorWhite"
         android:background="@android:color/transparent"
         android:textAllCaps="false"/>

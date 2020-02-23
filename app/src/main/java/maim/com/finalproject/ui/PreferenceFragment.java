@@ -85,12 +85,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
                     setAlarm("NEW", totalTime, 0);
 
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     cancelAlarm(0);
                     notificationManager.cancel(NOTIF_NEW_ID);
-                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
                     return true;
                 }
             }
@@ -102,12 +102,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 if (user_checkBoxPreference.isChecked()) {
 
                     setAlarm("USER", 5000, 1);
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     cancelAlarm(1);
                     notificationManager.cancel(NOTIF_USERS_ID);
-                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
                     return true;
                 }
             }
@@ -121,14 +121,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
                     setAlarm("NEW", 5000, 0);
                     setAlarm("USER", 5000, 1);
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     cancelAlarm(0);
                     cancelAlarm(1);
                     notificationManager.cancel(NOTIF_NEW_ID);
                     notificationManager.cancel(NOTIF_USERS_ID);
-                    Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
                     return true;
                 }
             }

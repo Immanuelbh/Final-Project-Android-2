@@ -117,7 +117,7 @@ public class ProfileFragment extends Fragment {
                     int hasWritePermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
                     if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(context, "no permission for camera", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.no_permission_for_camera_toast), Toast.LENGTH_SHORT).show();
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
                     } else {
 
@@ -243,12 +243,12 @@ public class ProfileFragment extends Fragment {
                 startMap();
             } else {
                 // Permission was denied. Display an error message.
-                Snackbar.make(coordinatorLayout, "The map cannot start without permission", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getString(R.string.the_map_cannot_start_sb), Snackbar.LENGTH_SHORT).show();
             }
         }
         else if(requestCode == WRITE_PERMISSION_REQUEST){
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(context, "Cannot take picture", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.cannot_take_picture_sb), Toast.LENGTH_SHORT).show();
             }
             else{
 
@@ -327,13 +327,13 @@ public class ProfileFragment extends Fragment {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("imageUrl", user.getPhotoUrl().toString());
                         dbRef.updateChildren(hashMap);
-                        Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.updated_successfully_toast), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Profile image failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.profile_image_failed_toast), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

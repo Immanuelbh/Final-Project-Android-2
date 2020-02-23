@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                         usersTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_sign_up:
-                        builder.setView(dialogView).setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                        builder.setView(dialogView).setPositiveButton(getString(R.string.next_btn), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String email = emailEt.getText().toString();
@@ -162,10 +162,10 @@ public class MainActivity extends AppCompatActivity {
                                             transaction.addToBackStack(null).commit();
 
 
-                                            Snackbar.make(coordinatorLayout, "Signup successful", Snackbar.LENGTH_SHORT).show();
+                                            Snackbar.make(coordinatorLayout, getString(R.string.signup_successful_sb), Snackbar.LENGTH_SHORT).show();
                                         }
                                         else{
-                                            Snackbar.make(coordinatorLayout, "Signup failed", Snackbar.LENGTH_SHORT).show();
+                                            Snackbar.make(coordinatorLayout, getString(R.string.signup_failed_sb), Snackbar.LENGTH_SHORT).show();
                                         }
 
 
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_login:
                         fullNameEt.setVisibility(View.GONE);
 
-                        builder.setView(dialogView).setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                        builder.setView(dialogView).setPositiveButton(getString(R.string.login_tv), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String email = emailEt.getText().toString();
@@ -191,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if(task.isSuccessful())
-                                            Snackbar.make(coordinatorLayout, "Login successful", Snackbar.LENGTH_SHORT).show();
+                                            Snackbar.make(coordinatorLayout, getString(R.string.login_successful_sb), Snackbar.LENGTH_SHORT).show();
                                         else
-                                            Snackbar.make(coordinatorLayout, "Login failed", Snackbar.LENGTH_SHORT).show();
+                                            Snackbar.make(coordinatorLayout, getString(R.string.login_failed_sb), Snackbar.LENGTH_SHORT).show();
 
                                     }
                                 });
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_logout:
 
                         firebaseAuth.signOut();
-                        Snackbar.make(coordinatorLayout, "Logged out", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.logged_out_sb), Snackbar.LENGTH_SHORT).show();
                         GenreFragment genreFragment = GenreFragment.newInstance();
 
                         FragmentTransaction homeTransaction = getSupportFragmentManager().beginTransaction();
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         final CollapsingToolbarLayout ctl = findViewById(R.id.collapsing_layout);
-        ctl.setTitle("Please Log In");
+        ctl.setTitle(getString(R.string.please_log_in_tv));
 
 
         //initializing authlistener
@@ -275,14 +275,14 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 fullName = null;
                                 if(task.isSuccessful())
-                                    Snackbar.make(coordinatorLayout, "Welcome " + user.getDisplayName() + "!", Snackbar.LENGTH_SHORT).show();
-                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + " is now connected", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, getString(R.string.welcome_sb) + user.getDisplayName() + "!", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(coordinatorLayout, user.getDisplayName() + getString(R.string.is_now_connected_sb), Snackbar.LENGTH_SHORT).show();
                             }
                         });
                     }
 
                     //update menu ui - user logged in
-                    userTv.setText(user.getDisplayName() + " logged in");
+                    userTv.setText(user.getDisplayName() + getString(R.string.is_now_connected_sb));
                     ctl.setTitle(user.getDisplayName()+"");
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);
@@ -306,8 +306,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{ //logged out or not sign in yet
                     //update ui
-                    userTv.setText("Please Log In");
-                    ctl.setTitle("Please Log In");
+                    userTv.setText(getString(R.string.please_log_in_tv));
+                    ctl.setTitle(getString(R.string.please_log_in_tv));
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);

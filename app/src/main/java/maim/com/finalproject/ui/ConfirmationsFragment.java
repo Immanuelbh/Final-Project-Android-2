@@ -53,7 +53,7 @@ public class ConfirmationsFragment extends Fragment {
         
         //load the confirmations
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setMessage("Loading confirmations, please wait..");
+        progressDialog.setMessage(getString(R.string.loading_confirms_pd));
         progressDialog.show();
 
         FirebaseUser myUser = FirebaseAuth.getInstance().getCurrentUser();

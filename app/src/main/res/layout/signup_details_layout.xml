@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="What's your age?"
+                android:text="@string/whats_your_age_tv"
                 android:layout_weight="5"
                 />
 
@@ -53,7 +53,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="How far would you like to search?"
+                android:text="@string/how_far_range_tv"
                 android:layout_weight="7"
                 />
 
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="km"
+                android:text="@string/km_tv"
                 />
         </LinearLayout>
 
@@ -94,7 +94,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Preferred meeting location"
+                android:text="@string/preferred_meeting_location_tv"
                 android:layout_weight="5"
                 />
 
@@ -109,7 +109,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Haven't choosen a location"
+            android:text="@string/havnt_chosen_location_tv"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
@@ -146,7 +146,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="My Skills"
+                    android:text="@string/my_skills_tv"
                     android:layout_weight="5"
                     android:layout_gravity="center"
                     />
@@ -179,7 +179,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="save"
+            android:text="@string/save_btn"
             android:id="@+id/signup_save_btn"
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"

@@ -239,7 +239,7 @@ public class SignupDetailsFragment extends Fragment {
 
                 bottomNav.setVisibility(View.VISIBLE);
 
-                Toast.makeText(context, "Added details!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.added_details_toast), Toast.LENGTH_SHORT).show();
                 getFragmentManager().popBackStackImmediate();
             }
         });
@@ -262,7 +262,7 @@ public class SignupDetailsFragment extends Fragment {
                 startMap();
             } else {
                 // Permission was denied. Display an error message.
-                Snackbar.make(coordinatorLayout, "The map cannot start without permission", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, getString(R.string.the_map_cannot_start_sb), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

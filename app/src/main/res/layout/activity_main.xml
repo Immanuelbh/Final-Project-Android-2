@@ -49,7 +49,7 @@
                     android:background="@color/colorWhite"
                     android:padding="10dp"
                     app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:queryHint="Search here"
+                    app:queryHint="@string/search_here_sv"
                     android:iconifiedByDefault="false"
                     android:layout_alignParentTop="true"
                     />

@@ -68,7 +68,7 @@ public class SearchUsersFragment extends Fragment {
 
         //read genres from database
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setMessage("Loading users, please wait..");
+        progressDialog.setMessage(getString(R.string.loading_users_please_wait_pd));
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
@@ -120,10 +120,10 @@ public class SearchUsersFragment extends Fragment {
                                 catch (NullPointerException e){
                                     e.printStackTrace();
                                     if(user == null){
-                                        Toast.makeText(getContext(), "user is null", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), getString(R.string.user_is_null_toast), Toast.LENGTH_SHORT).show();
                                     }
                                     else{
-                                        Toast.makeText(getContext(), "Something else is wrong", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -150,7 +150,7 @@ public class SearchUsersFragment extends Fragment {
                 });
             }
             else{
-                Toast.makeText(getContext(), "failed to transfer subgenre", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.failed_to_transfer_subgenre_toast), Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -175,7 +175,7 @@ public class SearchUsersFragment extends Fragment {
             return EARTH_RADIUS * c;
         }
 
-        Toast.makeText(getContext(), "current user is null", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.current_user_is_null_toast), Toast.LENGTH_SHORT).show();
         return 0;
     }
 }

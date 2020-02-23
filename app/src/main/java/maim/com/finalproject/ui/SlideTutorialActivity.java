@@ -145,7 +145,7 @@ public class SlideTutorialActivity extends AppCompatActivity {
                 mBackBtn.setEnabled(false);
                 mBackBtn.setVisibility(View.INVISIBLE);
 
-                mNextBtn.setText("Next");
+                mNextBtn.setText(getString(R.string.next_btn));
                 mBackBtn.setText("");
                 flag=false;
             }
@@ -154,16 +154,16 @@ public class SlideTutorialActivity extends AppCompatActivity {
                 mBackBtn.setEnabled(true);
                 mBackBtn.setVisibility(View.VISIBLE);
 
-                mNextBtn.setText("Finish");
-                mBackBtn.setText("Back");
+                mNextBtn.setText(getString(R.string.finish_btn));
+                mBackBtn.setText(getString(R.string.back_btn));
             }
             else{
                 mNextBtn.setEnabled(true);
                 mBackBtn.setEnabled(true);
                 mBackBtn.setVisibility(View.VISIBLE);
 
-                mNextBtn.setText("Next");
-                mBackBtn.setText("Back");
+                mNextBtn.setText(getString(R.string.next_btn));
+                mBackBtn.setText(getString(R.string.back_btn));
                 flag=false;
             }
         }

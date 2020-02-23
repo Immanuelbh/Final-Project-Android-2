@@ -132,7 +132,7 @@ public class SearchedConfirmationFragment extends Fragment {
                     recyclerView.setAdapter(subGenreAdapter);
                 }
                 else{
-                    Toast.makeText(getContext(), "skill list is empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.skill_list_is_empty_toast), Toast.LENGTH_SHORT).show();
                 }
             }
             else if (bundle.containsKey("confirmation")){
@@ -192,7 +192,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
                     }
                     else{
-                        Toast.makeText(getContext(), "Please enter time and date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.please_enter_time_and_date_toast), Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -254,7 +254,7 @@ public class SearchedConfirmationFragment extends Fragment {
                             SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio", null);
                             recyclerView.setAdapter(radioSubGenreAdapter);
                         } else {
-                            Toast.makeText(getContext(), "skill list is empty", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.skill_list_is_empty_toast), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -312,7 +312,7 @@ public class SearchedConfirmationFragment extends Fragment {
             }
         }
         catch (NullPointerException e){
-            Snackbar.make(getView(), "No skill found", Snackbar.LENGTH_SHORT);
+            Snackbar.make(getView(), getString(R.string.no_skill_found_toast), Snackbar.LENGTH_SHORT);
             e.printStackTrace();
         }
 

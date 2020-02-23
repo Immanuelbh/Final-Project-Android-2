@@ -17,8 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+//import com.google.firebase.storage.FirebaseStorage;
+//import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     Context uCtx;
     List<User> userList;
     String skillWant;
-    StorageReference reference;
+    //StorageReference reference;
 
     public UserAdapter(Context uCtx, List<User> users){
         this.uCtx = uCtx;

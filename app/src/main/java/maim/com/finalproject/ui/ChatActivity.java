@@ -162,19 +162,19 @@ public class ChatActivity extends AppCompatActivity {
 
                     try{
                         if(typingTo.equals(myUid)){
-                            userStatusTv.setText("Typing...");
+                            userStatusTv.setText(getString(R.string.typing_tv));
                         }
                         else{
                             if(status.equals("Online"))
                                 userStatusTv.setText(status);
                             else{
-                                userStatusTv.setText("Last seen at: " + currentTime(status));
+                                userStatusTv.setText(getString(R.string.last_seen_at_tv) + currentTime(status));
 
                             }
                         }
                     }
                     catch (NullPointerException e){
-                        Toast.makeText(ChatActivity.this, "failed to update ui", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChatActivity.this, getString(R.string.failed_to_update_ui_toast), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
 
@@ -203,7 +203,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(ChatActivity.this, "Message is empty..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChatActivity.this, getString(R.string.empty_msg_et), Toast.LENGTH_SHORT).show();
                 }
                 //----------------
                 //reset message et after sending message
@@ -248,7 +248,7 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference hisUserRef = FirebaseDatabase.getInstance().getReference("users").child(hisUid);
 
         if(myConfirmation == null){
-            Toast.makeText(this, "confirmation is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.confirmation_is_null_toast), Toast.LENGTH_SHORT).show();
         }
 
         myDbRef = myUserRef.child("myConfirmations").push();
@@ -387,7 +387,7 @@ public class ChatActivity extends AppCompatActivity {
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     Token token = ds.getValue(Token.class);
 
-                    Data data = new Data(myUid,name+":"+message,"New Message",hisUid,R.drawable.sleep_icon);
+                    Data data = new Data(myUid,name+":"+message,getString(R.string.new_message_title),hisUid,R.drawable.sleep_icon);
 
                     Sender sender = new Sender(data,token.getToken());
 
@@ -401,7 +401,7 @@ public class ChatActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<Response> call, Throwable t) {
-                                    Toast.makeText(ChatActivity.this, "Failed to send notification", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatActivity.this, getString(R.string.failed_to_send_notification_toast), Toast.LENGTH_SHORT).show();
                                     t.printStackTrace();
 
                                 }
@@ -420,7 +420,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user == null){
-            Toast.makeText(this, "Cannot open chat - not logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.cannot_open_chat_not_logged_in_toast), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }

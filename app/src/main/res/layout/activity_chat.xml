@@ -45,7 +45,7 @@
                 android:id="@+id/chat_name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/name_tv"
                 android:textSize="22sp"
                 android:textColor="#fff"
                 />
@@ -53,7 +53,7 @@
                 android:id="@+id/chat_status_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Online"
+                android:text="@string/online_tv"
                 android:textSize="13sp"
                 android:textColor="#fff"
                 />
@@ -82,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter message..."
+            android:hint="@string/enter_msg_et"
             android:padding="15dp"
             android:background="@null"
             android:id="@+id/chat_message_et"

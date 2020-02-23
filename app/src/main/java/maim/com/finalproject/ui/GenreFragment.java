@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -115,7 +114,7 @@ public class GenreFragment extends Fragment {
                     //read genres from database
 
                     final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-                    progressDialog.setMessage("Loading genres, please wait..");
+                    progressDialog.setMessage(getString(R.string.loading_genres_pd));
                     progressDialog.show();
 
                     dbGenres.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -153,7 +152,7 @@ public class GenreFragment extends Fragment {
             //read genres from database
 
             final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-            progressDialog.setMessage("Loading genres, please wait..");
+            progressDialog.setMessage(getString(R.string.loading_genres_pd));
             progressDialog.show();
 
             dbGenres.addListenerForSingleValueEvent(new ValueEventListener() {

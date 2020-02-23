@@ -38,44 +38,44 @@
             android:id="@+id/profile_name_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full name"
+            android:text="@string/full_name_tv"
             />
         <TextView
             android:id="@+id/profile_age_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Age"
+            android:text="@string/age_tv"
             />
         <TextView
             android:id="@+id/profile_email_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="@string/email_tv"
             />
         <TextView
             android:id="@+id/profile_range_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Max Range"
+            android:text="@string/max_range_tv"
             />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_edit_location_btn"
-            android:text="edit location"
+            android:text="@string/edit_location_btn"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/location_result"
-            android:text="location result"
+            android:text="@string/location_result_tv"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_edit_skills_btn"
-            android:text="edit skills"
+            android:text="@string/edit_skills_btn"
             />
 
 

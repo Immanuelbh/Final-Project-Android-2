@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,7 +34,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,10 +48,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -238,7 +233,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(MapsActivity.this, "lat " + chosenLocation.latitude + " lon " + chosenLocation.longitude, Toast.LENGTH_SHORT).show();
                 }
                 else if(centerScreen != null){
-                    Toast.makeText(MapsActivity.this, "screen center: " + centerScreen.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapsActivity.this, getString(R.string.screen_center_toast) + centerScreen.toString(), Toast.LENGTH_SHORT).show();
                     //write to db
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(
                                     FirebaseAuth.getInstance().getCurrentUser().getUid()); //won't be null - must be signed in to reach this page
@@ -253,7 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(MapsActivity.this, "gps: lat: " + lastKnownLocation.getLatitude() + " lon : " +lastKnownLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(MapsActivity.this, "No location chosen", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapsActivity.this, getString(R.string.no_location_chosen_toast), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -389,7 +384,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             }
                         } else {
-                            Toast.makeText(MapsActivity.this, "unable to get last location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapsActivity.this, getString(R.string.unable_to_get_last_location_toast), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

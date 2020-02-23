@@ -20,7 +20,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email address"
+            android:hint="@string/email_address_hint"
             android:inputType="textEmailAddress"
             android:id="@+id/email_input"
 
@@ -34,7 +34,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Full name"
+            android:hint="@string/full_name_tv"
             android:inputType="text"
             android:id="@+id/full_name_input"
 
@@ -50,7 +50,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First name"
+            android:hint="@string/first_name_tv"
             android:inputType="text"
             android:id="@+id/first_name_input"
 
@@ -67,7 +67,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last name"
+            android:hint="@string/last_name_tv"
             android:inputType="text"
             android:id="@+id/last_name_input"
 
@@ -82,7 +82,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password_tv"
             android:id="@+id/password_input"
             android:inputType="number|numberPassword"
 
@@ -98,7 +98,7 @@
         android:layout_marginEnd="20dp"
         android:id="@+id/sign_up_next"
         android:drawableEnd="@android:drawable/ic_media_play"
-        android:text="Next"
+        android:text="@string/next_btn"
         android:gravity="center"
         android:visibility="gone"
         />

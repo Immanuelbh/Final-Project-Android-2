@@ -5,38 +5,38 @@
 
         <item
             android:id="@+id/item_login"
-            android:title="Login"/>
+            android:title="@string/login_tv"/>
 
         <item android:id="@+id/item_sign_up"
-            android:title="Sign up"/>
+            android:title="@string/sign_up_dnv"/>
 
     </group>
 
     <group>
         <item android:id="@+id/item_users"
-            android:title="Users (for testing)"
+            android:title="@string/users_dnv"
             />
 
         <item android:id="@+id/item_search"
-            android:title="Search"
+            android:title="@string/search_dnv"
             android:visible="false"/>
 
         <item android:id="@+id/item_profile"
-            android:title="Profile"
+            android:title="@string/profile_dnv"
             android:visible="false"/>
         <item android:id="@+id/item_confirmations"
-            android:title="Confirmations"
+            android:title="@string/confirmations_dnv"
             android:visible="false"/>
         <item android:id="@+id/item_messages"
-            android:title="Messages"
+            android:title="@string/messages_dnv"
             android:visible="false"/>
         <item android:id="@+id/item_settings"
-            android:title="Settings"
+            android:title="@string/settings_dnv"
             android:visible="true"/>
 
 
         <item android:id="@+id/item_logout"
-            android:title="Log out"
+            android:title="@string/log_out_dnv"
             android:visible="false"/>
     </group>
 

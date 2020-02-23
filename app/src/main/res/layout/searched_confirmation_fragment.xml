@@ -37,13 +37,13 @@
             android:id="@+id/profile_name_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full name"
+            android:text="@string/full_name_tv"
             />
         <TextView
             android:id="@+id/profile_age_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Age"
+            android:text="@string/age_tv"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Schedule Time:"
+                android:text="@string/schedule_time_tv"
                 android:layout_marginTop="20dp"
                 android:layout_weight="8"
                 />
@@ -98,7 +98,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Schedule"
+            android:text="@string/next_btn"
             android:layout_gravity="end"
             android:layout_marginTop="20dp"
             android:id="@+id/confirmation_schedule_btn"

@@ -61,7 +61,7 @@ public class UsersFragment extends Fragment {
         //read genres from database
 
         final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setMessage("Loading users, please wait..");
+        progressDialog.setMessage(getString(R.string.loading_users_please_wait_pd));
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 

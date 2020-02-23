@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.Consumer;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.SignupSubGenreAdapter;
@@ -122,7 +121,7 @@ public class SubGenreFragment extends Fragment {
 
             }
             else{
-                Toast.makeText(this.getContext(), "couldn't open genre", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getContext(), getString(R.string.could_not_open_genre_toast), Toast.LENGTH_SHORT).show();
             }
         }
 

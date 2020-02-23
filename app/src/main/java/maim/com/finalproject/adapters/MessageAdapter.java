@@ -118,9 +118,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         //TODO add image
         if(position == messages.size()-1){
             if(message.isSeen())
-                holder.isSeenTv.setText("Seen");
+                holder.isSeenTv.setText(R.string.seen_tv);
             else
-                holder.isSeenTv.setText("Delivered");
+                holder.isSeenTv.setText(R.string.delivered_tv);
         }
         else{
             holder.isSeenTv.setVisibility(View.GONE);

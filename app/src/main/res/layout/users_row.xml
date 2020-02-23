@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Full name"
+            android:text="@string/full_name_tv"
             android:id="@+id/row_name_tv"
             android:gravity="center"
             android:layout_marginStart="10dp"
