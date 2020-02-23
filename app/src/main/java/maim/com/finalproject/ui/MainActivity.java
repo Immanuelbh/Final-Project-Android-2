@@ -341,12 +341,12 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
                     navigationView.getMenu().findItem(R.id.item_logout).setVisible(false);
 
-                    navigationView.getMenu().findItem(R.id.item_search).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_search).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_profile).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_confirmations).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_messages).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_settings).setVisible(true);
-                    navigationView.getMenu().findItem(R.id.item_logout).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.item_logout).setVisible(false);
 
                 }
             }

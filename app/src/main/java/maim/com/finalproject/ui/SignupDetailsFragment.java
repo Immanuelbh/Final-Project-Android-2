@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -45,13 +48,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 
 import maim.com.finalproject.R;
+import maim.com.finalproject.adapters.SubGenreAdapter;
 import maim.com.finalproject.model.SubGenre;
 import maim.com.finalproject.model.User;
 
@@ -66,28 +72,24 @@ public class SignupDetailsFragment extends Fragment {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference users = database.getReference("users");
-    DatabaseReference dbGenres = database.getReference("genres");
-
-    PlacesClient placesClient;
-    List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
-            Place.Field.NAME,
-            Place.Field.ADDRESS);
-    AutocompleteSupportFragment placesFragment;
 
     HashSet<String> skills;
     HashMap<String, HashSet<String>> mySkills = new HashMap<>();
 
     Context context;
-    CoordinatorLayout coordinatorLayout;
-    SeekBar ageSb;
-    SeekBar rangeSb;
-    String rangeProgress;
-    String ageProgress;
-    ListView mySkillsLv;
-    ImageView chooseLocationIv;
-    TextView signupAgeTv, signupRangeTv;
+    private CoordinatorLayout coordinatorLayout;
+    private SeekBar ageSb;
+    private SeekBar rangeSb;
+    private String rangeProgress;
+    private String ageProgress;
+    private ImageView chooseLocationIv, addMySkillBtn, addLearnBtn;
+    private TextView signupAgeTv, signupRangeTv, locationResultTv;
+
+    private RecyclerView skillRecycler, learnRecycler;
 
     HashMap<String,SubGenre> theSkill;
+    private List<SubGenre> skillList = new ArrayList<>();
+    private List<SubGenre> learnList = new ArrayList<>();
 
     public static SignupDetailsFragment newInstance(){
         SignupDetailsFragment signupDetailsFragment = new SignupDetailsFragment();
@@ -112,6 +114,7 @@ public class SignupDetailsFragment extends Fragment {
 
         signupAgeTv = rootView.findViewById(R.id.signup_age_tv);
         signupRangeTv = rootView.findViewById(R.id.signup_range_tv);
+        locationResultTv = rootView.findViewById(R.id.signup_location_result_tv);
         coordinatorLayout = rootView.findViewById(R.id.coordinator);
 
 
@@ -120,9 +123,14 @@ public class SignupDetailsFragment extends Fragment {
 
         ageSb = rootView.findViewById(R.id.signup_age_seekbar);
         rangeSb = rootView.findViewById(R.id.signup_range_seekbar);
-        ImageView addMySkillBtn = rootView.findViewById(R.id.signup_add_myskill);
-        mySkillsLv = rootView.findViewById(R.id.signup_mySkills_listview);
+        addMySkillBtn = rootView.findViewById(R.id.signup_add_myskill);
+        addLearnBtn = rootView.findViewById(R.id.signup_add_learn);
         chooseLocationIv = rootView.findViewById(R.id.signup_choose_location);
+
+        skillRecycler = rootView.findViewById(R.id.signup_skill_recycler);
+        learnRecycler = rootView.findViewById(R.id.signup_learn_recycler);
+
+        loadRecyclers();
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 
@@ -202,17 +210,49 @@ public class SignupDetailsFragment extends Fragment {
             }
         });
 
+        //track location update
+        DatabaseReference locationRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        locationRef.child("locationAddress").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String location = "Haven't chosen an address yet.";
+                if (dataSnapshot.exists()){
+                    location = dataSnapshot.getValue()+"";
+                    locationResultTv.setText(location);
+                }
+
+                Log.d("SDF", "the current location is : " + location);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         addMySkillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //open addSkill Activity
                 Intent addSkillIntent = new Intent(context, SignupAddSkills.class);
+                addSkillIntent.putExtra("type", "skill");
                 startActivity(addSkillIntent);
 
             }
         });
 
+        addLearnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addLearnIntent = new Intent(context, SignupAddSkills.class);
+                addLearnIntent.putExtra("type", "learn");
+                startActivity(addLearnIntent);
+            }
+        });
 
         Button saveBtn = rootView.findViewById(R.id.signup_save_btn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +287,61 @@ public class SignupDetailsFragment extends Fragment {
         return rootView;
     }
 
+    private void loadRecyclers() {
+        //skill
+        skillRecycler.setLayoutManager(new LinearLayoutManager(context));
+        skillRecycler.setHasFixedSize(true);
+
+        //learn
+        learnRecycler.setLayoutManager(new LinearLayoutManager(context));
+        learnRecycler.setHasFixedSize(true);
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        userRef.child("mySkillsList").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    skillList.clear();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        SubGenre subGenre = ds.getValue(SubGenre.class);
+                        skillList.add(subGenre);
+                    }
+                    SubGenreAdapter skillSubGenreAdapter = new SubGenreAdapter(context, skillList);
+                    skillRecycler.setAdapter(skillSubGenreAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        userRef.child("myLearnList").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    learnList.clear();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        SubGenre subGenre = ds.getValue(SubGenre.class);
+                        learnList.add(subGenre);
+                    }
+                    SubGenreAdapter learnSubGenreAdapter = new SubGenreAdapter(context, learnList);
+                    learnRecycler.setAdapter(learnSubGenreAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     private void startMap() {
         Intent mapIntent = new Intent(context, MapsActivity.class);
         context.startActivity(mapIntent);
@@ -266,46 +361,5 @@ public class SignupDetailsFragment extends Fragment {
             }
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-    }
-
-    /*
-
-    private void setupPlaceAutoComplete() {
-        placesFragment = (AutocompleteSupportFragment) getChildFragmentManager()//getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.places_autocomplete_fragment);
-        
-        try {
-            placesFragment.setPlaceFields(placeFields);
-
-        }
-        catch (NullPointerException e){
-            Toast.makeText(context, "np exception", Toast.LENGTH_SHORT).show();
-        }
-        
-        placesFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                Toast.makeText(context, ""+place.getName(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-                Toast.makeText(context, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void initPlaces() {
-        //Places.initialize(this.context, getString(R.string.places_api_key));
-        placesClient = Places.createClient(this.context);
-    }
-*/
-
 
 }

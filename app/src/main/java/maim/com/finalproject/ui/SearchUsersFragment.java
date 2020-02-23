@@ -46,6 +46,7 @@ public class SearchUsersFragment extends Fragment {
     Double userRadius, lat2, long2;
     SharedPreferences sp;
     int age_seekbar_sp;
+    boolean loggedIn;
 
 
     public static SearchUsersFragment newInstance() {
@@ -73,26 +74,43 @@ public class SearchUsersFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading_users_please_wait_pd));
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
+        loggedIn = false;
+        try{
+            String currentUserUid = fbUser.getUid();
+            loggedIn = true;
+        }
+        catch (NullPointerException e){
+            loggedIn = false;
+        }
 
-        DatabaseReference currentUserInfo = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
-        currentUserInfo.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentUser = dataSnapshot.getValue(User.class);
-                try{
-                    userRadius = Double.parseDouble(currentUser.getMaxRange());
-                    Log.d("SUF", "User Radius : " + userRadius);
+        if(loggedIn){
+            DatabaseReference currentUserInfo = FirebaseDatabase.getInstance().getReference("users").child(fbUser.getUid());
+            currentUserInfo.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentUser = dataSnapshot.getValue(User.class);
+                    try{
+                        userRadius = Double.parseDouble(currentUser.getMaxRange());
+                        Log.d("SUF", "User Radius : " + userRadius);
+                    }
+                    catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
                 }
-                catch (NullPointerException e){
-                    e.printStackTrace();
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
-            }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+
+
+        }
+        else{
+            userRadius = (double) sp.getInt("range_preference_seekbar", 50);
+        }
 
         age_seekbar_sp = sp.getInt("age_preference_seekbar",120); //Age Seek-bar value from sp
 
@@ -112,23 +130,34 @@ public class SearchUsersFragment extends Fragment {
                         if(dataSnapshot.exists()){
                             for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                                 User user = snapshot.getValue(User.class);
-                                try{
-                                    if(!user.getUID().equals(fbUser.getUid())){
 
-                                        if(user.getMySkillsList().containsKey(skillToFind) &&
-                                                Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0 &&
-                                                haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
-                                            userList.add(user);
+                                if(loggedIn){
+                                    try{
+                                        if(!user.getUID().equals(fbUser.getUid())){
+
+                                            if(user.getMySkillsList().containsKey(skillToFind) &&
+                                                    Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0 &&
+                                                    haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
+                                                userList.add(user);
+                                            }
+                                        }
+                                    }
+                                    catch (NullPointerException e){
+                                        e.printStackTrace();
+                                        if(user == null){
+                                            Toast.makeText(getContext(), getString(R.string.user_is_null_toast), Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
-                                catch (NullPointerException e){
-                                    e.printStackTrace();
-                                    if(user == null){
-                                        Toast.makeText(getContext(), getString(R.string.user_is_null_toast), Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
+                                else{
+
+                                    if(user.getMySkillsList().containsKey(skillToFind) &&
+                                            Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0){
+                                            //haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
+                                        userList.add(user);
                                     }
                                 }
 
