@@ -54,6 +54,7 @@
             </meta-data>
         </provider>
 
+        <receiver android:name="maim.com.finalproject.services.AlarmReceiver" android:enabled="true" ></receiver>
 
 
         <service android:name=".notifications.FirebaseService"

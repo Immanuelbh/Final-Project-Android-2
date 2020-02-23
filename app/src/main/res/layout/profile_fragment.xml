@@ -77,6 +77,12 @@
             android:id="@+id/profile_edit_skills_btn"
             android:text="@string/edit_skills_btn"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_edit_learn_btn"
+            android:text="edit skills I want to learn"
+            />
 
 
     </LinearLayout>

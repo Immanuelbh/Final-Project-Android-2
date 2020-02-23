@@ -25,7 +25,7 @@
     <PreferenceCategory android:title="@string/search_settings">
 
         <SeekBarPreference
-            android:defaultValue="0"
+            android:defaultValue="120"
             android:key="age_preference_seekbar"
             android:max="120"
             android:summary="@string/choose_age_range_ptv"
@@ -33,9 +33,9 @@
             app:showSeekBarValue="true" />
 
         <SeekBarPreference
-            android:defaultValue="0"
+            android:defaultValue="50"
             android:key="range_preference_seekbar"
-            android:max="5"
+            android:max="50"
             android:summary="@string/choose_search_range_ptv"
             android:title="@string/search_range_ptv"
             app:showSeekBarValue="true" />

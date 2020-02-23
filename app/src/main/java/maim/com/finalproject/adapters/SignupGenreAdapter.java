@@ -26,12 +26,14 @@ import maim.com.finalproject.ui.SubGenreFragment;
 
 public class SignupGenreAdapter extends RecyclerView.Adapter<SignupGenreAdapter.signupGenreViewHolder> {
 
+    private final String type;
     private Context sgCtx;
     private List<Genre> genres;
 
-    public SignupGenreAdapter(Context sgCtx, List<Genre> genres){
+    public SignupGenreAdapter(Context sgCtx, List<Genre> genres, String type){
         this.sgCtx = sgCtx;
         this.genres = genres;
+        this.type = type;
     }
 
     public class signupGenreViewHolder extends RecyclerView.ViewHolder{
@@ -64,6 +66,8 @@ public class SignupGenreAdapter extends RecyclerView.Adapter<SignupGenreAdapter.
 
                 bundle.putSerializable("genre", (Serializable) genres.get(gvh.getAdapterPosition()));
                 bundle.putCharSequence("action","signup");
+                bundle.putCharSequence("type",type);
+
                 subGenreFragment.setArguments(bundle);
 
                 FragmentTransaction transaction = ((AppCompatActivity)sgCtx).getSupportFragmentManager().beginTransaction();
