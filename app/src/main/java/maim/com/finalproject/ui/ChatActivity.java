@@ -251,6 +251,7 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.confirmation_is_null_toast), Toast.LENGTH_SHORT).show();
         }
 
+        //update confirmation lists
         myDbRef = myUserRef.child("myConfirmations").push();
         hisDbRef = hisUserRef.child("myConfirmations").push();
 
@@ -259,6 +260,21 @@ public class ChatActivity extends AppCompatActivity {
 
         myDbRef.setValue(myConfirmation);
         hisDbRef.setValue(myConfirmation);
+
+
+        //update chat lists
+        //myDbRef = myUserRef.child("myChatList");
+        //hisDbRef = hisUserRef.child("myChatList");
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        hashMap.put("userUid", hisUid);
+        myUserRef.child("myChatList").setValue(hashMap);
+
+        hashMap.clear();
+        hashMap.put("userUid", myUid);
+        hisUserRef.child("myChatList").setValue(hashMap);
+
 
     }
 

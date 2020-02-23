@@ -244,10 +244,11 @@ public class MainActivity extends AppCompatActivity {
                         confirmationsTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_messages:
-                        ChatFragment chatFragment = ChatFragment.newInstance();
+                        //ChatFragment chatFragment = ChatFragment.newInstance();
 
+                        UsersFragment usersFragment1 = UsersFragment.newInstance();
                         FragmentTransaction chatTransaction = getSupportFragmentManager().beginTransaction();
-                        chatTransaction.replace(R.id.recycler_container, chatFragment, MESSAGES_FRAGMENT_TAG);
+                        chatTransaction.replace(R.id.recycler_container, usersFragment1, MESSAGES_FRAGMENT_TAG);
                         chatTransaction.addToBackStack(null).commit();
                         break;
                     case R.id.item_settings:

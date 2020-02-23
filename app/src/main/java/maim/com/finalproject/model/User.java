@@ -21,6 +21,7 @@ public class User implements Serializable {
     private HashMap<String,SubGenre> mySkillsList;
     private HashMap<String,SubGenre> myLearnList;
     private HashMap<String,Confirmation> myConfirmations;
+    private HashMap<String,String> myChatList;
 
     public User() {   }
 
@@ -147,5 +148,13 @@ public class User implements Serializable {
 
     public void setMyConfirmations(HashMap<String, Confirmation> myConfirmations) {
         this.myConfirmations = myConfirmations;
+    }
+
+    public HashMap<String, String> getMyChatList() {
+        return myChatList;
+    }
+
+    public void setMyChatList(HashMap<String, String> myChatList) {
+        this.myChatList = myChatList;
     }
 }

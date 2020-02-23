@@ -20,10 +20,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import maim.com.finalproject.R;
 import maim.com.finalproject.adapters.GenreAdapter;
@@ -37,6 +39,7 @@ public class UsersFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     DatabaseReference dbUsers;
     UserAdapter adapter;
+    private List<String> uidList = new ArrayList<>();
 
     public static UsersFragment newInstance() {
         UsersFragment usersFragment  = new UsersFragment();
@@ -65,12 +68,17 @@ public class UsersFragment extends Fragment {
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
 
-        dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbUsers.child(firebaseAuth.getCurrentUser().getUid()).child("myChatList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
+                //userList.clear();
+                uidList.clear();
                 if(dataSnapshot.exists()){
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        String userUid = (String) snapshot.getValue();
+
+                        uidList.add(userUid);
+                        /*
                         User user = snapshot.getValue(User.class);
                         try{
                             if(!user.getUID().equals(fbUser.getUid())){
@@ -79,15 +87,44 @@ public class UsersFragment extends Fragment {
                         }
                         catch (NullPointerException e){
                             continue;
-                        }
+                        }*/
 
                         //userList.add(user);
                         //Log.d("GENRE_FRAGMENT:", genre.toString());
                     }
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
                 progressDialog.dismiss();
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        dbUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        User user = ds.getValue(User.class);
+                        try{
+                            if(!user.getUID().equals(fbUser.getUid()) && uidList.contains(user.getUID())){
+                                userList.add(user);
+                            }
+                        }
+                        catch (NullPointerException e) {
+                            continue;
+                        }
+
+                    }
+                    adapter.notifyDataSetChanged();
+
+                }
             }
 
             @Override
