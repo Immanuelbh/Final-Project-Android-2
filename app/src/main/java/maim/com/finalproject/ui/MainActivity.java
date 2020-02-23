@@ -54,6 +54,7 @@ import java.util.List;
 import maim.com.finalproject.R;
 import maim.com.finalproject.model.Genre;
 import maim.com.finalproject.notifications.Token;
+import maim.com.finalproject.services.AlarmService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);

@@ -78,40 +78,68 @@ public class SubGenreFragment extends Fragment {
                 list = new ArrayList<SubGenre>(genre.getSubGenres().values());
 
                 if(action != null){ //during signup
+                    if(action.equals("signup")){
+                        String type = bundle.getString("type");
 
-                    //add listener to db - update local list
-                    //pass local list to adapter - show checkbox marks if appears on list
+                        //add listener to db - update local list
+                        //pass local list to adapter - show checkbox marks if appears on list
+                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    dbRef.child("mySkillsList").addValueEventListener(new ValueEventListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.N)
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Log.d("SGF", "onDataChange");
-                            for(DataSnapshot ds: dataSnapshot.getChildren()){
-                                SubGenre subGenre = ds.getValue(SubGenre.class);
-                                mySkills.add(subGenre.getName());
-                                Log.d("SGF", "added " + subGenre.getName());
+                        if(type.equals("skill")){
+                            dbRef.child("mySkillsList").addValueEventListener(new ValueEventListener() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Log.d("SGF", "onDataChange");
+                                    mySkills.clear();
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                                        SubGenre subGenre = ds.getValue(SubGenre.class);
+                                        mySkills.add(subGenre.getName());
+                                        Log.d("SGF", "added " + subGenre.getName());
 
-                            }
-                            Log.d("SGF", "mySkills.isEmpty = " + mySkills.isEmpty());
+                                    }
+                                    Log.d("SGF", "mySkills.isEmpty = " + mySkills.isEmpty());
 
-                            signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills);
-                            recyclerView.setAdapter(signupSubGenreAdapter);
+                                    signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills, type);
+                                    recyclerView.setAdapter(signupSubGenreAdapter);
 
-                            /*for (String str : mySkills){
-                                Log.d("SGF", "printing list: " + str);
-                            }*/
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                        else if(type.equals("learn")){
+                            dbRef.child("myLearnList").addValueEventListener(new ValueEventListener() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Log.d("SGF", "onDataChange");
+                                    mySkills.clear();
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                                        SubGenre subGenre = ds.getValue(SubGenre.class);
+                                        mySkills.add(subGenre.getName());
+                                        Log.d("SGF", "added " + subGenre.getName());
+
+                                    }
+                                    Log.d("SGF", "mySkills.isEmpty = " + mySkills.isEmpty());
+
+                                    signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills, type);
+                                    recyclerView.setAdapter(signupSubGenreAdapter);
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-
-                    /*signupSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), list, "checkbox", mySkills);
-                    recyclerView.setAdapter(signupSubGenreAdapter);*/
+                    }
 
                 }
                 else{ //during search

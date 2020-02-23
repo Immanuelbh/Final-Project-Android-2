@@ -251,7 +251,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
                             }
 
-                            SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio", null);
+                            SignupSubGenreAdapter radioSubGenreAdapter = new SignupSubGenreAdapter(rootView.getContext(), mySkills, "radio", null, null);
                             recyclerView.setAdapter(radioSubGenreAdapter);
                         } else {
                             Toast.makeText(getContext(), "skill list is empty", Toast.LENGTH_SHORT).show();
@@ -338,6 +338,7 @@ public class SearchedConfirmationFragment extends Fragment {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
 
                 TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override

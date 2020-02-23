@@ -36,6 +36,7 @@ import maim.com.finalproject.ui.SubGenreFragment;
 
 public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAdapter.signupSubGenreViewHolder> {
 
+    private final String skillType;
     private Context ssCtx;
     private List<SubGenre> subGenres;
     private String type;
@@ -45,12 +46,12 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
     private HashMap<String, Object> hashMap = new HashMap<>();
     private DatabaseReference skillRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-    public SignupSubGenreAdapter(Context ssCtx, List<SubGenre> subGenres, String type, HashSet<String> mySkills){
+    public SignupSubGenreAdapter(Context ssCtx, List<SubGenre> subGenres, String type, HashSet<String> mySkills, String skillType){
         this.ssCtx = ssCtx;
         this.subGenres = subGenres;
         this.type = type;
         this.mySkills = mySkills;
-        //Log.d("SSGA", "1 mySkills.isEmpty = " + mySkills.isEmpty());
+        this.skillType = skillType;
 
         if(type.equals("checkbox")){
             sp = ssCtx.getSharedPreferences("mySkills", Context.MODE_PRIVATE);
@@ -95,31 +96,32 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
                     String name = subGenres.get(gvh.getAdapterPosition()).getName();
                     String imageUrl = subGenres.get(gvh.getAdapterPosition()).getImageUrl();
 
+                    //update db
                     if(((CompoundButton) view).isChecked()){
                         HashMap<String, Object> dbSubGenre = new HashMap<>();
                         dbSubGenre.put("imageUrl", imageUrl);
                         dbSubGenre.put("name", name);
 
                         hashMap.put(name.toLowerCase(), dbSubGenre);
-                        skillRef.child("mySkillsList").updateChildren(hashMap);
-                        mySkills.add(name);
+                        //mySkills.add(name);
+                        if(skillType.equals("skill"))
+                            skillRef.child("mySkillsList").updateChildren(hashMap);
+                        else
+                            skillRef.child("myLearnList").updateChildren(hashMap);
+
 
                     }
                     else {
 
                         hashMap.remove(name.toLowerCase());
-                        skillRef.child("mySkillsList").child(name.toLowerCase()).removeValue();
-                        mySkills.remove(name);
+                        //mySkills.remove(name);
+                        if(skillType.equals("skill"))
+                            skillRef.child("mySkillsList").child(name.toLowerCase()).removeValue();
+                        else
+                            skillRef.child("myLearnList").child(name.toLowerCase()).removeValue();
+
                     }
 
-                    //update db
-
-
-                    //Log.d("SSGA", "user uid from adapter: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-/*
-                for (String str : mySkills){
-                    Log.d("SSGA", "printing : " + str);
-                }*/
                 }
             });
         }
@@ -165,7 +167,12 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
                 holder.checkBox.setVisibility(View.VISIBLE);
                 //check if exists in db
                 //if it does - set checkbox to checked
-                DatabaseReference db = skillRef.child("mySkillsList").child(subGenre.getName().toLowerCase());
+                DatabaseReference db;
+                if(skillType.equals("skill"))
+                    db = skillRef.child("mySkillsList").child(subGenre.getName().toLowerCase());
+                else
+                    db = skillRef.child("myLearnList").child(subGenre.getName().toLowerCase());
+
                 if(mySkills.contains(subGenre.getName())){
                     holder.checkBox.setChecked(true);
                 }

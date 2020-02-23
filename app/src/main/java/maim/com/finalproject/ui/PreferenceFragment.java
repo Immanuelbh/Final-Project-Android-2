@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import maim.com.finalproject.R;
@@ -53,7 +55,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     public static final String CHANNEL_1_ID = "New";
     public static final String CHANNEL_2_ID = "Users";
-    private int updateMaxRange;
 
     //The settings will automatically be saved in the shared preferences.
     @Override
@@ -102,6 +103,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     Toast.makeText(getActivity(), "Off", Toast.LENGTH_SHORT).show();
                     return true;
                 }
+
             }
         });
 
@@ -148,8 +150,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 age_seekBarPreference.setValue((Integer) newValue);
-                //Toast.makeText(getActivity(), String.valueOf(age_seekBarPreference.getValue()), Toast.LENGTH_SHORT).show();
-
                 return false;
             }
         });
@@ -158,12 +158,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         range_seekBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                //updateMaxRange = range_seekBarPreference.getValue();
-
                 range_seekBarPreference.setValue((Integer) newValue);
-
-
-
                 return false;
             }
         });
@@ -172,7 +167,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 }
 
 
-    public void newsChannel() {
+    public void newChannel() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID); // 1. building the notif
         builder.setSmallIcon(android.R.drawable.star_on);
         //RemoteViews remoteViews = new RemoteViews(getActivity().getPackageName(), R.layout.new_pending_intent); // 3.after attaching PendingIntent(2) ,inflate it and wrap it in RemoteViews (adding a custom view)
@@ -197,6 +192,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private void setAlarm(String type, long progress, int requestCode) {
+        /*Log.d("PF", "Setting Alarm --");
+        Log.d("PF", "progress : " + progress);
+        Log.d("PF", "type : " + type);
+        Log.d("PF", "triggerAtMillis : " + SystemClock.elapsedRealtime() + progress);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
 
@@ -204,8 +203,21 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         alarmIntent.putExtra("type", type);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + progress, pendingIntent);
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis() + (10 * 1000), pendingIntent);
+*/
 
+
+        Intent intent = new Intent(getContext(), AlarmReceiver.class);
+        intent.putExtra("progress", progress);
+        intent.putExtra("type", type);
+        intent.putExtra("currentUserUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0,
+                intent, PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + progress, pendingIntent);
+        Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
     }
 
 

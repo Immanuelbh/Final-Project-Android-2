@@ -30,11 +30,13 @@ public class SignupAddSkills extends AppCompatActivity {
             }
         });
 
+        String type = getIntent().getStringExtra("type");
 
         GenreFragment genreFragment = GenreFragment.newInstance();
         Bundle bundle = new Bundle();
 
         bundle.putCharSequence("action", "signup");
+        bundle.putCharSequence("type", type);
         genreFragment.setArguments(bundle);
         FragmentTransaction mySkillsTransaction = this.getSupportFragmentManager().beginTransaction();
         mySkillsTransaction.replace(R.id.as_recycler_container, genreFragment, GENRE_FRAGMENT_TAG);

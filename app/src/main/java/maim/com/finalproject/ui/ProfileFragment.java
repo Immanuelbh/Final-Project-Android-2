@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
 
     private ImageView profileIv;
     private TextView nameTv, ageTv, emailTv, rangeTv, locationResultTv;
-    private Button editLocationBtn, editSkillsBtn;
+    private Button editLocationBtn, editSkillsBtn, editLearnBtn;
     private CoordinatorLayout coordinatorLayout;
 
     private Context context;
@@ -108,6 +108,7 @@ public class ProfileFragment extends Fragment {
         coordinatorLayout = rootView.findViewById(R.id.coordinator);
         editLocationBtn = rootView.findViewById(R.id.profile_edit_location_btn);
         editSkillsBtn = rootView.findViewById(R.id.profile_edit_skills_btn);
+        editLearnBtn = rootView.findViewById(R.id.profile_edit_learn_btn);
 
 
         profileIv.setOnClickListener(new View.OnClickListener() {
@@ -207,8 +208,18 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 //open addSkill Activity
                 Intent addSkillIntent = new Intent(context, SignupAddSkills.class);
+                addSkillIntent.putExtra("type", "skill");
                 startActivity(addSkillIntent);
 
+            }
+        });
+
+        editLearnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addLearnIntent = new Intent(context, SignupAddSkills.class);
+                addLearnIntent.putExtra("type", "learn");
+                startActivity(addLearnIntent);
             }
         });
 

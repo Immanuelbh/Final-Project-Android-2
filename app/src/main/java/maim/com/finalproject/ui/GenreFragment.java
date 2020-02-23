@@ -105,11 +105,11 @@ public class GenreFragment extends Fragment {
 
             switch (action){
                 case "signup":
-
+                    String type = bundle.getCharSequence("type").toString();
                     recyclerView.setLayoutManager(new LinearLayoutManager((rootView.getContext())));
                     recyclerView.setHasFixedSize(true);
 
-                    final SignupGenreAdapter signupGenreAdapter = new SignupGenreAdapter(rootView.getContext(), genresList);
+                    final SignupGenreAdapter signupGenreAdapter = new SignupGenreAdapter(rootView.getContext(), genresList, type);
                     recyclerView.setAdapter(signupGenreAdapter);
 
                     //read genres from database

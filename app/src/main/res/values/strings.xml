@@ -12,16 +12,16 @@
     <string name="title_activity_maps">Map</string>
 
     <string-array name="dropdown_entries">
-        <item>5 Seconds</item>
-        <item>15 Seconds</item>
-        <item>30 Seconds</item>
-        <item>60 Seconds</item>
+        <item>10 Seconds **</item>
+        <item>Once an hour</item>
+        <item>Twice a day</item>
+        <item>Once a day</item>
     </string-array>
 
     <string-array name="dropdown_values">
-        <item>5</item>
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
+        <item>10</item>
+        <item>3600</item>
+        <item>43200</item>
+        <item>86400</item>
     </string-array>
 </resources>

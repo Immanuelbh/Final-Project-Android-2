@@ -18,6 +18,7 @@ public class User implements Serializable {
     private double locationLat;
     private double locationLon;
     private HashMap<String,SubGenre> mySkillsList;
+    private HashMap<String,SubGenre> myLearnList;
     private HashMap<String,Confirmation> myConfirmations;
 
     //Preferred Location
@@ -27,7 +28,7 @@ public class User implements Serializable {
 
     public User() {   }
 
-    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo, HashMap<String,SubGenre> list)  {
+    public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo, HashMap<String,SubGenre> mySkillsList, HashMap<String,SubGenre> myLearnList)  {
         this.email = email;
         this.UID = UID;
         this.name = name;
@@ -35,7 +36,8 @@ public class User implements Serializable {
         this.maxRange = maxRange;
         this.onlineStatus = onlineStatus;
         this.typingTo = typingTo;
-        this.mySkillsList = list;
+        this.mySkillsList = mySkillsList;
+        this.myLearnList = myLearnList;
         //TODO add image url to db
     }
 
@@ -125,6 +127,14 @@ public class User implements Serializable {
 
     public void setMySkillsList(HashMap<String, SubGenre> mySkillsList) {
         this.mySkillsList = mySkillsList;
+    }
+
+    public HashMap<String, SubGenre> getMyLearnList() {
+        return myLearnList;
+    }
+
+    public void setMyLearnList(HashMap<String, SubGenre> myLearnList) {
+        this.myLearnList = myLearnList;
     }
 
     public HashMap<String, Confirmation> getMyConfirmations() {
