@@ -21,11 +21,6 @@ public class User implements Serializable {
     private HashMap<String,SubGenre> myLearnList;
     private HashMap<String,Confirmation> myConfirmations;
 
-    //Preferred Location
-    //Skills I want to learn
-    //User image (url)
-
-
     public User() {   }
 
     public User(String email, String UID, String name, String age, String maxRange, String onlineStatus, String typingTo, HashMap<String,SubGenre> mySkillsList, HashMap<String,SubGenre> myLearnList)  {

@@ -1,17 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bh="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="15dp"
-        android:background="#fff"
+        android:background="@color/white"
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryWhite"
+            android:orientation="vertical"
+            android:translationY="-50dp"
+            android:layout_below="@+id/profileIv"
+            android:paddingTop="70dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/profile_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/full_name_tv"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="23sp"
+                    android:layout_weight="3"
+                    />
+                <TextView
+                    android:id="@+id/profile_age_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/age_tv"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:text="My preferred meeting location"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My place to meet up"
+                android:paddingStart="5dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My skills:"
+                    android:textColor="@color/colorBlack"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/confirmation_myskills"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Skills I want to learn:"
+                    android:textColor="@color/colorBlack"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_learn_recycler"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/schedule_time_tv"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="8"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_weight="1"
+                    android:src="@android:drawable/ic_menu_my_calendar"
+                    android:id="@+id/confirmation_schedule_time"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="5dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date_time_tv"
+                    android:background="@android:color/background_light"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next_btn"
+                android:layout_gravity="bottom|end"
+                android:layout_marginTop="20dp"
+                android:id="@+id/confirmation_schedule_btn"
+                />
+        </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,90 +158,11 @@
             android:src="@drawable/ic_user"
             app:civ_border_width="2dp"
             app:civ_border_color="#FF000000"
-            android:layout_gravity="center"
-
-            />
-        <!--<ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:id="@+id/profileIv"
-            android:background="@drawable/ic_launcher_background"
-            android:src="@drawable/ic_add_image"
-            android:layout_gravity="center"
-            />-->
-
-        <TextView
-            android:id="@+id/profile_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/full_name_tv"
-            />
-        <TextView
-            android:id="@+id/profile_age_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/age_tv"
+            android:layout_centerHorizontal="true"
             />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/confirmation_myskills"
-            />
+    </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/schedule_time_tv"
-                android:layout_marginTop="20dp"
-                android:layout_weight="8"
-                />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_my_calendar"
-                android:id="@+id/confirmation_schedule_time"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="5dp"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/date_time_tv"
-                android:background="@android:color/background_light"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                />
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/next_btn"
-            android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:id="@+id/confirmation_schedule_btn"
-            />
-
-    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
 
 

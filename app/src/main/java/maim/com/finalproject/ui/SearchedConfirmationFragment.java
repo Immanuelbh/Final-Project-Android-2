@@ -332,6 +332,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
     private void showDateTimeDialog(final TextView dateTimeTv) {
         calendar = Calendar.getInstance();
+
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -357,7 +358,10 @@ public class SearchedConfirmationFragment extends Fragment {
             }
         };
 
-        new DatePickerDialog(getContext(), dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+        DatePickerDialog datePickerDialog  = new DatePickerDialog(getContext(), dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePickerDialog.show();
     }
 
     @Override

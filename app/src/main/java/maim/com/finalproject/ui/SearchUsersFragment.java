@@ -134,11 +134,16 @@ public class SearchUsersFragment extends Fragment {
                                 if(loggedIn){
                                     try{
                                         if(!user.getUID().equals(fbUser.getUid())){
+                                            if(validUser(user)){
+                                                if(user.getMySkillsList().containsKey(skillToFind) &&
+                                                        Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0 &&
+                                                        haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
+                                                    userList.add(user);
+                                                }
 
-                                            if(user.getMySkillsList().containsKey(skillToFind) &&
-                                                    Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0 &&
-                                                    haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
-                                                userList.add(user);
+                                            }
+                                            else{
+                                                continue;
                                             }
                                         }
                                     }
@@ -148,7 +153,7 @@ public class SearchUsersFragment extends Fragment {
                                             Toast.makeText(getContext(), getString(R.string.user_is_null_toast), Toast.LENGTH_SHORT).show();
                                         }
                                         else{
-                                            Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
@@ -190,6 +195,18 @@ public class SearchUsersFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private boolean validUser(User user) {
+        if (user.getMySkillsList().size() == 0) {
+            return false;
+        } else if (Integer.parseInt(user.getAge()) > 120 || Integer.parseInt(user.getAge()) < 18) {
+            return false;
+        } else if (user.getLocationLat() == 0 || user.getLocationLon() == 0){
+            return false;
+        }
+        //Toast.makeText(getContext(), "not a valid user", Toast.LENGTH_SHORT).show();
+        return true;
     }
 
     private double haversine(double locationLat, double locationLon) {
