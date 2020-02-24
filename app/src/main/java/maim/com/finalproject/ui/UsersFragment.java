@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ public class UsersFragment extends Fragment {
     DatabaseReference dbUsers;
     UserAdapter adapter;
     private List<String> uidList = new ArrayList<>();
+    private TextView noUsersTv;
 
     public static UsersFragment newInstance() {
         UsersFragment usersFragment  = new UsersFragment();
@@ -54,6 +56,7 @@ public class UsersFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        noUsersTv = rootView.findViewById(R.id.chat_no_users_tv);
 
         final RecyclerView recyclerView = rootView.findViewById(R.id.users_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
@@ -123,7 +126,12 @@ public class UsersFragment extends Fragment {
 
                     }
                     adapter.notifyDataSetChanged();
-
+                    if(userList.size() == 0){
+                        noUsersTv.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        noUsersTv.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -132,6 +140,8 @@ public class UsersFragment extends Fragment {
 
             }
         });
+
+
 
         return rootView;
     }

@@ -143,7 +143,7 @@ public class SearchUsersFragment extends Fragment {
 
                                             }
                                             else{
-                                                continue;
+                                                //continue;
                                             }
                                         }
                                     }
@@ -159,11 +159,18 @@ public class SearchUsersFragment extends Fragment {
                                 }
                                 else{
 
-                                    if(user.getMySkillsList().containsKey(skillToFind) &&
-                                            Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0){
+                                    try{
+                                        if(user.getMySkillsList().containsKey(skillToFind) &&
+                                                Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0){
                                             //haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
-                                        userList.add(user);
+                                            userList.add(user);
+                                        }
                                     }
+                                    catch (NullPointerException e){
+                                        //e.printStackTrace();
+                                        //continue;
+                                    }
+
                                 }
 
                             }

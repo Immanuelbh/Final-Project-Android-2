@@ -383,7 +383,7 @@ public class SignupDetailsFragment extends Fragment {
                 startMap();
             } else {
                 // Permission was denied. Display an error message.
-                Snackbar.make(coordinatorLayout, getString(R.string.the_map_cannot_start_sb), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(R.id.coordinator), getString(R.string.the_map_cannot_start_sb), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

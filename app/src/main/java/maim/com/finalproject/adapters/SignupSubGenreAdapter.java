@@ -19,6 +19,7 @@ import androidx.collection.ArraySet;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -184,15 +185,13 @@ public class SignupSubGenreAdapter extends RecyclerView.Adapter<SignupSubGenreAd
 
         }
 
-
-
         /*
-        Glide.with(sgCtx)
-                .load(genre.getImageUrl()+"")
+        Glide.with(ssCtx)
+                .load(subGenre.getImageUrl()+"")
                 .error(R.drawable.no_image_available_comp)
                 .into(holder.bgIv);
+*/
 
-         */
         //TODO change image
     }
 

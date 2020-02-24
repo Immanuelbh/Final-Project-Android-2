@@ -127,6 +127,7 @@ public class ChatActivity extends AppCompatActivity {
         String confirmationMsg = intent.getStringExtra("confirmation_msg");
         Confirmation myConfirmation = (Confirmation) intent.getSerializableExtra("confirmation_pojo");
         if(confirmationMsg != null){
+            notify=true;
             createConfirmations(myConfirmation);
             sendMessage(confirmationMsg, "confirmation");
         }
@@ -248,7 +249,7 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference hisUserRef = FirebaseDatabase.getInstance().getReference("users").child(hisUid);
 
         if(myConfirmation == null){
-            Toast.makeText(this, getString(R.string.confirmation_is_null_toast), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, getString(R.string.confirmation_is_null_toast), Toast.LENGTH_SHORT).show();
         }
 
         //update confirmation lists
@@ -403,7 +404,7 @@ public class ChatActivity extends AppCompatActivity {
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     Token token = ds.getValue(Token.class);
 
-                    Data data = new Data(myUid,name+":"+message,getString(R.string.new_message_title),hisUid,R.drawable.sleep_icon);
+                    Data data = new Data(myUid,message,getString(R.string.new_message_title) + " " + name,hisUid,R.drawable.ic_deal);
 
                     Sender sender = new Sender(data,token.getToken());
 
@@ -412,7 +413,7 @@ public class ChatActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                                    Toast.makeText(ChatActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(ChatActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override

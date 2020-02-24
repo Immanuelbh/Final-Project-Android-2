@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="My place to meet up"
                 android:paddingStart="5dp"
+                android:id="@+id/confirmation_user_location"
                 />
 
             <LinearLayout

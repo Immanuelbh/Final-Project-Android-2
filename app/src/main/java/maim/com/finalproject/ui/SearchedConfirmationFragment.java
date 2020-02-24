@@ -41,6 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,7 +68,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
     private ImageView profileIv;
     private TextView nameTv, ageTv;
-    private TextView dateTimeTv;
+    private TextView dateTimeTv, locationTv;
     private View rootView;
     private RecyclerView skillRecyclerView;
     private RecyclerView learnRecyclerView;
@@ -107,6 +108,7 @@ public class SearchedConfirmationFragment extends Fragment {
         profileIv = rootView.findViewById(R.id.profileIv);
         nameTv = rootView.findViewById(R.id.profile_name_tv);
         ageTv = rootView.findViewById(R.id.profile_age_tv);
+        locationTv = rootView.findViewById(R.id.confirmation_user_location);
         skillRecyclerView = rootView.findViewById(R.id.confirmation_myskills_recycler);
         learnRecyclerView = rootView.findViewById(R.id.confirmation_learn_recycler);
         ImageView scheduleTime = rootView.findViewById(R.id.confirmation_schedule_time);
@@ -132,6 +134,7 @@ public class SearchedConfirmationFragment extends Fragment {
                 //update ui
                 nameTv.setText(hisUser.getName());
                 ageTv.setText(hisUser.getAge());
+                locationTv.setText(hisUser.getLocationAddress());
                 mySkillsList = hisUser.getMySkillsList();
 
                 if(mySkillsList != null){
@@ -261,6 +264,8 @@ public class SearchedConfirmationFragment extends Fragment {
 
                         nameTv.setText(hisUser.getName());
                         ageTv.setText(hisUser.getAge());
+                        locationTv.setText(hisUser.getLocationAddress());
+                        Log.d("SCF", "user location : " + hisUser.getLocationAddress());
                         mySkillsList = hisUser.getMySkillsList();
                         myLearnList = hisUser.getMyLearnList();
 

@@ -3,6 +3,7 @@ package maim.com.finalproject.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,7 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
                 .load(subGenre.getImageUrl()+"")
                 .error(R.drawable.no_image_available_comp)
                 .into(holder.imageView);
+        Log.d("SGA", "image url: " + subGenre.getImageUrl());
     }
 
     @Override

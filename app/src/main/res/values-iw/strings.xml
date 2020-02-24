@@ -55,7 +55,7 @@
     <string name="failed_to_update_ui_toast">עדכון ממשק המשתמש נכשל</string>
     <string name="confirmation_is_null_toast">האישור ריק</string>
     <string name="failed_to_send_notification_toast">שליחת ההודעה נכשלה</string>
-    <string name="new_message_title">הודעה חדשה</string>
+    <string name="new_message_title">הודעה חדשה מאת</string>
     <string name="cannot_open_chat_not_logged_in_toast">לא ניתן לפתוח צ\'אט - לא מחובר</string>
     <string name="loading_confirms_pd">טוען אישורים ,אנא המתן...</string>
     <string name="loading_genres_pd">" טוען ז'אנרים, אנא המתן..."</string>

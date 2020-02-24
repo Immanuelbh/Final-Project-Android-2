@@ -63,7 +63,7 @@
     <string name="failed_to_update_ui_toast">Failed to update ui</string>
     <string name="confirmation_is_null_toast">Confirmation is null</string>
     <string name="failed_to_send_notification_toast">Failed to send notification</string>
-    <string name="new_message_title">New Message</string>
+    <string name="new_message_title">New Message from</string>
     <string name="cannot_open_chat_not_logged_in_toast">Cannot open chat - not logged in</string>
     <string name="loading_confirms_pd">Loading confirmations, please wait...</string>
     <string name="loading_genres_pd">Loading genres, please wait...</string>

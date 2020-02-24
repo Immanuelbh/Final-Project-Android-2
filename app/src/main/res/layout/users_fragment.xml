@@ -4,6 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Schedule new skill swaps to add people to your chat list!"
+        android:textSize="23dp"
+        android:visibility="gone"
+        android:padding="20dp"
+        android:id="@+id/chat_no_users_tv"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
