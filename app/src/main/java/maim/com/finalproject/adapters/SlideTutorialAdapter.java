@@ -28,15 +28,19 @@ public class SlideTutorialAdapter extends PagerAdapter {
             R.drawable.code_icon};
 
     public String[] slide_headings = {
-            "EAT",
-            "SLEEP",
-            "CODE"
+            "Share a skill you know!",
+            "Full notification integration",
+            "Sign up and start swapping!"
     };
 
     public String[] slide_descs = {
-            "Eat_description...",
-            "Sleep_description...",
-            "Code_description..."
+            "Sign up and choose the skills you know and the skills you would like to learn.\n " +
+                    "Schedule a meeting time and chat with your new teacher!\n" +
+                    " ",
+            "Get notify when a new user would like to schedule a skill swap with you!\n" +
+                    "Our integrated chat will help you keep in touch with the people you had fun with.\n",
+            "Feel free to browse through our categories and different genres.\n" +
+                    "To get the full experience - finding users in your local area - sign up for free!"
     };
 
     //count of total headings /total num of slides

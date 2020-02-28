@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorBlack"
-            android:text="Please fill in your details below so you can start searching your area for people to swap skills with!"
+            android:text="@string/signup_inst_txt"
             />
 
         <LinearLayout
@@ -213,7 +213,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Skills I want to learn"
+                    android:text="@string/signup_learn_txt"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/colorBlack"

@@ -92,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:text="Skills I want to learn:"
                     android:textColor="@color/colorBlack"
+                    android:visibility="gone"
                     />
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"

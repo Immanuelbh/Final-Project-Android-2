@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Schedule new skill swaps to add people to your chat list!"
+        android:text="@string/chat_no_users_txt"
         android:textSize="23dp"
         android:visibility="gone"
         android:padding="20dp"

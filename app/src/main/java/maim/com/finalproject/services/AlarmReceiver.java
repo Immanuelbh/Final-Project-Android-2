@@ -41,6 +41,8 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class AlarmReceiver extends BroadcastReceiver {
     final static double EARTH_RADIUS = 6378.137;
+    final int NEWS_TAG = 0;
+    final int WEATHER_TAG = 1;
 
     List<SubGenre> sgList = new ArrayList<>();
     List<User> foundUsers = new ArrayList<>();
@@ -59,25 +61,28 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("AR", "Alarm Receiver --");
 
         if (intent.getExtras() != null) {
-            repeatingMillis = intent.getExtras().getLong("progress");
-            String channelType = intent.getExtras().getString("type");
-            if (channelType == null) return;
+            long repeatingMillis = intent.getExtras().getLong("progress");
+            String forecastType = intent.getExtras().getString("type");
+            if (forecastType == null) return;
 
-            //AlarmService
-
-            currentUserUid = intent.getStringExtra("currentUserUid");
-
-            Intent serviceIntent = new Intent(context, AlarmReceiver.class);
-            intent.putExtra("progress", repeatingMillis);
-            intent.putExtra("type", channelType);
-            intent.putExtra("currentUserUid", currentUserUid);
+            Intent serviceIntent = new Intent(context, AlarmService.class);
+            serviceIntent.putExtra("type", forecastType);
             ContextCompat.startForegroundService(context, serviceIntent);
 
-            pendingIntent = PendingIntent.getBroadcast(context, 0,
-                    intent, PendingIntent.FLAG_ONE_SHOT);
+            int requestCode;
+            if (forecastType.equals("NEWS")) {
+                requestCode = NEWS_TAG;
+            } else {
+                requestCode = NEWS_TAG;
+            }
 
-            //sample db
-
+            // Apply repeating intents
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + repeatingMillis, pendingIntent);
+        }
+        //sample db
+/*
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             reference.child("myLearnList").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -99,9 +104,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
+            });*/
 
-        }
     }
 
     private void createNotification() {
@@ -222,10 +226,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                             mNotificationManager.notify(0, mBuilder.build());
 
-                            // Apply repeating intents
+                            /*// Apply repeating intents
 
                             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatingMillis, pendingIntent);
+                            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + repeatingMillis, pendingIntent);*/
+
+                            //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatingMillis, pendingIntent);
                             //Toast.makeText(context, "Alarm set", Toast.LENGTH_LONG).show();
 
 

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FinalProject</string>
     <string name="places_api_key">מפתח מוצר</string>
     <string name="notifications">התראות</string>
     <string name="all_notifications">הפעל או כבה את כל ההתראות</string>
-    <string name="new_notifications">התראות חדשות</string>
+    <string name="new_notifications">כל ההתראות</string>
     <string name="user_notifications">התראות ממשתמשים</string>
     <string name="new_notifications_summary">הפעל או כבה התראות מהודעות חדשות</string>
     <string name="user_notifications_summary">הפעל או כבה התראות ממשתמשים חדשים</string>
     <string name="search_settings">הגדרות חיפוש</string>
 
     <string-array name="dropdown_entries">
-        <item>5 שניות</item>
-        <item>15 שניות</item>
-        <item>30 שניות</item>
-        <item>60 שניות</item>
+        <item>10 שניות</item>
+        <item>פעם בשעה</item>
+        <item>פעמיים ביום</item>
+        <item>פעם ביום</item>
     </string-array>
     <string name="confirm_btn">אשר</string>
     <string name="online_tv">מחובר</string>
@@ -107,4 +106,12 @@
     <string name="settings_dnv">הגדרות</string>
     <string name="log_out_dnv">התנתק</string>
     <string name="title_activity_maps">מפה</string>
+    <string name="prof_edit_txt_btn">ערוך מיומנוית</string>
+    <string name="prof_my_skills_txt">המיומנויות שלי</string>
+    <string name="prof_learn_txt">מיומנויות שאני רוצה ללמוד</string>
+    <string name="prof_preferred_loc">מקום המפגש המועדף עלי</string>
+    <string name="prof_max_radius_txt">טווח החיפוש המקסימלי:</string>
+    <string name="signup_inst_txt">אנא מלא את הפרטים למטה, כך שתוכל להתחיל לחפש אנשים המחכים להחליף מיומנויות!</string>
+    <string name="signup_learn_txt">מיומנויות שאני רוצה ללמוד</string>
+    <string name="chat_no_users_txt">קבע החלפה עם אנשים שונים כדי להוסיפם לרשימת הצ\'ט!</string>
 </resources>

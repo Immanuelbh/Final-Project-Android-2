@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name" translatable="false">Skilldeal</string>
     <string name="places_api_key">/*api key*/</string>
     <string name="notifications">Notifications</string>
     <string name="all_notifications">Turn on or turn off all notification</string>
-    <string name="new_notifications">New Notifications</string>
+    <string name="new_notifications">All Notifications</string>
     <string name="user_notifications">User Notifications</string>
     <string name="new_notifications_summary">Turn on or turn off new notifications</string>
     <string name="user_notifications_summary">Turn on or turn off user notifications</string>
@@ -114,4 +114,12 @@
     <string name="messages_dnv">Messages</string>
     <string name="settings_dnv">Settings</string>
     <string name="log_out_dnv">Log out</string>
+    <string name="prof_edit_txt_btn">Edit Skills</string>
+    <string name="prof_my_skills_txt">My skills:</string>
+    <string name="prof_learn_txt">Skills I want to learn:</string>
+    <string name="prof_preferred_loc">My preferred meeting location</string>
+    <string name="prof_max_radius_txt">My maximum search radius:</string>
+    <string name="signup_inst_txt">Please fill in your details below so you can start searching your area for people to swap skills with!</string>
+    <string name="signup_learn_txt">Skills I want to learn</string>
+    <string name="chat_no_users_txt">Schedule new skill swaps to add people to your chat list!</string>
 </resources>

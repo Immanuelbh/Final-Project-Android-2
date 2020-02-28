@@ -71,7 +71,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:text="My maximum search radius:"
+                    android:text="@string/prof_max_radius_txt"
                     android:textColor="@color/colorBlack"
                     />
                 <TextView
@@ -94,7 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
-                    android:text="My preferred meeting location"
+                    android:text="@string/prof_preferred_loc"
                     android:layout_weight="3"
                     />
                 <Button
@@ -126,7 +126,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="My skills:"
+                        android:text="@string/prof_my_skills_txt"
                         android:textColor="@color/colorBlack"
                         android:layout_weight="1"
                         />
@@ -161,7 +161,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Skills I want to learn:"
+                        android:text="@string/prof_learn_txt"
                         android:textColor="@color/colorBlack"
                         android:layout_weight="1"
                         />
@@ -169,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/profile_edit_learn_btn"
-                        android:text="edit skills"
+                        android:text="@string/edit_skills_btn"
                         />
 
                 </LinearLayout>

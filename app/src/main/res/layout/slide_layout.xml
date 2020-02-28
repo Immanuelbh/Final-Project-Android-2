@@ -23,7 +23,10 @@
         android:textSize="30dp"
         android:layout_marginTop="40dp"
         android:textColor="@color/colorWhite"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        />
 
     <TextView
         android:id="@+id/slide_desc"
@@ -36,6 +39,9 @@
         android:textSize="18dp"
         android:layout_marginTop="50dp"
         android:textColor="@color/colorWhite"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        />
 
 </RelativeLayout>

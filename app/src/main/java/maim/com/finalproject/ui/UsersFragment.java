@@ -70,76 +70,69 @@ public class UsersFragment extends Fragment {
         progressDialog.setMessage(getString(R.string.loading_users_please_wait_pd));
         progressDialog.show();
         final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
+        try{
+            dbUsers.child(firebaseAuth.getCurrentUser().getUid()).child("myChatList").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //userList.clear();
+                    uidList.clear();
+                    if(dataSnapshot.exists()){
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                            String userUid = (String) snapshot.getValue();
 
-        dbUsers.child(firebaseAuth.getCurrentUser().getUid()).child("myChatList").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //userList.clear();
-                uidList.clear();
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        String userUid = (String) snapshot.getValue();
+                            uidList.add(userUid);
 
-                        uidList.add(userUid);
-                        /*
-                        User user = snapshot.getValue(User.class);
-                        try{
-                            if(!user.getUID().equals(fbUser.getUid())){
-                                userList.add(user);
-                            }
                         }
-                        catch (NullPointerException e){
-                            continue;
-                        }*/
-
-                        //userList.add(user);
-                        //Log.d("GENRE_FRAGMENT:", genre.toString());
+                        //adapter.notifyDataSetChanged();
                     }
-                    //adapter.notifyDataSetChanged();
+                    progressDialog.dismiss();
+
                 }
-                progressDialog.dismiss();
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
 
-            }
-        });
+            dbUsers.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    userList.clear();
 
-        dbUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        User user = ds.getValue(User.class);
-                        try{
-                            if(!user.getUID().equals(fbUser.getUid()) && uidList.contains(user.getUID())){
-                                userList.add(user);
+                    if(dataSnapshot.exists()){
+                        for(DataSnapshot ds: dataSnapshot.getChildren()){
+                            User user = ds.getValue(User.class);
+                            try{
+                                if(!user.getUID().equals(fbUser.getUid()) && uidList.contains(user.getUID())){
+                                    userList.add(user);
+                                }
                             }
-                        }
-                        catch (NullPointerException e) {
-                            continue;
-                        }
+                            catch (NullPointerException e) {
+                                continue;
+                            }
 
-                    }
-                    adapter.notifyDataSetChanged();
-                    if(userList.size() == 0){
-                        noUsersTv.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        noUsersTv.setVisibility(View.GONE);
+                        }
+                        adapter.notifyDataSetChanged();
+                        if(userList.size() == 0){
+                            noUsersTv.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            noUsersTv.setVisibility(View.GONE);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }catch (NullPointerException e){
+            progressDialog.dismiss();
+
+        }
+
 
 
 

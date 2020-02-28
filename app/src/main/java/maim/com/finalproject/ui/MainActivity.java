@@ -227,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.item_search:
                         //TODO return to initial fragment (genres)
+                        GenreFragment homeFragment = GenreFragment.newInstance();
+
+                        FragmentTransaction genreTransaction = getSupportFragmentManager().beginTransaction();
+                        genreTransaction.replace(R.id.recycler_container, homeFragment, GENRE_FRAGMENT_TAG);
+                        genreTransaction.addToBackStack(null).commit();
                         break;
 
                     case R.id.item_profile:
@@ -274,10 +279,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         ctl = findViewById(R.id.collapsing_layout);
-        //ctl.setCollapsedTitleTextColor(R.color.white);
         ctl.setTitle(getString(R.string.please_log_in_tv));
-
-
+        ctl.setExpandedTitleColor(getResources().getColor(R.color.white));//;setCollapsedTitleTextColor(R.color.white);
 
         //initializing authlistener
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -311,7 +314,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //update menu ui - user logged in
                     userTv.setText(user.getDisplayName() + getString(R.string.is_now_connected_sb));
-                    ctl.setTitle("Welcome");
+                    ctl.setTitle(getString(R.string.welcome_sb));
+                    ctl.setCollapsedTitleTextColor(0xffffff);
 
 
                     navigationView.getMenu().findItem(R.id.item_login).setVisible(false);

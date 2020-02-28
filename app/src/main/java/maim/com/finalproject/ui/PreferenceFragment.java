@@ -50,11 +50,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     DropDownPreference dropDownPreference;
     long totalTime;
 
-    final int NOTIF_NEW_ID = 2;
-    final int NOTIF_USERS_ID = 3;
+    final int NOTIF_NEWS_ID = 2;
+    final int NOTIF_WEATHER_ID = 3;
 
-    public static final String CHANNEL_1_ID = "New";
-    public static final String CHANNEL_2_ID = "Users";
+    public static final String CHANNEL_1_ID = "News";
+    public static final String CHANNEL_2_ID = "Weather";
 
     //The settings will automatically be saved in the shared preferences.
     @Override
@@ -64,23 +64,23 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        new_checkBoxPreference =  getPreferenceManager().findPreference("new_preference_checkbox");
-        user_checkBoxPreference =  getPreferenceManager().findPreference("user_preference_checkbox");
-        all_checkBoxPreference =  getPreferenceManager().findPreference("all_preference_checkbox");
+        new_checkBoxPreference =  (CheckBoxPreference)getPreferenceManager().findPreference("new_preference_checkbox");
+        user_checkBoxPreference =  (CheckBoxPreference)getPreferenceManager().findPreference("user_preference_checkbox");
+        all_checkBoxPreference =  (CheckBoxPreference)getPreferenceManager().findPreference("all_preference_checkbox");
         age_seekBarPreference = getPreferenceManager().findPreference("age_preference_seekbar");
         range_seekBarPreference = getPreferenceManager().findPreference("range_preference_seekbar");
-        dropDownPreference =  getPreferenceManager().findPreference("dropdown_preference");
+        dropDownPreference =  (DropDownPreference)getPreferenceManager().findPreference("dropdown_preference");
 
         if (Build.VERSION.SDK_INT >= 26) {
-            CharSequence channelName = "NewChannel";
-            CharSequence channelName2 = "UsersChannel";
+            CharSequence channelName = "NewsChannel";
+            CharSequence channelName2 = "WeatherChannel";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel newChannel = new NotificationChannel(CHANNEL_1_ID, channelName, importance);
-            newChannel.enableVibration(true);
-            NotificationChannel userChannel = new NotificationChannel(CHANNEL_2_ID, channelName2, importance);
+            NotificationChannel newsChannel = new NotificationChannel(CHANNEL_1_ID, channelName, importance);
+            newsChannel.enableVibration(true);
+            NotificationChannel weatherChannel = new NotificationChannel(CHANNEL_2_ID, channelName2, importance);
             notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(newChannel);
-            notificationManager.createNotificationChannel(userChannel);
+            notificationManager.createNotificationChannel(newsChannel);
+            notificationManager.createNotificationChannel(weatherChannel);
         }
 
         new_checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -93,13 +93,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     String[] splitted = dropDownSelectedAnswer.split(" ");
                     totalTime = Long.valueOf(splitted[0]) * 1000;
 
-                    setAlarm("NEW", totalTime, 0);
+                    setAlarm("NEWS", totalTime, 0);
 
                     //Toast.makeText(getActivity(), getString(R.string.on_toast), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     cancelAlarm(0);
-                    notificationManager.cancel(NOTIF_NEW_ID);
+                    notificationManager.cancel(NOTIF_NEWS_ID);
                     //Toast.makeText(getActivity(), getString(R.string.off_toast), Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -107,7 +107,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             }
         });
 
-        user_checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        /*user_checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (user_checkBoxPreference.isChecked()) {
@@ -122,10 +122,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     return true;
                 }
             }
-        });
+        });*/
 
 
-        all_checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        /*all_checkBoxPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (all_checkBoxPreference.isChecked()) {
@@ -143,7 +143,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     return true;
                 }
             }
-        });
+        });*/
 
         age_seekBarPreference.setMin(18);
         age_seekBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -164,10 +164,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         });
 
         return super.onCreateView(inflater, container, savedInstanceState);
-}
+    }
 
 
-    public void newChannel() {
+    /*public void newChannel() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID); // 1. building the notif
         builder.setSmallIcon(android.R.drawable.star_on);
         //RemoteViews remoteViews = new RemoteViews(getActivity().getPackageName(), R.layout.new_pending_intent); // 3.after attaching PendingIntent(2) ,inflate it and wrap it in RemoteViews (adding a custom view)
@@ -180,13 +180,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         builder.setContentIntent(newPendingIntent);
         notificationManager.notify(NOTIF_NEW_ID, builder.build());
 
-    }
+    }*/
 
 
     private void cancelAlarm(int requestCode) {
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
@@ -205,18 +204,21 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis() + (10 * 1000), pendingIntent);
 */
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
 
-
-        Intent intent = new Intent(getContext(), AlarmReceiver.class);
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("progress", progress);
         intent.putExtra("type", type);
         intent.putExtra("currentUserUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0,
-                intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),
+                0,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + progress, pendingIntent);
+
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + progress, pendingIntent);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + progress, pendingIntent);
         //Toast.makeText(getContext(), "Alarm set", Toast.LENGTH_LONG).show();
     }
 

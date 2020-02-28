@@ -3,6 +3,7 @@ package maim.com.finalproject.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +29,19 @@ public class SettingsActivity extends AppCompatActivity {
     public void onBackPressed() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         int maxRange = sp.getInt("range_preference_seekbar",120);
-
+        try{
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("maxRange", String.valueOf(maxRange));
-        ref.updateChildren(hashMap);
+
+            FirebaseAuth.getInstance().getCurrentUser().getUid();
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("maxRange", String.valueOf(maxRange));
+            ref.updateChildren(hashMap);
+        }
+        catch (NullPointerException e){
+            Log.d("SA", "no user uid");
+        }
+
         //Toast.makeText(this, "new max range: " + maxRange, Toast.LENGTH_SHORT).show();
 
         super.onBackPressed();

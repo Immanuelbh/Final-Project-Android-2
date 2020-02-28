@@ -179,6 +179,13 @@ public class SearchedConfirmationFragment extends Fragment {
             }
         });
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            scheduleBtn.setVisibility(View.VISIBLE);
+        }
+        else{
+            scheduleBtn.setVisibility(View.GONE);
+        }
+
         scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
