@@ -242,6 +242,10 @@
             android:id="@+id/signup_save_btn"
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/generic_btn_selector"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             />
 
 

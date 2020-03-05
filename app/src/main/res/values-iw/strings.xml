@@ -114,4 +114,5 @@
     <string name="signup_inst_txt">אנא מלא את הפרטים למטה, כך שתוכל להתחיל לחפש אנשים המחכים להחליף מיומנויות!</string>
     <string name="signup_learn_txt">מיומנויות שאני רוצה ללמוד</string>
     <string name="chat_no_users_txt">קבע החלפה עם אנשים שונים כדי להוסיפם לרשימת הצ\'ט!</string>
+    <string name="schedule_btn_txt">קבע</string>
 </resources>

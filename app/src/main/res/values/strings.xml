@@ -122,4 +122,5 @@
     <string name="signup_inst_txt">Please fill in your details below so you can start searching your area for people to swap skills with!</string>
     <string name="signup_learn_txt">Skills I want to learn</string>
     <string name="chat_no_users_txt">Schedule new skill swaps to add people to your chat list!</string>
+    <string name="schedule_btn_txt">Schedule</string>
 </resources>

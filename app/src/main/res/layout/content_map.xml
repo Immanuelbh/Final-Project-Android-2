@@ -56,5 +56,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:id="@+id/map_set_location"
+        android:background="@drawable/generic_btn_selector"
+        android:textColor="#FFFFFF"
+
         />
 </RelativeLayout>
