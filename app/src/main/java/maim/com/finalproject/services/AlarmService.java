@@ -56,16 +56,17 @@ public class AlarmService extends IntentService {
     final int NEWS_TAG = 0;
     final int ALARM_SERVICE_ID = 1;
 
-    String city;
-    String desc;
-    NotificationManager notificationManager;
-    List<SubGenre> sgList = new ArrayList<>();
-    Context context;
+    private String city;
+    private String desc;
+    private NotificationManager notificationManager;
+    private List<SubGenre> sgList = new ArrayList<>();
+    private Context context;
     private User cUser;
-    double userRadius;
-    List<User> foundUsers = new ArrayList<>();
+    private double userRadius;
+    private List<User> foundUsers = new ArrayList<>();
     private int count;
     private NotificationManager mNotificationManager;
+    private PendingIntent pendingIntent2;
 
 
     /**
@@ -167,8 +168,8 @@ public class AlarmService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context.getApplicationContext(), "notify_001");
-        Intent ii = new Intent(context.getApplicationContext(), MainActivity.class);
-        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, ii, 0);
+        Intent ii = new Intent(context.getApplicationContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //pendingIntent2 = PendingIntent.getActivity(context, 0, ii, 0);
 
         if(sgList != null) {
             int min = 0;
@@ -240,6 +241,10 @@ public class AlarmService extends IntentService {
                                 bigText.setBigContentTitle("Meet new People");
                                 bigText.setSummaryText("Click for more details");
 
+                                ii.putExtra("skillToFind", sgName);
+                                pendingIntent2 = PendingIntent.getActivity(context, 0, ii, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
                                 mBuilder.setContentIntent(pendingIntent2);
                                 mBuilder.setSmallIcon(R.drawable.ic_deal);
                                 mBuilder.setContentTitle("Your Title");
@@ -252,6 +257,9 @@ public class AlarmService extends IntentService {
                                 bigText.bigText("Add a skill you would like to learn!");
                                 bigText.setBigContentTitle("New learning possibilities");
                                 bigText.setSummaryText("Click for more details");
+
+                                pendingIntent2 = PendingIntent.getActivity(context, 0, ii, 0);
+
 
                                 mBuilder.setContentIntent(pendingIntent2);
                                 mBuilder.setSmallIcon(R.drawable.ic_deal);

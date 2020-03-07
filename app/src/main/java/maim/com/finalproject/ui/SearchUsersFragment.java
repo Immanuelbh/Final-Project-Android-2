@@ -35,18 +35,21 @@ import maim.com.finalproject.model.User;
 public class SearchUsersFragment extends Fragment {
     final static double EARTH_RADIUS = 6378.137;
 
-    RecyclerView recyclerView;
-    TextView noUsersTv;
+    private RecyclerView recyclerView;
+    private TextView noUsersTv;
     private List<User> userList = new ArrayList<>();
-    FirebaseAuth firebaseAuth;
-    DatabaseReference dbUsers;
-    UserAdapter adapter; //for now
-    String skillToFind;
-    User currentUser;
-    Double userRadius, lat2, long2;
-    SharedPreferences sp;
-    int age_seekbar_sp;
-    boolean loggedIn;
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference dbUsers;
+    private UserAdapter adapter; //for now
+    private String skillToFind;
+    private User currentUser;
+    private Double userRadius, lat2, long2;
+    private SharedPreferences sp;
+    private int age_seekbar_sp;
+    private boolean loggedIn;
+    private View rootView;
+    private FirebaseUser fbUser;
+    private ProgressDialog progressDialog;
 
 
     public static SearchUsersFragment newInstance() {
@@ -57,7 +60,10 @@ public class SearchUsersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.users_fragment, container, false);
+        rootView = inflater.inflate(R.layout.users_fragment, container, false);
+
+        Log.d("SearchUsersFragment", "starting fragment");
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
@@ -70,10 +76,10 @@ public class SearchUsersFragment extends Fragment {
         sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //read genres from database
-        final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
+        progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage(getString(R.string.loading_users_please_wait_pd));
         progressDialog.show();
-        final FirebaseUser fbUser = firebaseAuth.getCurrentUser();
+        fbUser = firebaseAuth.getCurrentUser();
         loggedIn = false;
         try{
             String currentUserUid = fbUser.getUid();
@@ -200,8 +206,100 @@ public class SearchUsersFragment extends Fragment {
             }
 
         }
+        else{ //from notification
+            Toast.makeText(getContext(), "From Notification!", Toast.LENGTH_SHORT).show();
+            Bundle bundle2 = getArguments();
+            if(bundle2 != null){
+                String skillToFind = bundle2.getCharArray("skillToFind").toString();
+                if(skillToFind != null){
+                    displayUsers(skillToFind.toLowerCase());
+                    Toast.makeText(getContext(), "With Intent", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            else{
+                Toast.makeText(getContext(), "No Intent", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         return rootView;
+    }
+
+    private void displayUsers(String skillToFind) {
+        adapter = new UserAdapter(rootView.getContext(), userList, skillToFind);
+        recyclerView.setAdapter(adapter);
+
+        dbUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        User user = snapshot.getValue(User.class);
+
+                        if(loggedIn){
+                            try{
+                                if(!user.getUID().equals(fbUser.getUid())){
+                                    if(validUser(user)){
+                                        if(user.getMySkillsList().containsKey(skillToFind) &&
+                                                Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0 &&
+                                                haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
+                                            userList.add(user);
+                                        }
+
+                                    }
+                                    else{
+                                        //continue;
+                                    }
+                                }
+                            }
+                            catch (NullPointerException e){
+                                e.printStackTrace();
+                                if(user == null){
+                                    Toast.makeText(getContext(), getString(R.string.user_is_null_toast), Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    //Toast.makeText(getContext(), getString(R.string.something_else_is_wrong_toast), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                        else{
+
+                            try{
+                                if(user.getMySkillsList().containsKey(skillToFind) &&
+                                        Integer.parseInt(user.getAge()) - age_seekbar_sp <= 0){
+                                    //haversine(user.getLocationLat(),user.getLocationLon()) <= userRadius){
+                                    userList.add(user);
+                                }
+                            }
+                            catch (NullPointerException e){
+                                //e.printStackTrace();
+                                //continue;
+                            }
+
+                        }
+
+                    }
+                    adapter.notifyDataSetChanged();
+                    if(userList.isEmpty()){
+                        recyclerView.setVisibility(View.GONE);
+                        noUsersTv.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        noUsersTv.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                    }
+                }
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private boolean validUser(User user) {

@@ -357,12 +357,47 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
+        //testing
+        Log.d("MainActivity", "starting MainActivity");
+        Bundle bundle = new Bundle();
+        String skillToFind = getIntent().getStringExtra("skillToFind");
+        if (skillToFind != null) {
+            Log.d("MainActivity", "string in intent is not null: " + skillToFind);
+
+            bundle.putCharSequence("subGenre", skillToFind);
+
+            SearchUsersFragment searchUsersFragment = SearchUsersFragment.newInstance();
+            searchUsersFragment.setArguments(bundle);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.recycler_container, searchUsersFragment, "SEARCH_USERS_FRAG");
+            transaction.commit();
+
+        } else {
+            Log.d("MainActivity", "string from intent is null");
+
+            GenreFragment genreFragment = GenreFragment.newInstance();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+            transaction.commit();
+        }
+
+
+
+
+
+
         //adding genres fragment
+/*
+
         GenreFragment genreFragment = GenreFragment.newInstance();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
         transaction.commit();
+*/
+
 
         initSearch();
 
