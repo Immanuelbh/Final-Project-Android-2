@@ -46,13 +46,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
-                android:background="@drawable/ic_confirm_event"
+                android:src="@drawable/ic_confirm_event"
+                android:id="@+id/m_status_iv"
                 />
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Please click to confirm"
+            android:text="@string/click_for_det_txt"
             android:textColor="@color/colorBlack"
             android:gravity="center"
             android:textStyle="bold"

@@ -33,11 +33,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private static final int MSG_TYPE_RIGHT = 0;
     private static final int MSG_TYPE_LEFT = 1;
     private static final int MSG_TYPE_CONFIRMATION = 2;
-    Context mCtx;
-    List<Message> messages = new ArrayList<>();
-    String imageUrl;
+    private Context mCtx;
+    private List<Message> messages = new ArrayList<>();
+    private String imageUrl;
     private FirebaseUser fbUser;
-    LinearLayout confirmationLl;
+    private LinearLayout confirmationLl;
 
     public MessageAdapter(Context mCtx, List<Message> messages){
         this.mCtx = mCtx;
@@ -46,7 +46,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     class MessageViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView profileIv;
+        ImageView profileIv, statusIv;
         TextView messageTv, timeTv, isSeenTv;
 
         public MessageViewHolder(@NonNull View itemView) {
@@ -57,6 +57,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             timeTv = itemView.findViewById(R.id.m_time_stamp);
             isSeenTv = itemView.findViewById(R.id.m_delivered);
             confirmationLl = itemView.findViewById(R.id.chat_confirmation_msg);
+            statusIv = itemView.findViewById(R.id.m_status_iv);
 
         }
     }
@@ -128,7 +129,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
         if(message.getType().equals("confirmation")){
-            //holder.messageTv.setText((Confirmation) message.);
+            if(message.getCompleteStatus().equals("complete"))
+                holder.statusIv.setImageResource(R.drawable.ic_done);
         }
 
 

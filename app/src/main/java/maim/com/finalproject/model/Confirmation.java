@@ -23,6 +23,8 @@ public class Confirmation implements Serializable  {
     private String senderCid;
     private String receiverCid;
 
+    private String completeStatus;
+
     public Confirmation(){}
 
     public Confirmation(String senderUid, String receiverUid, String senderName, String receiverName, String skill1, String date1, String location1) {
@@ -142,6 +144,14 @@ public class Confirmation implements Serializable  {
 
     public void setReceiverUid(String receiverUid) {
         this.receiverUid = receiverUid;
+    }
+
+    public String getCompleteStatus() {
+        return completeStatus;
+    }
+
+    public void setCompleteStatus(String completeStatus) {
+        this.completeStatus = completeStatus;
     }
 
     @NonNull

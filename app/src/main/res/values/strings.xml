@@ -123,4 +123,5 @@
     <string name="signup_learn_txt">Skills I want to learn</string>
     <string name="chat_no_users_txt">Schedule new skill swaps to add people to your chat list!</string>
     <string name="schedule_btn_txt">Schedule</string>
+    <string name="click_for_det_txt">Click for more details</string>
 </resources>

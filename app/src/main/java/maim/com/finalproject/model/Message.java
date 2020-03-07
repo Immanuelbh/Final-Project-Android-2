@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 
 public class Message {
 
-    String message, receiver, sender, timeStamp, type;
-    String senderCid, receiverCid;
-    boolean seen;
+    private String message, receiver, sender, timeStamp, type;
+    private String senderCid, receiverCid;
+    private boolean seen;
+    private String completeStatus;
 
     public Message() {
     }
@@ -82,6 +83,14 @@ public class Message {
 
     public void setReceiverCid(String receiverCid) {
         this.receiverCid = receiverCid;
+    }
+
+    public String getCompleteStatus() {
+        return completeStatus;
+    }
+
+    public void setCompleteStatus(String completeStatus) {
+        this.completeStatus = completeStatus;
     }
 
     @NonNull

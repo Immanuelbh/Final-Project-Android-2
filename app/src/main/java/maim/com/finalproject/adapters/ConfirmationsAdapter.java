@@ -1,6 +1,7 @@
 package maim.com.finalproject.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +26,7 @@ public class ConfirmationsAdapter extends RecyclerView.Adapter<ConfirmationsAdap
 
     private Context cCtx;
     private List<Confirmation> confirmationList;
-    LinearLayout confirmationCardLl;
+    private LinearLayout confirmationCardLl;
 
     public ConfirmationsAdapter(Context cCtx, List<Confirmation> confirmations){
         this.cCtx = cCtx;
@@ -40,6 +42,7 @@ public class ConfirmationsAdapter extends RecyclerView.Adapter<ConfirmationsAdap
         TextView confCardSkill2;
         TextView confCardDate1;
         TextView confCardDate2;
+        CardView confCardView;
 
 
         public ConfirmationViewHolder(@NonNull View itemView) {
@@ -53,6 +56,7 @@ public class ConfirmationsAdapter extends RecyclerView.Adapter<ConfirmationsAdap
             confCardDate1 = itemView.findViewById(R.id.confirmation_card_date1);
             confCardDate2 = itemView.findViewById(R.id.confirmation_card_date2);
             confirmationCardLl = itemView.findViewById(R.id.confirmation_card_ll);
+            confCardView = itemView.findViewById(R.id.confirmation_card_bg);
         }
     }
 
@@ -92,6 +96,15 @@ public class ConfirmationsAdapter extends RecyclerView.Adapter<ConfirmationsAdap
         holder.confCardSkill2.setText(confirmation.getSkill2());
         holder.confCardDate1.setText(confirmation.getDate1());
         holder.confCardDate2.setText(confirmation.getDate2());
+
+        if(confirmation.getCompleteStatus().equals("complete")){
+            //green bg
+            holder.confCardView.setCardBackgroundColor(Color.GREEN);
+
+        }
+        else{
+            holder.confCardView.setCardBackgroundColor(Color.YELLOW);
+        }
 
     }
 

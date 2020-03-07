@@ -58,35 +58,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class ChatActivity extends AppCompatActivity {
-    final int ALARM_SERVICE_ID = 1;
+    private final int ALARM_SERVICE_ID = 1;
 
-    FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference dbUsers;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference dbUsers;
 
-    ValueEventListener seenListener;
-    DatabaseReference seenDbReference;
+    private ValueEventListener seenListener;
+    private DatabaseReference seenDbReference;
 
-    List<Message> messages = new ArrayList<>();
-    MessageAdapter adapter;
+    private List<Message> messages = new ArrayList<>();
+    private MessageAdapter adapter;
 
-    Toolbar toolbar;
-    RecyclerView recyclerView;
-    ImageView profileIv;
-    TextView nameTv, userStatusTv;
-    EditText messageEt;
-    ImageButton sendBtn;
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private ImageView profileIv;
+    private TextView nameTv, userStatusTv;
+    private EditText messageEt;
+    private ImageButton sendBtn;
 
-    String myUid;
-    String hisUid;
-    String hisImage;
+    private String myUid;
+    private String hisUid;
+    private String hisImage;
     //-------------------
-    APIService apiService;
-    boolean notify=false;
+    private APIService apiService;
+    private boolean notify=false;
     //-------------------
 
-    DatabaseReference myDbRef;
-    DatabaseReference hisDbRef;
+    private DatabaseReference myDbRef;
+    private DatabaseReference hisDbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +258,7 @@ public class ChatActivity extends AppCompatActivity {
 
         myConfirmation.setSenderCid(myDbRef.getKey());
         myConfirmation.setReceiverCid(hisDbRef.getKey());
+        myConfirmation.setCompleteStatus("incomplete");
 
         myDbRef.setValue(myConfirmation);
         hisDbRef.setValue(myConfirmation);
@@ -369,6 +370,7 @@ public class ChatActivity extends AppCompatActivity {
         if(type.equals("confirmation")){
             hashMap.put("senderCid", myDbRef.getKey());
             hashMap.put("receiverCid", hisDbRef.getKey());
+            hashMap.put("completeStatus", "incomplete");
         }
 
         dbChats.push().setValue(hashMap); //TODO have custom push value

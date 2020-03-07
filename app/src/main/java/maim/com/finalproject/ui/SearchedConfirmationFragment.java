@@ -54,6 +54,7 @@ import maim.com.finalproject.adapters.SignupGenreAdapter;
 import maim.com.finalproject.adapters.SignupSubGenreAdapter;
 import maim.com.finalproject.adapters.SubGenreAdapter;
 import maim.com.finalproject.model.Confirmation;
+import maim.com.finalproject.model.Message;
 import maim.com.finalproject.model.SubGenre;
 import maim.com.finalproject.model.User;
 
@@ -208,8 +209,7 @@ public class SearchedConfirmationFragment extends Fragment {
 
                         intent.putExtra("confirmation_msg",
                                 myUser.getDisplayName() + " would like to schedule a skill swap with you at: " +
-                                        DateFormat.format("hh:mm aa dd/MM/yy", calendar).toString() +
-                                        ". Please click to confirm"
+                                        DateFormat.format("hh:mm aa dd/MM/yy", calendar).toString()
                         );
 
                         getContext().startActivity(intent);
@@ -345,11 +345,15 @@ public class SearchedConfirmationFragment extends Fragment {
                 hashMap.put("skill2", skillSelected);
                 hashMap.put("date2", receiverDate);
                 hashMap.put("location2", "home2");
+                hashMap.put("completeStatus", "complete");
 
                 //update
-                Log.d("CDF", "Attempting to update the db with new receiver skill and date");
+                Log.d("CDF", "Attempting to update the db with new receiver skill, date and status");
                 senderRef.updateChildren(hashMap);
                 receiverRef.updateChildren(hashMap);
+
+                //update chat confirmation message
+                updateChatDb(senderUid, receiverUid, senderCid, receiverCid);
 
                 getFragmentManager().popBackStack();
             }
@@ -374,6 +378,39 @@ public class SearchedConfirmationFragment extends Fragment {
 
         Log.d("CDF", "selected skill = " + selectedSkill + " receiver date = " + receiverDate);
 
+    }
+
+    private void updateChatDb(String senderUid, String receiverUid, String senderCid, String receiverCid) {
+        DatabaseReference dbMessages = FirebaseDatabase.getInstance().getReference("chats");
+        dbMessages.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    Message message = ds.getValue(Message.class);
+                    if(message.getReceiver().equals(senderUid) && message.getSender().equals(receiverUid) ||
+                            message.getReceiver().equals(receiverUid) && message.getSender().equals(senderUid)){ //TODO create unique identifier to pull from
+                        if(message.getReceiverCid().equals(senderCid) && message.getSenderCid().equals(receiverCid) ||
+                            message.getReceiverCid().equals(receiverCid) && message.getSenderCid().equals(senderCid)){
+                            HashMap hashMap = new HashMap();
+                            hashMap.put("completeStatus", "complete");
+
+                            String ref = ds.getKey();
+                            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("chats").child(ref);
+                            dbRef.updateChildren(hashMap);
+
+                        }
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showDateTimeDialog(final TextView dateTimeTv) {
