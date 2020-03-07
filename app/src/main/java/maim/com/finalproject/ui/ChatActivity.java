@@ -87,6 +87,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private DatabaseReference myDbRef;
     private DatabaseReference hisDbRef;
+    private String stringChatKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +125,9 @@ public class ChatActivity extends AppCompatActivity {
         //get other user's id
         Intent intent = getIntent();
         hisUid = intent.getStringExtra("user_uid");
+        int chatKey = myUid.hashCode() + hisUid.hashCode();
+        stringChatKey = String.valueOf(chatKey);
+
         String confirmationMsg = intent.getStringExtra("confirmation_msg");
         Confirmation myConfirmation = (Confirmation) intent.getSerializableExtra("confirmation_pojo");
         if(confirmationMsg != null){
@@ -304,7 +308,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void seenMessage() {
-        seenDbReference = FirebaseDatabase.getInstance().getReference("chats");
+        seenDbReference = FirebaseDatabase.getInstance().getReference("chats").child(stringChatKey);
         seenListener = seenDbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -327,7 +331,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void readMessages() {
 
-        DatabaseReference dbMessages = FirebaseDatabase.getInstance().getReference("chats");
+        DatabaseReference dbMessages = FirebaseDatabase.getInstance().getReference("chats").child(stringChatKey);
         dbMessages.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -356,7 +360,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage(final String message, String type) {
-        DatabaseReference dbChats = FirebaseDatabase.getInstance().getReference("chats");
+        DatabaseReference dbChats = FirebaseDatabase.getInstance().getReference("chats").child(stringChatKey);
 
         String timeStamp = String.valueOf(System.currentTimeMillis());
 
@@ -373,7 +377,10 @@ public class ChatActivity extends AppCompatActivity {
             hashMap.put("completeStatus", "incomplete");
         }
 
-        dbChats.push().setValue(hashMap); //TODO have custom push value
+        int chatKey = (myUid).hashCode() + (hisUid).hashCode();
+        Log.d("CA", "ChatKEY: " + chatKey);
+        dbChats.push().setValue(hashMap);
+        //dbChats.push().setValue(hashMap); //TODO have custom push value
 
         //-----------------------------
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference("users").child(myUid);
