@@ -99,11 +99,11 @@ public class ConfirmationsAdapter extends RecyclerView.Adapter<ConfirmationsAdap
 
         if(confirmation.getCompleteStatus().equals("complete")){
             //green bg
-            holder.confCardView.setCardBackgroundColor(Color.GREEN);
+            holder.confCardView.setCardBackgroundColor(cCtx.getResources().getColor(R.color.flatGreen));
 
         }
         else{
-            holder.confCardView.setCardBackgroundColor(Color.YELLOW);
+            holder.confCardView.setCardBackgroundColor(cCtx.getResources().getColor(R.color.flatYellow));
         }
 
     }
