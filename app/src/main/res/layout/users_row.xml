@@ -21,12 +21,7 @@
             app:civ_border_color="#FF000000"
             android:padding="3dp"
             />
-        <!--<ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/row_image_iv"
-            />-->
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,8 +30,19 @@
             android:id="@+id/row_name_tv"
             android:gravity="center"
             android:layout_marginStart="10dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Home"
+            android:id="@+id/row_location_tv"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
 
             />
+
+
 
 
     </LinearLayout>

@@ -29,9 +29,9 @@ import maim.com.finalproject.ui.SearchedConfirmationFragment;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
 
-    Context uCtx;
-    List<User> userList;
-    String skillWant;
+    private Context uCtx;
+    private List<User> userList;
+    private String skillWant;
     //StorageReference reference;
 
     public UserAdapter(Context uCtx, List<User> users){
@@ -47,7 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     public class UserViewHolder extends RecyclerView.ViewHolder{
         ImageView profileIv;
-        TextView nameTv;
+        TextView nameTv, ageTv, locationTv;
         LinearLayout rowLl;
 
         public UserViewHolder(@NonNull View itemView) {
@@ -55,6 +55,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
             profileIv = itemView.findViewById(R.id.row_image_iv);
             nameTv = itemView.findViewById(R.id.row_name_tv);
+            //ageTv = itemView.findViewById(R.id.row_age_tv);
+            locationTv = itemView.findViewById(R.id.row_location_tv);
             rowLl = itemView.findViewById(R.id.row_ll);
         }
     }
@@ -83,9 +85,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                     transaction.commit();
                 }
                 else{
-
-
-
                     //opens user chat
                     Intent intent = new Intent(parent.getContext(), ChatActivity.class);
                     intent.putExtra("user_uid", userList.get(uvh.getAdapterPosition()).getUID());
@@ -103,21 +102,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = userList.get(position);
         String userUid = user.getUID();
         Log.d("CHAT_ACTIVITY", "userAdapter: useruid : " + userUid);
-        //TODO add image
-        holder.nameTv.setText(user.getName());
 
-        /*reference = FirebaseStorage.getInstance().getReference()
-                .child("profileImages")
-                .child(user.getUID() + ".jpeg");
-*/
-        //if(user.getPhotoUrl() != null){
-            Glide.with(holder.itemView.getContext())
-                    .load(user.getImageUrl())
-                    .thumbnail(0.01f)
-                    .dontAnimate()
-                    .error(R.drawable.ic_user) //change to default profile image
-                    .into(holder.profileIv);
-        //}
+        holder.nameTv.setText(user.getName());
+        //holder.ageTv.setText(user.getAge());
+        holder.locationTv.setText(user.getLocationAddress());
+
+
+        Glide.with(holder.itemView.getContext())
+                .load(user.getImageUrl())
+                .thumbnail(0.01f)
+                .dontAnimate()
+                .error(R.drawable.ic_user) //change to default profile image
+                .into(holder.profileIv);
+
     }
 
     @Override
