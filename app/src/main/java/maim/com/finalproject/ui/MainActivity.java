@@ -66,23 +66,24 @@ public class MainActivity extends AppCompatActivity {
     private static final String SEARCH_FRAGMENT_TAG = "search_fragment";
     private static final String CONFIRMATIONS_FRAGMENT_TAG = "confirmations_fragment";
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    CoordinatorLayout coordinatorLayout;
-    CollapsingToolbarLayout ctl;
-    AppBarLayout appBarLayout;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private CoordinatorLayout coordinatorLayout;
+    private CollapsingToolbarLayout ctl;
+    private AppBarLayout appBarLayout;
 
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    FirebaseAuth.AuthStateListener authStateListener;
-    FirebaseUser user;
-    String mUID;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseUser user;
+    private String mUID;
 
-    String fullName;
+    private String fullName;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbGenres = database.getReference("genres");
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference dbGenres = database.getReference("genres");
 
-    SearchView searchView;
+    private SearchView searchView;
+    private SearchView toolbarSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,28 +104,28 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-
+        searchView=findViewById(R.id.collapsing_search_view);
+        toolbarSearchView = findViewById(R.id.toolbar_search_view);
+        //toolbarSearchView=searchView;
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
                     // Collapsed
-                    //Toast.makeText(MainActivity.this, "Collapsing", Toast.LENGTH_SHORT).show();
-
+                    toolbarSearchView.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.GONE);
                 } else if (verticalOffset == 0) {
                     // Expanded
+                    toolbarSearchView.setVisibility(View.GONE);
+                    searchView.setVisibility(View.VISIBLE);
                 } else {
                     // Somewhere in between
                 }
             }
         });
 
-
-
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
-        searchView=findViewById(R.id.search_view_1);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -357,12 +358,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-        //testing
         Log.d("MainActivity", "starting MainActivity");
         Bundle bundle = new Bundle();
         String skillToFind = getIntent().getStringExtra("skillToFind");
-        if (skillToFind != null) {
+        if (skillToFind != null) { //from notification
             Log.d("MainActivity", "string in intent is not null: " + skillToFind);
 
             bundle.putCharSequence("subGenre", skillToFind);
@@ -373,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.add(R.id.recycler_container, searchUsersFragment, "SEARCH_USERS_FRAG");
             transaction.commit();
 
-        } else {
+        } else { //regular
             Log.d("MainActivity", "string from intent is null");
 
             GenreFragment genreFragment = GenreFragment.newInstance();
@@ -557,5 +556,58 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        if(toolbarSearchView!=null){
+            toolbarSearchView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toolbarSearchView.setIconified(false);
+                }
+            });
+            toolbarSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if(query.length()>0) {
+                        //adding genres fragment
+                        SearchFragment searchFragment = SearchFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putCharSequence("search_genre_query", query);
+                        searchFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, searchFragment, SEARCH_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    else{
+                        GenreFragment genreFragment = GenreFragment.newInstance();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        transaction.commit();
+
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    if(newText.length()>0) {
+                        //adding genres fragment
+                        SearchFragment searchFragment = SearchFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putCharSequence("search_genre_query", newText);
+                        searchFragment.setArguments(bundle);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, searchFragment, SEARCH_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    else{
+                        GenreFragment genreFragment = GenreFragment.newInstance();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.recycler_container, genreFragment, GENRE_FRAGMENT_TAG);
+                        transaction.commit();
+                    }
+                    return true;
+                }
+            });
+        }
     }
 }

@@ -33,7 +33,7 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static int TYPE_USERS = 3;
 
     private Context gCtx;
-    List<Object> typeList;
+    private List<Object> typeList;
 
 
     public MultiRecyclerAdapter(Context gCtx, List<Object> typeList) {
@@ -61,12 +61,15 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         RelativeLayout relativeLayout;
         TextView titleTv;
+        ImageView bgIv;
 
         public SubGenreViewHolder(@NonNull View itemView) {
             super(itemView);
 
             relativeLayout = itemView.findViewById(R.id.genre_rl);
             titleTv = itemView.findViewById(R.id.genre_title_tv);
+            bgIv = itemView.findViewById(R.id.genre_cell_bg);
+
         }
     }
 //-----------------------------------------------------------------------------------------------
@@ -142,15 +145,16 @@ public class MultiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .load(genre.getImageUrl()+"")
                     .error(R.drawable.no_image_available_comp)
                     .into(genreViewHolder.bgIv);
-            //TODO change image
 
         } else{
            //bind viewholder two
             SubGenreViewHolder subGenreViewHolder =(SubGenreViewHolder) holder; //casting to the correct VH
             SubGenre subGenre = (SubGenre) typeList.get(position);
             subGenreViewHolder.titleTv.setText(subGenre.getName());
-            //TODO change image
-        }
+            Glide.with(gCtx)
+                    .load(subGenre.getImageUrl()+"")
+                    .error(R.drawable.no_image_available_comp)
+                    .into(subGenreViewHolder.bgIv);        }
     }
 
 

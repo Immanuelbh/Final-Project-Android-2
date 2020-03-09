@@ -31,7 +31,6 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
     private Context sCtx;
     private List<SubGenre> subGenres;
     private SubGenreListener listener;
-    //TODO genre listener
 
     public interface SubGenreListener{
         void onSubGenreClicked(int position, View view);
@@ -67,11 +66,9 @@ public class SubGenreAdapter extends RecyclerView.Adapter<SubGenreAdapter.SubGen
         View view = LayoutInflater.from(sCtx).inflate(R.layout.genre_cell, parent, false);
 
         final SubGenreViewHolder svh = new SubGenreViewHolder(view);
-        //TODO set on click listener
         svh.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO click starts search fragment -> finds matching users (in fragment) -> displays them
 
                 SearchUsersFragment searchUsersFragment = SearchUsersFragment.newInstance();
                 Bundle bundle = new Bundle();

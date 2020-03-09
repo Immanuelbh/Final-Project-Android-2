@@ -381,7 +381,8 @@ public class SearchedConfirmationFragment extends Fragment {
     }
 
     private void updateChatDb(String senderUid, String receiverUid, String senderCid, String receiverCid) {
-        DatabaseReference dbMessages = FirebaseDatabase.getInstance().getReference("chats");
+        int chatKey = senderUid.hashCode() + receiverUid.hashCode();
+        DatabaseReference dbMessages = FirebaseDatabase.getInstance().getReference("chats").child(String.valueOf(chatKey));
         dbMessages.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -396,7 +397,7 @@ public class SearchedConfirmationFragment extends Fragment {
                             hashMap.put("completeStatus", "complete");
 
                             String ref = ds.getKey();
-                            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("chats").child(ref);
+                            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("chats").child(String.valueOf(chatKey)).child(ref);
                             dbRef.updateChildren(hashMap);
 
                         }
